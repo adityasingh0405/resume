@@ -1,0 +1,185 @@
+@layer utilities {
+  .neon {
+    color: #44a433;
+    text-shadow:
+      2px 6px 3px #000000,
+      3px 6px 2px #2b5b3c,
+      0 0 90px rgb(74, 144, 120),
+      0 0 100px rgb(67, 123, 104),
+      0 0 150px rgb(47, 94, 78);
+  }
+  
+  .flicker {
+    animation: flicker 6s infinite alternate;
+  }
+
+  @keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+      opacity: 1;
+    }
+
+    20%, 22%, 24%, 55% {
+      opacity: 0.6;
+    }
+  }
+}
+
+.pixelify-sans-800 {
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px #327537, 0 0 5px #36783f;
+  }
+  50% {
+    box-shadow: 0 0 5px #37633c, 0 0 5px #359041;
+  }
+}
+
+.neon-animated {
+  animation: neon-pulse 2s infinite;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bulbGlow {
+  0% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  40% {
+    opacity: 0.3;
+    text-shadow: 0 0 2px #458639;
+  }
+  60% {
+    opacity: 0.6;
+    text-shadow: 0 0 5px #327537;
+  }
+  80% {
+    opacity: 0.85;
+    text-shadow: 0 0 8px #36783f, 0 0 12px #2b5b3c;
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 
+      2px 6px 3px #000000,
+      3px 6px 2px #2b5b3c,
+      0 0 90px rgb(74, 144, 120),
+      0 0 100px rgb(67, 123, 104),
+      0 0 150px rgb(47, 94, 78);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 1s ease forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 1s ease forwards;
+  animation-delay: 0.4s;
+}
+
+.animate-bulb-glow {
+  animation: bulbGlow 2s ease forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes bulbGlow2 {
+  0% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  40% {
+    opacity: 0.3;
+    text-shadow: 0 0 2px #458639;
+  }
+  60% {
+    opacity: 0.6;
+    text-shadow: 0 0 5px #327537;
+  }
+  80% {
+    opacity: 0.85;
+    text-shadow: 0 0 8px #36783f, 0 0 12px #2b5b3c;
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 
+     
+      0 0 100px rgb(67, 123, 104),
+      0 0 150px rgb(47, 94, 78);
+  }
+}
+
+.animate-bulb-glow-2 {
+  animation: bulbGlow2 2s ease forwards;
+  animation-delay: 0.5s;
+}
+@keyframes flicker-chaos {
+  0%   { opacity: 1; }
+  2%   { opacity: 0.2; }
+  4%   { opacity: 1; }
+  6%   { opacity: 0.4; }
+  8%   { opacity: 1; }
+  10%  { opacity: 0.2; }     
+  15%  { opacity: 0.2; }
+  18%  { opacity: 0.2; }
+  20%  { opacity: 0.2; }
+  25%  { opacity: 0.2; }
+  27%  { opacity: 0.2; }
+  30%  { opacity: 0.7; }
+  33%  { opacity: 0.2; }     
+  38%  { opacity: 0.2; }
+  40%  { opacity: 1; }
+  45%  { opacity: 0.6; }
+  48%  { opacity: 0.2; }
+  50%  { opacity: 1; }
+  60%  { opacity: 0.4; }
+  65%  { opacity: 1; }
+  70%  { opacity: 0.2; }     
+  72%  { opacity: 0.2; }
+  75%  { opacity: 0.7; }
+  80%  { opacity: 1; }
+  85%  { opacity: 0.6; }
+  90%  { opacity: 1; }
+  95%  { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+.flicker-1 {
+  animation: flicker-chaos 4s infinite;
+}
