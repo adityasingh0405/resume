@@ -183,3 +183,78 @@
 .flicker-1 {
   animation: flicker-chaos 4s infinite;
 }
+
+@keyframes slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 1s ease-out forwards;
+}
+
+.animate-slide-in-left-1 {
+  animation: slide-in-left 1.5s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 1s ease-out forwards;
+}
+
+.animate-slide-in-top {
+  animation: slide-in-top 1s ease-out forwards;
+}
+
+@layer utilities {
+  .neon-2 {
+    color: #ff4444;
+    text-shadow:
+      2px 6px 3px #000000,
+      3px 6px 2px #5a1c1c,
+      0 0 90px rgb(179, 45, 45),
+      0 0 100px rgb(147, 30, 30),
+      0 0 150px rgb(134, 27, 27);
+  }
+
+  .flicker-2 {
+    animation: flicker-2 6s infinite alternate;
+  }
+
+  @keyframes flicker-2 {
+    0%, 18%, 20%, 22%, 60%, 100% {
+      opacity: 1;
+    }
+
+    19%, 21%, 59% {
+      opacity: 0.5;
+    }
+  }
+}
