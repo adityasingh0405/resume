@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import '../App.css';
-import reactLogo from '../assets/react.svg';
-import viteLogo from '../assets/vite.jpeg';
-import jsLogo from '../assets/js.jpeg';
-import pythonLogo from '../assets/python.jpeg';
-import javaLogo from '../assets/java.jpeg';
-import nodeLogo from '../assets/node.png';
-import expressLogo from '../assets/ex.png';
-import mongoLogo from '../assets/mongo.jpeg';
-import mysqlLogo from '../assets/mysql.png';
-import gitLogo from '../assets/git.jpg';
-import githubLogo from '../assets/github.png';
+
 import pic from '../assets/pic.png';
 
 
@@ -39,41 +29,7 @@ export default function About() {
 <div className={`relative col-start-3 row-span-2 h-full flex flex-col items-center justify-center text-center animate-slide-in-top ${cardBase} ${isLit ? lit : dull}`}>
   <h1 className="text-3xl pixelify-sans-800 neon mb-6">Technologies</h1>
 
-  <div className="grid grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
-    <div className="flex flex-col items-center">
-      <img src={reactLogo} alt="React" className="w-10 h-10" />
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={viteLogo} alt="Vite" className="w-25 h-10" />
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={jsLogo} alt="JavaScript" className="w-10 h-10" />
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={pythonLogo} alt="Python" className="w-10 h-10" />
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={javaLogo} alt="Java" className="w-10 h-15" />
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={nodeLogo} alt="Node.js" className="w-10 h-10" />
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={expressLogo} alt="Express.js" className="w-10 h-10" />
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={mongoLogo} alt="MongoDB" className="w-10 h-10" />
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={mysqlLogo} alt="MySQL" className="w-10 h-10" />
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={gitLogo} alt="Git" className="w-10 h-10" />
-    </div>
-    <div className="flex flex-col items-center">
-      <img src={githubLogo} alt="GitHub" className="w-10 h-10" />
-    </div>
-  </div>
+
 </div>
 
 
