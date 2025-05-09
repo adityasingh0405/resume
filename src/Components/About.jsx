@@ -25,9 +25,40 @@ export default function About() {
   </p>
 </div>
 
+<div className={`relative col-start-3 row-span-2 h-full flex flex-col items-center justify-start text-center animate-slide-in-top ${cardBase} ${isLit ? lit : dull}`}>
+  <h1 className="text-3xl pixelify-sans-800 neon mb-10 mt-4">Technologies</h1>
 
-<div className={`relative col-start-3 row-span-2 h-full flex flex-col items-center justify-center text-center animate-slide-in-top ${cardBase} ${isLit ? lit : dull}`}>
-  <h1 className="text-3xl pixelify-sans-800 neon mb-6">Technologies</h1>
+<div className="grid grid-cols-4 grid-rows-4 gap-7 px-4">
+  {[
+    { name: 'react', color: '61DAFB' },
+    { name: 'javascript', color: 'F7DF1E' },
+    { name: 'node.js', color: '339933' },
+    { name: 'vite', color: '646CFF' },
+    { name: 'html5', color: 'E34F26' },
+    { name: 'css3', color: '1572B6' },
+    { name: 'tailwindcss', color: '06B6D4' },
+    { name: 'mongodb', color: '47A248' },
+    { name: 'express', color: '000000', whiteBg: true },
+    { name: 'mysql', color: '4479A1' },
+    { name: 'git', color: 'F05032' },
+    { name: 'postman', color: 'FF6C37' },
+    { name: 'npm', color: 'CB3837' },
+    { name: 'github', color: '333333', whiteBg: true },
+    { name: 'c', color: 'A8B9CC' },
+    { name: 'cplusplus', color: '00599C' },
+  ].map((tech, index) => (
+    <div
+      key={index}
+      className="flex items-center justify-center transition-transform hover:scale-105"
+    >
+      <img
+        src={`https://cdn.simpleicons.org/${tech.name}/${tech.color}`}
+        alt={tech.name}
+        className={`drop-shadow-sm w-10 h-10 ${tech.whiteBg ? 'bg-white rounded-full p-1' : ''}`}
+      />
+    </div>
+  ))}
+</div>
 
 
 </div>

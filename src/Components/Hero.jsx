@@ -164,23 +164,24 @@ const MovingCat = () => {
 
 function Hero() {
   const socials = [
-    { id: "linkedin", label: "LinkedIn", icon: <FaLinkedin size={20} />, href: "https://www.linkedin.com/in/aditya-singh" },
-    { id: "github", label: "GitHub", icon: <FaGithub size={20} />, href: "https://github.com/adityacodesdev" },
-    { id: "mail", label: "Mail", icon: <HiOutlineMail size={20} />, href: "mailto:aditya@example.com" },
+    { id: "linkedin", label: "LinkedIn", icon: <FaLinkedin size={20} />, href: "https://www.linkedin.com/in/aditya-singh-2b175828a/" },
+    { id: "github", label: "GitHub", icon: <FaGithub size={20} />, href: "https://github.com/adityasingh0405" },
+    { id: "mail", label: "Mail", icon: <HiOutlineMail size={20} />, href: "mailto:aditabhi9@gmail.com" },
   ];
 
   return (
     <div className="bg-black -mt-10 text-white flex flex-col items-center justify-center min-h-screen relative overflow-hidden">
       <p className="text-4xl sm:text-5xl md:text-7xl font-montserrat text-center">
         <span className="inline-block opacity-0 animate-slide-in-left">Hi, I’m{" "}</span>
-        <span className="text-4xl leading-tight tracking-tight sm:text-5xl md:text-8xl pixelify-sans-800 font-mono animate-bulb-glow neon flicker mx-2">
-          ADITY
-          <span className="inline-block rotate-6">
-            <span className="text-4xl sm:text-5xl md:text-8xl pixelify-sans-800 font-mono animate-bulb-glow neon flicker-1 mx-1">
-              A
-            </span>
-          </span>
-        </span>
+      <span className="text-4xl leading-tight tracking-tight sm:text-5xl md:text-8xl pixelify-sans-800 font-mono animate-bulb-glow neon-text flicker mx-2">
+  ADITY
+  <span className="inline-block rotate-6">
+    <span className="text-4xl sm:text-5xl md:text-8xl pixelify-sans-800 font-mono animate-bulb-glow neon-text flicker-1 mx-1">
+      A
+    </span>
+  </span>
+</span>
+
         <br />
         <span className="inline-block opacity-0 animate-slide-in-right">Full-Stack Developer.</span>
       </p>
