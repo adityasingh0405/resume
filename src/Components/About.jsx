@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../App.css';
-
 import pic from '../assets/pic.png';
 
 export default function About() {
   const [isLit, setIsLit] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsLit(true);
+    }
+  }, []);
 
   const cardBase = "rounded-lg bg-[#111111] border-3 p-4 transition duration-300 ease-in-out hover:scale-[1.02]";
   const dull = "opacity-20 brightness-30 border-green-200";
@@ -14,10 +19,8 @@ export default function About() {
 
   return (
     <div className="pt-24 mt-8 mb-10 px-4 bg-black min-h-screen flex justify-center items-center relative">
-      {/* Grid container with 1 col on mobile, 3 cols and 3 rows on md+ */}
       <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-3 gap-4 max-w-6xl w-full relative">
 
-        {/* Who am I? box */}
         <div className={`col-span-1 md:col-span-2 h-auto p-6 animate-slide-in-left ${cardBase} ${isLit ? lit : dull}`}>
           <h1 className="text-3xl font-bold pixelify-sans-800 neon mb-2">Who am I?</h1>
           <p className="text-md text-gray-300 pixelify-sans-800 leading-relaxed">
@@ -26,7 +29,6 @@ export default function About() {
           </p>
         </div>
 
-        {/* Technologies box */}
         <div className={`relative md:col-start-3 row-span-1 md:row-span-2 h-full flex flex-col items-center justify-start text-center animate-slide-in-top ${cardBase} ${isLit ? lit : dull}`}>
           <h1 className="text-3xl pixelify-sans-800 neon mb-10 mt-4">Technologies</h1>
 
@@ -63,16 +65,9 @@ export default function About() {
           </div>
         </div>
 
-        {/* Experience box */}
-        <div
-          className={`col-span-1 row-span-1 md:row-span-2 h-[380px] flex flex-col items-center justify-center text-center animate-slide-in-left-1 border-3 rounded-2xl shadow-2xl bg-gradient-to-br from-black via-gray-900 to-black ${cardBase} ${isLit ? lit : dull}`}
-        >
-          <h1 className="text-4xl font-bold pixelify-sans-800 text-green-300 neon mb-4">
-            Experience
-          </h1>
-          <p className="text-lg text-gray-300 animate-pulse px-4">
-            Something awesome is brewing...
-          </p>
+        <div className={`col-span-1 row-span-1 md:row-span-2 h-[380px] flex flex-col items-center justify-center text-center animate-slide-in-left-1 border-3 rounded-2xl shadow-2xl bg-gradient-to-br from-black via-gray-900 to-black ${cardBase} ${isLit ? lit : dull}`}>
+          <h1 className="text-4xl font-bold pixelify-sans-800 text-green-300 neon mb-4">Experience</h1>
+          <p className="text-lg text-gray-300 animate-pulse px-4">Something awesome is brewing...</p>
           <div className="mt-6">
             <span className="inline-block px-4 py-2 pixelify-sans-800 text-md font-semibold text-black bg-green-300 rounded-full shadow-md animate-bounce">
               Coming Soon
@@ -80,13 +75,11 @@ export default function About() {
           </div>
         </div>
 
-        {/* Picture & name box */}
         <div className={`col-span-1 h-[200px] flex flex-col items-center justify-center animate-slide-in-right ${cardBase} ${isLit ? lit : dull}`}>
           <img src={pic} className="h-28 -mt-2 w-28 neon" alt="aditya" />
           <h1 className="text-4xl pixelify-sans-800 neon mt-2">ADITYA SINGH</h1>
         </div>
 
-        {/* Button with Japanese text */}
         <div className="col-span-1 -mt-[20px] h-[200px] w-full sm:w-[600px] lg:w-[800px] flex items-center justify-center animate-flicker relative">
           <button
             onClick={toggleLight}
@@ -97,7 +90,6 @@ export default function About() {
           </button>
         </div>
 
-        {/* Education box */}
         <div className={`col-span-1 md:col-span-3 -mt-[35px] h-auto p-6 animate-slide-in-right ${cardBase} ${isLit ? lit : dull}`}>
           <h1 className="text-3xl font-bold pixelify-sans-800 neon mb-2">Education</h1>
           <div className="text-md text-gray-300 pixelify-sans-800 leading-relaxed space-y-2">
