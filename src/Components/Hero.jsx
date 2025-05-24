@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import '../App.css'; 
+import '../App.css';
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { HiOutlineMail } from "react-icons/hi";
 import catIdle from '../assets/cat_idle.png';
 import catMove from '../assets/cat_move.png';
-import catHouse from '../assets/cat_house.png'; 
+import catHouse from '../assets/cat_house.png';
 
 const OnlineStatus = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -36,7 +36,7 @@ const OnlineStatus = () => {
 
   return (
     <div
-      className="fixed top-6 right-6 z-50 px-5 animate-bulb-glow-2 py-2 rounded-md bg-[#101010] flex items-center gap-3 border border-[#2a2a2a]"
+      className="fixed top-[110px] sm:top-6 right-6 z-50 px-5 animate-bulb-glow-2 py-2 rounded-md bg-[#101010] flex items-center gap-3 border border-[#2a2a2a]"
       style={{ boxShadow: glowStyle }}
     >
       <span className="text-gray-300 text-base pixelify-sans-800 font-mono select-none">I'm</span>
@@ -117,7 +117,7 @@ const MovingCat = () => {
             currentVelocityY = 0;
           }
         }
-        
+
         if (isJumping !== currentIsJumping) setIsJumping(currentIsJumping);
         setVelocityY(currentVelocityY);
         return { x: newX, y: newY };
@@ -141,12 +141,9 @@ const MovingCat = () => {
       }}
     >
       <div className="group relative flex flex-col items-center">
-        {/* Hover Tooltip */}
-        <div title="Please Hire Me" className="absolute font-extrabold -top-8 bg-white text-black text- px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div title="Please Hire Me" className="absolute font-extrabold -top-8 bg-white text-black px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           私を雇ってください。
         </div>
-        
-        {/* Cat Image */}
         <img
           src={isCatMoving ? catMove : catIdle}
           alt={isCatMoving ? "Moving Pixelated Cat" : "Idle Pixelated Cat"}
@@ -163,6 +160,17 @@ const MovingCat = () => {
 };
 
 function Hero() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const socials = [
     { id: "linkedin", label: "LinkedIn", icon: <FaLinkedin size={20} />, href: "https://www.linkedin.com/in/aditya-singh-2b175828a/" },
     { id: "github", label: "GitHub", icon: <FaGithub size={20} />, href: "https://github.com/adityasingh0405" },
@@ -170,23 +178,38 @@ function Hero() {
   ];
 
   return (
-    <div className="bg-black -mt-10 text-white flex flex-col items-center justify-center min-h-screen relative overflow-hidden">
+    <div className="bg-black md:-mt-20 pt-30 text-white flex flex-col items-center justify-center min-h-screen relative overflow-hidden">
       <p className="text-4xl sm:text-5xl md:text-7xl font-montserrat text-center">
-        <span className="inline-block opacity-0 animate-slide-in-left">Hi, I’m{" "}</span>
-      <span className="text-4xl leading-tight tracking-tight sm:text-5xl md:text-8xl pixelify-sans-800 font-mono animate-bulb-glow neon-text flicker mx-2">
-  ADITY
-  <span className="inline-block rotate-6">
-    <span className="text-4xl sm:text-5xl md:text-8xl pixelify-sans-800 font-mono animate-bulb-glow neon-text flicker-1 mx-1">
-      A
-    </span>
-  </span>
-</span>
-
-        <br />
-        <span className="inline-block opacity-0 animate-slide-in-right">Full-Stack Developer.</span>
+        <span className="block md:hidden text-center">
+          <span className="block opacity-0 animate-slide-in-left text-3xl sm:text-4xl mb-2">
+            Hi, I’m
+          </span>
+          <span className="text-5xl sm:text-6xl font-mono font-bold pixelify-sans-800 animate-bulb-glow neon-text flicker inline-flex items-center justify-center gap-1">
+            ADITY
+            <span className="rotate-6">
+              <span className="animate-bulb-glow neon-text flicker-1">
+                A
+              </span>
+            </span>
+          </span>
+          <span className="block opacity-0 animate-slide-in-right text-2xl sm:text-3xl mt-3">
+            Full-Stack Developer.
+          </span>
+        </span>
+        <span className="hidden md:inline-block opacity-0 animate-slide-in-left">Hi, I’m{" "}</span>
+        <span className="hidden md:inline-block text-4xl leading-tight tracking-tight sm:text-5xl md:text-8xl pixelify-sans-800 font-mono animate-bulb-glow neon-text flicker mx-2">
+          ADITY
+          <span className="inline-block rotate-6">
+            <span className="text-4xl sm:text-5xl md:text-8xl pixelify-sans-800 font-mono animate-bulb-glow neon-text flicker-1 mx-1">
+              A
+            </span>
+          </span>
+        </span>
+        <br className="hidden md:block" />
+        <span className="hidden md:inline-block opacity-0 animate-slide-in-right">Full-Stack Developer.</span>
       </p>
 
-      <div className="flex gap-4 mt-10">
+      <div className="flex flex-col sm:flex-row gap-4 mt-10">
         {socials.map((link, index) => (
           <a
             key={link.id}
@@ -202,20 +225,23 @@ function Hero() {
         ))}
       </div>
 
-      <div className="absolute bottom-3 text-sm text-gray-500 opacity-80 select-none">
-        Use arrow keys to move the cat 🐾
-      </div>
+      {!isMobile && (
+        <div className="absolute bottom-3 text-sm text-gray-500 opacity-80 select-none">
+          Use arrow keys to move the cat 🐾
+        </div>
+      )}
 
-      
-      <img
-        src={catHouse}
-        alt="Cat House"
-        className="fixed bottom-0 -mb-5 -mr-15 right-0 w-[200px] sm:w-[2200px] md:w-[240px] pointer-events-none select-none"
-        draggable="false"
-      />
+      {!isMobile && (
+        <img
+          src={catHouse}
+          alt="Cat House"
+          className="fixed bottom-0 -mb-5 -mr-15 right-0 w-[200px] sm:w-[2200px] md:w-[240px] pointer-events-none select-none"
+          draggable="false"
+        />
+      )}
 
       <OnlineStatus />
-      <MovingCat />
+      {!isMobile && <MovingCat />}
     </div>
   );
 }
