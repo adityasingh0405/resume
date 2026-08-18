@@ -24,14 +24,15 @@ github.com/adityasingh`
   };
 
   return (
-    <div className="h-full w-full flex items-center justify-center overflow-y-auto overflow-x-hidden bg-void p-2 sm:p-6">
+    <div className="h-full w-full flex items-center justify-center overflow-hidden bg-void p-3 sm:p-6 box-border">
 
       {/* Sticky Note */}
       <div
         className="
           relative
-          w-[95%] sm:w-full
+          w-[92%] sm:w-full
           max-w-[340px] sm:max-w-[430px]
+          h-[90%] sm:h-auto
           min-h-[260px] sm:min-h-[430px]
           p-3.5 sm:p-7
           bg-[#f5e58c]
@@ -42,6 +43,9 @@ github.com/adityasingh`
           hover:rotate-0
           hover:-translate-y-1
           my-auto
+          box-border
+          flex flex-col
+          overflow-hidden
         "
         style={{
           backgroundImage: `
@@ -67,7 +71,7 @@ github.com/adityasingh`
             -top-3 sm:-top-4
             left-1/2
             -translate-x-1/2
-            w-18 sm:w-24
+            w-16 sm:w-24
             h-5 sm:h-8
             bg-[#d8c873]/80
             rotate-0 sm:rotate-[1deg]
@@ -84,9 +88,9 @@ github.com/adityasingh`
             right-0
             w-0
             h-0
-            border-t-[28px] sm:border-t-[42px]
+            border-t-[26px] sm:border-t-[42px]
             border-t-[#d5c66e]
-            border-l-[28px] sm:border-l-[42px]
+            border-l-[26px] sm:border-l-[42px]
             border-l-transparent
             drop-shadow-[-2px_-2px_2px_rgba(0,0,0,0.08)]
           "
@@ -95,35 +99,39 @@ github.com/adityasingh`
         {/* Small note label */}
         <div
           className="
-            mb-2 sm:mb-5
+            mb-1.5 sm:mb-4
             text-[9px] sm:text-[11px]
             uppercase
             tracking-[0.22em]
             font-bold
             opacity-50
             font-mono
+            flex-shrink-0
           "
         >
           PERSONAL NOTE
         </div>
 
-        {/* Actual editable note */}
+        {/* Actual editable note (No scrollbars) */}
         <textarea
           value={noteText}
           onChange={handleChange}
           spellCheck={false}
           className="
             w-full
-            min-h-[180px] sm:min-h-[330px]
+            flex-1
             bg-transparent
             border-none
             outline-none
             resize-none
-            text-[13px] sm:text-[17px]
-            leading-[1.5] sm:leading-[1.75]
+            overflow-hidden
+            text-[12px] sm:text-[16px]
+            leading-[1.4] sm:leading-[1.7]
             font-medium
             placeholder:text-[#4a462f]/40
             selection:bg-[#d8c95f]
+            box-border
+            mb-4 sm:mb-6
           "
           style={{
             fontFamily:
