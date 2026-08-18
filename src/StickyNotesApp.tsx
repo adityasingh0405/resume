@@ -24,130 +24,315 @@ github.com/adityasingh`
   };
 
   return (
-    <div className="h-full w-full flex items-center justify-center overflow-hidden bg-void p-3 sm:p-6 box-border">
-
-      {/* Sticky Note */}
+    <div
+      className="
+        w-full
+        h-full
+        min-h-0
+        flex
+        items-center
+        justify-center
+        overflow-hidden
+        bg-void
+        px-3
+        py-4
+        sm:px-6
+        sm:py-6
+        box-border
+      "
+    >
+      {/* ================================
+          STICKY NOTE
+      ================================= */}
       <div
         className="
           relative
-          w-[92%] sm:w-full
-          max-w-[340px] sm:max-w-[430px]
-          h-[90%] sm:h-auto
-          min-h-[260px] sm:min-h-[430px]
-          p-3.5 sm:p-7
-          bg-[#f5e58c]
-          text-[#27251b]
-          shadow-[6px_8px_18px_rgba(0,0,0,0.45)]
-          rotate-0 sm:rotate-[-1.5deg]
-          transition-all duration-300
+
+          w-[min(88vw,360px)]
+          h-[min(78vh,480px)]
+          max-h-full
+
+          px-4
+          py-4
+
+          sm:w-full
+          sm:max-w-[430px]
+          sm:h-[min(82vh,520px)]
+          sm:px-7
+          sm:py-7
+
+          bg-[#f4e48b]
+          text-[#29271d]
+
+          rotate-[-1deg]
+          sm:rotate-[-1.5deg]
+
+          shadow-[5px_7px_14px_rgba(0,0,0,0.32)]
+          sm:shadow-[8px_12px_24px_rgba(0,0,0,0.38)]
+
+          transition-all
+          duration-300
+
           hover:rotate-0
-          hover:-translate-y-1
-          my-auto
+          hover:-translate-y-0.5
+
           box-border
-          flex flex-col
+
+          flex
+          flex-col
+
           overflow-hidden
         "
         style={{
           backgroundImage: `
             linear-gradient(
-              rgba(255,255,255,0.12),
-              rgba(0,0,0,0.04)
+              135deg,
+              rgba(255,255,255,0.22) 0%,
+              rgba(255,255,255,0.06) 35%,
+              rgba(0,0,0,0.04) 100%
             ),
+
             repeating-linear-gradient(
               0deg,
-              rgba(80,70,20,0.025) 0px,
-              rgba(80,70,20,0.025) 1px,
+              rgba(70,60,15,0.025) 0px,
+              rgba(70,60,15,0.025) 1px,
               transparent 1px,
               transparent 4px
+            ),
+
+            repeating-linear-gradient(
+              90deg,
+              rgba(255,255,255,0.025) 0px,
+              rgba(255,255,255,0.025) 1px,
+              transparent 1px,
+              transparent 5px
             )
+          `,
+          boxShadow: `
+            5px 7px 14px rgba(0,0,0,0.32),
+            inset 0 0 25px rgba(100,85,25,0.08)
           `,
         }}
       >
-
-        {/* Tape / Pin */}
+        {/* ================================
+            TOP EDGE
+        ================================= */}
         <div
           className="
             absolute
-            -top-3 sm:-top-4
-            left-1/2
-            -translate-x-1/2
-            w-16 sm:w-24
-            h-5 sm:h-8
-            bg-[#d8c873]/80
-            rotate-0 sm:rotate-[1deg]
-            shadow-sm
-            border-x border-[#b8a955]/30
+            top-0
+            left-0
+            right-0
+            h-[2px]
+            bg-[#c9b85b]/30
           "
         />
 
-        {/* Folded corner */}
+        {/* ================================
+            TAPE
+        ================================= */}
         <div
           className="
             absolute
+
+            -top-[3px]
+
+            left-1/2
+            -translate-x-1/2
+
+            w-[68px]
+            h-[22px]
+
+            sm:w-[92px]
+            sm:h-[29px]
+
+            bg-[#d5c36b]/75
+
+            rotate-[1deg]
+
+            shadow-[0_1px_3px_rgba(0,0,0,0.15)]
+
+            border-x
+            border-[#ad9e4e]/20
+          "
+          style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                90deg,
+                rgba(255,255,255,0.08) 0px,
+                rgba(255,255,255,0.08) 2px,
+                transparent 2px,
+                transparent 5px
+              )
+            `,
+          }}
+        />
+
+        {/* ================================
+            FOLDED CORNER
+        ================================= */}
+        <div
+          className="
+            absolute
+
             bottom-0
             right-0
+
             w-0
             h-0
-            border-t-[26px] sm:border-t-[42px]
-            border-t-[#d5c66e]
-            border-l-[26px] sm:border-l-[42px]
+
+            border-t-[28px]
+            border-t-[#d2c367]
+
+            border-l-[28px]
             border-l-transparent
+
+            sm:border-t-[42px]
+            sm:border-l-[42px]
+
             drop-shadow-[-2px_-2px_2px_rgba(0,0,0,0.08)]
           "
         />
 
-        {/* Small note label */}
+        {/* ================================
+            CONTENT
+        ================================= */}
         <div
           className="
-            mb-1.5 sm:mb-4
-            text-[9px] sm:text-[11px]
-            uppercase
-            tracking-[0.22em]
-            font-bold
-            opacity-50
-            font-mono
-            flex-shrink-0
+            relative
+            z-10
+
+            flex
+            flex-col
+
+            h-full
+            min-h-0
           "
         >
-          PERSONAL NOTE
-        </div>
+          {/* ================================
+              LABEL
+          ================================= */}
+          <div
+            className="
+              flex-shrink-0
 
-        {/* Actual editable note (No scrollbars) */}
-        <textarea
-          value={noteText}
-          onChange={handleChange}
-          spellCheck={false}
-          className="
-            w-full
-            flex-1
-            bg-transparent
-            border-none
-            outline-none
-            resize-none
-            overflow-hidden
-            text-[12px] sm:text-[16px]
-            leading-[1.4] sm:leading-[1.7]
-            font-medium
-            placeholder:text-[#4a462f]/40
-            selection:bg-[#d8c95f]
-            box-border
-            mb-4 sm:mb-6
-          "
-          style={{
-            fontFamily:
-              '"Comic Sans MS", "Segoe Print", "Bradley Hand", cursive',
-          }}
-        />
+              mb-2
+              sm:mb-4
 
-        {/* Bottom details */}
-        <div className="absolute bottom-2 sm:bottom-4 left-3.5 sm:left-7 right-3.5 sm:right-7 flex justify-between items-center">
-          <span className="text-[8px] sm:text-[9px] font-mono opacity-35 uppercase tracking-wider">
-            LOCAL • AUTO SAVED
-          </span>
+              text-[8px]
+              sm:text-[11px]
 
-          <span className="text-[9px] sm:text-[10px] opacity-30 rotate-[-2deg]">
-            ✓
-          </span>
+              uppercase
+
+              tracking-[0.2em]
+
+              font-bold
+
+              opacity-45
+
+              font-mono
+            "
+          >
+            PERSONAL NOTE
+          </div>
+
+          {/* ================================
+              EDITABLE NOTE
+          ================================= */}
+          <textarea
+            value={noteText}
+            onChange={handleChange}
+            spellCheck={false}
+            aria-label="Personal sticky note"
+            className="
+              w-full
+              flex-1
+              min-h-0
+
+              bg-transparent
+
+              border-none
+              outline-none
+              resize-none
+
+              overflow-y-auto
+              overflow-x-hidden
+
+              text-[13px]
+              sm:text-[16px]
+
+              leading-[1.5]
+              sm:leading-[1.7]
+
+              font-medium
+
+              placeholder:text-[#4a462f]/40
+
+              selection:bg-[#d8c95f]
+
+              pr-1
+              pb-8
+
+              scrollbar-thin
+              scrollbar-track-transparent
+              scrollbar-thumb-[#9f9145]/30
+            "
+            style={{
+              fontFamily:
+                '"Comic Sans MS", "Segoe Print", "Bradley Hand", cursive',
+
+              scrollbarWidth: 'thin',
+            }}
+          />
+
+          {/* ================================
+              FOOTER
+          ================================= */}
+          <div
+            className="
+              absolute
+
+              bottom-0
+              left-0
+              right-0
+
+              flex
+              justify-between
+              items-center
+
+              pointer-events-none
+            "
+          >
+            <span
+              className="
+                text-[7px]
+                sm:text-[9px]
+
+                font-mono
+
+                opacity-30
+
+                uppercase
+
+                tracking-wider
+              "
+            >
+              LOCAL • AUTO SAVED
+            </span>
+
+            <span
+              className="
+                text-[10px]
+                sm:text-[11px]
+
+                opacity-25
+
+                rotate-[-8deg]
+              "
+            >
+              ✓
+            </span>
+          </div>
         </div>
       </div>
     </div>
