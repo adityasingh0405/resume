@@ -30,29 +30,51 @@ const ResearchApp: React.FC = () => {
   if (selectedPdf) {
     return (
       <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--window-bg)', fontFamily: 'var(--font-mono)' }}>
+        {/* PDF Viewer Header Bar */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '10px 14px',
+          padding: '8px 12px',
           borderBottom: '1px solid var(--border-mid)',
           background: 'rgba(0,255,65,0.03)',
+          flexWrap: 'wrap',
+          gap: '8px',
         }}>
-          <div className="font-vt323 text-xl text-glow" style={{ color: 'var(--phosphor)' }}>
-            PDF VIEWER
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button
+              onClick={() => setSelectedPdf(null)}
+              className="retro-btn"
+              style={{ fontSize: '11px', padding: '4px 9px', cursor: 'pointer' }}
+            >
+              ← BACK
+            </button>
+            <div className="font-vt323 text-xl text-glow" style={{ color: 'var(--phosphor)' }}>
+              PDF VIEWER
+            </div>
           </div>
-          <button
-            onClick={() => setSelectedPdf(null)}
-            className="retro-btn"
-            style={{ fontSize: '10px', padding: '4px 8px', cursor: 'pointer' }}
+
+          <a
+            href={selectedPdf}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="retro-btn retro-btn-amber"
+            style={{ fontSize: '11px', padding: '4px 10px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
           >
-            ← BACK
-          </button>
+            📄 OPEN ALL PAGES ↗
+          </a>
         </div>
-        <div style={{ flex: 1, position: 'relative' }}>
+
+        {/* Mobile notice banner for WebKit single-page iframe limitations */}
+        <div className="sm:hidden px-3 py-1.5 bg-black/80 border-b border-dim-color text-[10px] text-amber flex items-center justify-between">
+          <span>Mobile user: Tap "OPEN ALL PAGES ↗" to view multi-page PDF natively</span>
+        </div>
+
+        {/* PDF Viewport Container */}
+        <div style={{ flex: 1, position: 'relative', overflow: 'auto', WebkitOverflowScrolling: 'touch' }}>
           <iframe
-            src={selectedPdf}
-            style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+            src={`${selectedPdf}#toolbar=1&navpanes=1&view=FitH`}
+            style={{ width: '100%', height: '100%', minHeight: '480px', border: 'none', display: 'block' }}
             title="Research PDF Viewer"
           />
         </div>
@@ -174,18 +196,33 @@ const ResearchApp: React.FC = () => {
             </div>
 
             {paper.pdf && (
-              <div style={{ marginTop: '14px' }}>
+              <div style={{ marginTop: '14px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 <button
                   onClick={() => setSelectedPdf(paper.pdf as string)}
                   className="retro-btn"
                   style={{
-                    fontSize: '12px',
-                    padding: '6px 10px',
+                    fontSize: '11px',
+                    padding: '5px 10px',
                     cursor: 'pointer',
                   }}
                 >
-                  VIEW PDF
+                  👁 VIEW IN APP
                 </button>
+                <a
+                  href={paper.pdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="retro-btn retro-btn-amber"
+                  style={{
+                    fontSize: '11px',
+                    padding: '5px 10px',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  📄 OPEN ALL PAGES ↗
+                </a>
               </div>
             )}
           </div>

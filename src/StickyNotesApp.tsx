@@ -24,22 +24,24 @@ github.com/adityasingh`
   };
 
   return (
-    <div className="h-full w-full flex items-center justify-center overflow-y-auto bg-void p-3 sm:p-6">
+    <div className="h-full w-full flex items-center justify-center overflow-y-auto overflow-x-hidden bg-void p-2 sm:p-6">
 
       {/* Sticky Note */}
       <div
         className="
           relative
-          w-full max-w-[430px]
-          min-h-[290px] sm:min-h-[430px]
-          p-4 sm:p-7
+          w-[95%] sm:w-full
+          max-w-[340px] sm:max-w-[430px]
+          min-h-[260px] sm:min-h-[430px]
+          p-3.5 sm:p-7
           bg-[#f5e58c]
           text-[#27251b]
-          shadow-[8px_12px_25px_rgba(0,0,0,0.45)]
-          rotate-[-1.5deg]
+          shadow-[6px_8px_18px_rgba(0,0,0,0.45)]
+          rotate-0 sm:rotate-[-1.5deg]
           transition-all duration-300
-          hover:rotate-[0deg]
+          hover:rotate-0
           hover:-translate-y-1
+          my-auto
         "
         style={{
           backgroundImage: `
@@ -65,10 +67,10 @@ github.com/adityasingh`
             -top-3 sm:-top-4
             left-1/2
             -translate-x-1/2
-            w-20 sm:w-24
-            h-6 sm:h-8
+            w-18 sm:w-24
+            h-5 sm:h-8
             bg-[#d8c873]/80
-            rotate-[1deg]
+            rotate-0 sm:rotate-[1deg]
             shadow-sm
             border-x border-[#b8a955]/30
           "
@@ -82,9 +84,9 @@ github.com/adityasingh`
             right-0
             w-0
             h-0
-            border-t-[32px] sm:border-t-[42px]
+            border-t-[28px] sm:border-t-[42px]
             border-t-[#d5c66e]
-            border-l-[32px] sm:border-l-[42px]
+            border-l-[28px] sm:border-l-[42px]
             border-l-transparent
             drop-shadow-[-2px_-2px_2px_rgba(0,0,0,0.08)]
           "
@@ -93,8 +95,8 @@ github.com/adityasingh`
         {/* Small note label */}
         <div
           className="
-            mb-3 sm:mb-5
-            text-[10px] sm:text-[11px]
+            mb-2 sm:mb-5
+            text-[9px] sm:text-[11px]
             uppercase
             tracking-[0.22em]
             font-bold
@@ -112,7 +114,7 @@ github.com/adityasingh`
           spellCheck={false}
           className="
             w-full
-            min-h-[210px] sm:min-h-[330px]
+            min-h-[180px] sm:min-h-[330px]
             bg-transparent
             border-none
             outline-none
@@ -130,7 +132,7 @@ github.com/adityasingh`
         />
 
         {/* Bottom details */}
-        <div className="absolute bottom-2.5 sm:bottom-4 left-4 sm:left-7 right-4 sm:right-7 flex justify-between items-center">
+        <div className="absolute bottom-2 sm:bottom-4 left-3.5 sm:left-7 right-3.5 sm:right-7 flex justify-between items-center">
           <span className="text-[8px] sm:text-[9px] font-mono opacity-35 uppercase tracking-wider">
             LOCAL • AUTO SAVED
           </span>
