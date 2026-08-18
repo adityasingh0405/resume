@@ -78,15 +78,7 @@ const ResearchApp: React.FC = () => {
             APPLIED AI · LLM ARCHITECTURES · HYBRID RAG · BENCHMARK REPORTS
           </div>
         </div>
-        <div style={{
-          fontSize: '12px',
-          padding: '4px 8px',
-          border: '1px solid var(--phosphor-hot)',
-          color: 'var(--phosphor-hot)',
-          letterSpacing: '1px',
-        }}>
-          AUTONOMOUS AI AGENT 1ST PLACE WINNER
-        </div>
+
       </div>
 
       {/* Hackathon Winner Banner */}
