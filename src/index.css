@@ -1,0 +1,1727 @@
+@import "tailwindcss";
+
+/* ============================================================
+   PEGASUS_OS v2.0 — RETRO-FUTURE WIN95/XP EDITION
+   Monochrome green with structured windowing, solid backgrounds,
+   Win95-style 3D bevel borders, and clean readable typography.
+   ============================================================ */
+
+:root {
+  /* ── NeonOS Chrome (fixed structural tones, not theme-switchable) ── */
+  --neos-bg: #081008;
+  /* Desktop void — solid slate green */
+  --neos-window: #0b160c;
+  /* Window body background */
+  --neos-window-dark: #070e07;
+  /* Darker inset / alternate fill */
+
+  /* Win95 bevel system — three tones per side */
+  --bevel-xlight: #6abf72;
+  /* Outer edge highlight */
+  --bevel-light: #3e8a46;
+  /* Top/Left raised edge */
+  --bevel-mid: #1a4a20;
+  /* Inner border mid */
+  --bevel-dark: #050d06;
+  /* Bottom/Right shadow */
+  --bevel-xdark: #020502;
+  /* Deepest shadow */
+
+  /* Title bar tones */
+  --title-active-start: #0f4a22;
+  --title-active-end: #0a3018;
+  --title-inactive: #080f08;
+  --title-text-active: #c0f0c8;
+  --title-text-inactive: #2e6636;
+
+  /* Taskbar */
+  --taskbar-bg: #060c06;
+  --taskbar-border: #3e8a46;
+
+  /* ── Phosphor (theme-switchable via CSS class) ── */
+  --phosphor: #4ede5a;
+  /* Primary bright green */
+  --phosphor-hot: #8fff9a;
+  /* Max brightness */
+  --phosphor-mid: #2a8c36;
+  /* Mid-tone */
+  --phosphor-dim: #2a8234;
+  /* Dim text / secondary */
+  --phosphor-dark: #1a5624;
+  /* Very dim */
+  --phosphor-ghost: #040c06;
+  /* Near-black tint */
+
+  /* Accent colors */
+  --amber: #cc8826;
+  --amber-dim: #7a4a10;
+  --red-alert: #c83828;
+
+  /* Border tokens (phosphor-tinted, change with theme) */
+  --border-bright: #4ede5a;
+  --border-mid: #1a4a20;
+  --border-dim: #0c2610;
+
+  /* Glow effects */
+  --glow-phosphor: 0 0 8px rgba(78, 222, 90, 0.35), 0 0 20px rgba(78, 222, 90, 0.12);
+  --glow-soft: 0 0 5px rgba(78, 222, 90, 0.25);
+  --glow-title: 0 0 10px rgba(78, 222, 90, 0.2);
+
+  /* Typography */
+  --font-mono: 'Share Tech Mono', 'Courier New', Courier, monospace;
+  --font-vt323: 'VT323', monospace;
+}
+
+/* ── Theme: Vintage Amber VT100 ────────────────────────────── */
+.theme-amber {
+  --phosphor: #e09a2a;
+  --phosphor-hot: #ffbe68;
+  --phosphor-mid: #b06c14;
+  --phosphor-dim: #8c5416;
+  --phosphor-dark: #542c08;
+  --phosphor-ghost: #120800;
+  --amber: #4ede5a;
+  --border-bright: #e09a2a;
+  --border-mid: #885010;
+  --border-dim: #422808;
+  --glow-phosphor: 0 0 8px rgba(224, 154, 42, 0.35), 0 0 20px rgba(224, 154, 42, 0.12);
+  --glow-soft: 0 0 5px rgba(224, 154, 42, 0.25);
+  --title-active-start: #3a2008;
+  --title-active-end: #281408;
+  --title-text-active: #ffe0a0;
+}
+
+/* ── Theme: Paper White ─────────────────────────────────────── */
+.theme-paper {
+  --phosphor: #c4d8c8;
+  --phosphor-hot: #eef8f0;
+  --phosphor-mid: #829e88;
+  --phosphor-dim: #5c7562;
+  --phosphor-dark: #3e4e42;
+  --phosphor-ghost: #080d08;
+  --amber: #cc8826;
+  --border-bright: #c4d8c8;
+  --border-mid: #587860;
+  --border-dim: #282e28;
+  --glow-phosphor: 0 0 5px rgba(196, 216, 200, 0.25);
+  --glow-soft: 0 0 4px rgba(196, 216, 200, 0.2);
+  --title-active-start: #1e2e20;
+  --title-active-end: #141e16;
+  --title-text-active: #e0f0e4;
+}
+
+/* ── Theme: Virtual Boy Red ─────────────────────────────────── */
+.theme-red {
+  --phosphor: #dc3c38;
+  --phosphor-hot: #ff7a76;
+  --phosphor-mid: #a02020;
+  --phosphor-dim: #841a1a;
+  --phosphor-dark: #500c0c;
+  --phosphor-ghost: #100202;
+  --amber: #e09a2a;
+  --border-bright: #dc3c38;
+  --border-mid: #761414;
+  --border-dim: #3c0808;
+  --glow-phosphor: 0 0 8px rgba(220, 60, 56, 0.35), 0 0 20px rgba(220, 60, 56, 0.12);
+  --glow-soft: 0 0 5px rgba(220, 60, 56, 0.25);
+  --title-active-start: #3a0808;
+  --title-active-end: #280606;
+  --title-text-active: #ffb0b0;
+}
+
+/* ── Global Reset ───────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #040804;
+}
+
+body {
+  font-family: var(--font-mono);
+  color: var(--phosphor);
+  cursor: default;
+  user-select: none;
+}
+
+/* ============================================================
+   MONITOR BEZEL — Minimal inset frame
+   Thin border only; no heavy barrel-curve or padding gimmick
+   ============================================================ */
+.crt-bezel {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  display: flex;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.crt-bezel-inner {
+  flex: 1;
+  border: none;
+  box-shadow: none;
+  position: relative;
+  overflow: hidden;
+  background: var(--neos-bg);
+}
+
+/* Glass layer — very subtle only */
+.crt-glass {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Extremely subtle scanlines — barely perceptible depth hint */
+.crt-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: repeating-linear-gradient(to bottom,
+      transparent 0px,
+      transparent 3px,
+      rgba(0, 0, 0, 0.04) 3px,
+      rgba(0, 0, 0, 0.04) 4px);
+}
+
+/* Soft edge vignette — only at corners, not center */
+.crt-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;
+  background: radial-gradient(ellipse at 50% 50%,
+      transparent 72%,
+      rgba(0, 0, 0, 0.28) 100%);
+}
+
+/* Barely-there phosphor flicker */
+@keyframes crtFlicker {
+
+  0%,
+  95%,
+  100% {
+    opacity: 1;
+  }
+
+  96% {
+    opacity: 0.975;
+  }
+}
+
+.crt-flicker {
+  animation: crtFlicker 7s linear infinite;
+}
+
+/* ============================================================
+   DESKTOP — Solid dark background, no grid texture
+   ============================================================ */
+.desktop-bg {
+  background: var(--neos-bg);
+}
+
+/* ============================================================
+   WIN95-STYLE 3D BEVEL SYSTEM
+   Classic two-tone raised/sunken borders
+   ============================================================ */
+
+/* Raised element: light top+left, dark bottom+right */
+.win95-raised {
+  border: 2px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+}
+
+/* Sunken element: dark top+left, light bottom+right */
+.win95-sunken {
+  border: 2px solid;
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
+}
+
+/* Flat inset panel (for input areas / display boxes) */
+.win95-inset {
+  border: 1px solid;
+  border-color: var(--bevel-dark) var(--bevel-mid) var(--bevel-mid) var(--bevel-dark);
+  background: var(--neos-window-dark);
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================
+   WINDOW CHROME — Win95 Double-Bevel Borders
+   ============================================================ */
+.window-border {
+  /* Outer raised bevel */
+  border: 2px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  /* Inner contrast border + drop shadow */
+  box-shadow:
+    inset 0 0 0 1px var(--bevel-mid),
+    4px 6px 28px rgba(0, 0, 0, 0.85),
+    0 0 0 1px var(--bevel-xdark);
+}
+
+.window-border-inactive {
+  border: 2px solid;
+  border-color: var(--bevel-mid) var(--bevel-xdark) var(--bevel-xdark) var(--bevel-mid);
+  box-shadow:
+    inset 0 0 0 1px var(--bevel-dark),
+    2px 4px 16px rgba(0, 0, 0, 0.7);
+}
+
+/* Title bar — solid saturated green when focused */
+.titlebar-active {
+  background: linear-gradient(90deg, var(--title-active-start) 0%, var(--title-active-end) 60%, var(--title-active-start) 100%);
+  border-bottom: 1px solid var(--bevel-dark);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.titlebar-inactive {
+  background: var(--title-inactive);
+  border-bottom: 1px solid var(--bevel-xdark);
+}
+
+/* Window body inner shadow */
+.window-body-inset {
+  box-shadow:
+    inset 2px 2px 6px rgba(0, 0, 0, 0.6),
+    inset -1px -1px 2px rgba(78, 222, 90, 0.03);
+}
+
+/* Sunken content panel (for displays, terminals) */
+.sunken-panel {
+  background: var(--neos-window-dark);
+  border: 1px solid;
+  border-color: var(--bevel-dark) var(--bevel-mid) var(--bevel-mid) var(--bevel-dark);
+  box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.55);
+}
+
+/* ============================================================
+   WINDOW CONTROLS — Win95 Raised Buttons
+   ============================================================ */
+.win-ctrl {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: bold;
+  width: 22px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  background: #0e2e12;
+  color: var(--phosphor);
+  flex-shrink: 0;
+  user-select: none;
+  border-radius: 3px;
+  transition: all 0.1s ease;
+  line-height: 1;
+}
+
+.win-ctrl:hover {
+  background: #142e16;
+  color: var(--phosphor);
+}
+
+.win-ctrl:active {
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
+  transform: translate(1px, 1px);
+}
+
+.win-ctrl-close:hover {
+  background: #380a08 !important;
+  color: #ff7070 !important;
+  border-color: #902020 var(--bevel-dark) var(--bevel-dark) #902020 !important;
+}
+
+/* ============================================================
+   RETRO BUTTONS (raised Win95 bevel)
+   ============================================================ */
+.retro-btn {
+  font-family: var(--font-mono);
+  background: #0c1e0e;
+  color: var(--phosphor);
+  border: 2px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  padding: 4px 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 11px;
+  outline: none;
+  transition: none;
+}
+
+.retro-btn:hover {
+  background: #122016;
+  color: var(--phosphor-hot);
+}
+
+.retro-btn:active {
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
+  transform: translate(1px, 1px);
+}
+
+.retro-btn-amber {
+  color: var(--amber);
+  border-top-color: var(--amber-dim);
+  border-left-color: var(--amber-dim);
+}
+
+.retro-btn-red {
+  color: var(--red-alert);
+  border-top-color: #6a1410;
+  border-left-color: #6a1410;
+}
+
+.retro-btn-red:hover {
+  background: #2c0806;
+}
+
+/* ============================================================
+   SCROLLBARS — Win95 themed
+   ============================================================ */
+.retro-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #0e2e12 #070e07;
+}
+
+.retro-scroll::-webkit-scrollbar {
+  width: 12px;
+}
+
+.retro-scroll::-webkit-scrollbar-track {
+  background: #070e07;
+  border-left: 1px solid var(--bevel-dark);
+}
+
+.retro-scroll::-webkit-scrollbar-thumb {
+  background: #0e2e12;
+  border: 1px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  min-height: 20px;
+}
+
+.retro-scroll::-webkit-scrollbar-thumb:hover {
+  background: #142e16;
+}
+
+.retro-scroll::-webkit-scrollbar-button {
+  background: #0c1e0e;
+  border: 1px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  height: 12px;
+}
+
+/* ============================================================
+   PULSING STATUS DOT
+   ============================================================ */
+@keyframes phosphorPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--phosphor);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: phosphorPulse 2s ease-in-out infinite;
+}
+
+.pulse-dot-amber {
+  background: var(--amber);
+  animation: phosphorPulse 2s ease-in-out infinite;
+}
+
+/* ============================================================
+   TEXT UTILITIES
+   ============================================================ */
+.text-glow {
+  text-shadow: var(--glow-soft);
+}
+
+.text-glow-bright {
+  text-shadow: 0 0 8px var(--phosphor), 0 0 20px var(--phosphor);
+}
+
+.text-glow-amber {
+  text-shadow: 0 0 5px var(--amber);
+}
+
+/* ============================================================
+   DESKTOP ICONS — Win95 Cluster Style
+   ============================================================ */
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 5px;
+  cursor: pointer;
+  width: 84px;
+  border: 1px solid transparent;
+}
+
+.desktop-icon:hover {
+  background: rgba(78, 222, 90, 0.05);
+}
+
+/* Icon image wrapper — no bevel box, just the pixel sprite */
+.icon-wrapper {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  image-rendering: pixelated;
+}
+
+.icon-wrapper svg {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Win95-style dotted focus rect — on icon-wrapper ONLY */
+.desktop-icon.selected .icon-wrapper {
+  outline: 1px dotted var(--phosphor);
+  outline-offset: 2px;
+}
+
+.desktop-icon.selected {
+  background: rgba(78, 222, 90, 0.07);
+}
+
+/* Running indicator: underline dot below icon */
+.desktop-icon.running .icon-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 2px;
+  background: var(--phosphor);
+  box-shadow: 0 0 4px var(--phosphor);
+}
+
+.icon-label {
+  font-size: 10px;
+  color: var(--phosphor-dim);
+  text-align: center;
+  line-height: 1.25;
+  word-break: break-all;
+  letter-spacing: 0.2px;
+  font-family: var(--font-mono);
+  max-width: 82px;
+  padding: 0 2px;
+}
+
+/* Selected/running labels get text bg like Win95 */
+.desktop-icon.selected .icon-label,
+.desktop-icon.running .icon-label {
+  color: var(--phosphor-hot);
+  background: rgba(0, 40, 8, 0.7);
+}
+
+.desktop-icon:hover .icon-label {
+  color: var(--phosphor);
+}
+
+/* Desktop category divider label */
+.desktop-category {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--phosphor-dark);
+  letter-spacing: 2px;
+  padding: 10px 4px 3px;
+  text-align: center;
+  width: 84px;
+}
+
+/* ============================================================
+   TASKBAR — Solid Win95 Style
+   ============================================================ */
+.taskbar {
+  background: var(--taskbar-bg);
+  border-top: 2px solid;
+  border-color: var(--bevel-light) transparent transparent var(--bevel-light);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* ◈ START button — distinct raised 3D bevel look */
+.start-button {
+  font-family: var(--font-mono);
+  background: #0e2812;
+  color: var(--phosphor-hot);
+  border: 2px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  padding: 3px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 88px;
+  flex-shrink: 0;
+}
+
+.start-button:hover {
+  background: #122e16;
+}
+
+.start-button.active,
+.start-button:active {
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
+  background: #080f08;
+  transform: translate(1px, 1px);
+}
+
+/* Taskbar window buttons */
+.taskbar-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 10px;
+  border: 1px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  background: #0a1c0c;
+  color: var(--phosphor-dim);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.taskbar-btn:hover {
+  color: var(--phosphor);
+  background: #0e2412;
+}
+
+.taskbar-btn.active {
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
+  background: #060c06;
+  color: var(--phosphor);
+  box-shadow: inset 1px 1px 0 var(--bevel-xdark);
+}
+
+.taskbar-btn.minimized {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+/* System tray */
+.system-tray {
+  border: 1px solid;
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
+  background: #050c05;
+  padding: 3px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   START MENU — Win95 Solid Popup Panel
+   ============================================================ */
+.start-menu {
+  background: #080f08;
+  border: 2px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.92), inset 0 0 0 1px var(--bevel-mid);
+  display: flex;
+  overflow: hidden;
+}
+
+/* Left accent strip with rotated NEON_OS text */
+.start-menu-sidebar {
+  width: 34px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, var(--title-active-start) 0%, #040c06 100%);
+  border-right: 1px solid var(--bevel-dark);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.start-menu-sidebar-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-vt323);
+  font-size: 20px;
+  color: rgba(160, 240, 176, 0.55);
+  letter-spacing: 2px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Right content panel */
+.start-menu-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.start-menu-item {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 8px 14px;
+  color: var(--phosphor-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.start-menu-item:hover {
+  background: #0e3016;
+  color: var(--phosphor-hot);
+}
+
+.start-menu-separator {
+  height: 0;
+  border-top: 1px solid var(--bevel-dark);
+  border-bottom: 1px solid var(--bevel-mid);
+  margin: 3px 6px;
+}
+
+/* ============================================================
+   FORM INPUTS
+   ============================================================ */
+.terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--phosphor);
+  caret-color: var(--phosphor);
+  width: 100%;
+}
+
+.retro-form-input {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: #040a04;
+  border: 1px solid;
+  border-color: var(--bevel-dark) var(--bevel-mid) var(--bevel-mid) var(--bevel-dark);
+  color: var(--phosphor);
+  caret-color: var(--phosphor);
+  outline: none;
+  padding: 5px 8px;
+  width: 100%;
+}
+
+.retro-form-input:focus {
+  outline: 1px solid var(--phosphor-dim);
+  outline-offset: -2px;
+}
+
+/* ============================================================
+   PROJECT CARDS
+   ============================================================ */
+.project-card {
+  background: #070e07;
+  border: 1px solid var(--bevel-dark);
+  border-top-color: var(--bevel-mid);
+  border-left-color: var(--bevel-mid);
+  padding: 12px;
+}
+
+.project-card:hover {
+  border-color: var(--border-mid);
+  background: #090f09;
+  box-shadow: 0 0 10px rgba(78, 222, 90, 0.06);
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes blinkCursor {
+
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blinkCursor 0.8s step-end infinite;
+}
+
+@keyframes phosphorReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.phosphor-reveal {
+  animation: phosphorReveal 0.08s ease-out both;
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.font-vt323 {
+  font-family: var(--font-vt323);
+}
+
+.text-p {
+  color: var(--phosphor);
+}
+
+.text-p-hot {
+  color: var(--phosphor-hot);
+}
+
+.text-p-dim {
+  color: var(--phosphor-dim);
+}
+
+.text-amber {
+  color: var(--amber);
+}
+
+.text-alert {
+  color: var(--red-alert);
+}
+
+.bg-window {
+  background: var(--neos-window);
+}
+
+.bg-window-dark {
+  background: var(--neos-window-dark);
+}
+
+.bg-void {
+  background: var(--neos-bg);
+}
+
+/* "border-dim-color" used in some components */
+.border-dim-color {
+  border-color: var(--bevel-dark);
+}
+
+/* CPU meter bar */
+.cpu-bar {
+  width: 3px;
+  height: 10px;
+  background: var(--bevel-dark);
+}
+
+.cpu-bar.active-low {
+  background: var(--phosphor);
+}
+
+.cpu-bar.active-mid {
+  background: var(--amber);
+}
+
+.cpu-bar.active-high {
+  background: var(--red-alert);
+}
+
+::selection {
+  background: var(--phosphor-mid);
+  color: var(--neos-bg);
+}
+
+/* ============================================================
+   COMPAT UTILITY CLASSES
+   Used by component files via className strings
+   ============================================================ */
+
+/* shadow-glow — used by DisplayCfgApp, SynthApp */
+.shadow-glow {
+  box-shadow: var(--glow-phosphor);
+}
+
+.shadow-glow-amber {
+  box-shadow: 0 0 8px rgba(204, 136, 38, 0.4), 0 0 16px rgba(204, 136, 38, 0.15);
+}
+
+/* border-p — phosphor-colored border */
+.border-p {
+  border-color: var(--phosphor) !important;
+}
+
+.border-amber {
+  border-color: var(--amber) !important;
+}
+
+.focus\:border-amber:focus {
+  border-color: var(--amber) !important;
+}
+
+.hover\:border-p:hover {
+  border-color: var(--phosphor) !important;
+}
+
+.hover\:border-p-dim:hover {
+  border-color: var(--phosphor-dim) !important;
+}
+
+/* border-dim-color — dim border */
+.border-dim-color {
+  border-color: var(--bevel-dark);
+}
+
+/* bg-amber — amber background */
+.bg-amber {
+  background-color: var(--amber) !important;
+}
+
+/* text-void — text on dark bg */
+.text-void {
+  color: var(--neos-bg) !important;
+}
+
+/* focus:border-p */
+.focus\:border-p:focus {
+  border-color: var(--phosphor) !important;
+}
+
+/* tracking and letter spacing helpers */
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+/* Tailwind border shorthand (used in component className strings) */
+.border {
+  border-width: 1px;
+  border-style: solid;
+}
+
+.border-2 {
+  border-width: 2px;
+  border-style: solid;
+}
+
+/* ============================================================
+   RETRO 3D HARDWARE MONITOR FRAME (EXACT PHOTO ENCLOSURE)
+   ============================================================ */
+
+.retro-monitor-wrapper {
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 50% 40%, #1e242b 0%, #0d1014 70%, #050709 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+}
+
+/* Floating Mode Switcher Button */
+.frame-toggle-btn {
+  position: fixed;
+  top: 12px;
+  right: 14px;
+  z-index: 99999;
+  background: #1e2228;
+  color: #a0aab8;
+  border: 1px solid #3a424e;
+  padding: 6px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.15s ease;
+}
+
+.frame-toggle-btn:hover {
+  background: #2a3039;
+  color: #ffffff;
+  border-color: #5a6678;
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   CRT MONITOR FRAME — SINGLE UNIFIED HARDWARE CABINET
+   ============================================================ */
+
+/* Dark desk / room background */
+.crt-wrapper {
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(ellipse at 48% 28%, #1c2128 0%, #0c0f13 55%, #040608 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+}
+
+/* Ambient desk surface glow below monitor */
+.crt-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 100px;
+  background: radial-gradient(ellipse at center bottom, rgba(25, 45, 25, 0.25) 0%, transparent 75%);
+  pointer-events: none;
+}
+
+/* Scale container */
+.crt-scaler {
+  transform-origin: center center;
+  transition: transform 0.15s ease-out;
+}
+
+/* Outer CRT Housing Box */
+.crt-housing {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1080px;
+}
+
+/* Main Molded Aged Cabinet — reference: sandy cream/beige CRT plastic */
+.crt-faceplate {
+  width: 100%;
+  /* Cream-beige ivory aging: lighter at top, slightly darker warm tan at bottom — matches ref photo */
+  background: linear-gradient(180deg,
+      #ddd3b5 0%,
+      #d5c9a3 25%,
+      #cdc09a 60%,
+      #c4b48a 85%,
+      #b8a87d 100%);
+  border-radius: 38px 38px 22px 22px;
+  padding: 24px 26px 14px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow:
+    /* Main drop shadow */
+    0 40px 80px rgba(0, 0, 0, 0.9),
+    0 18px 32px rgba(0, 0, 0, 0.75),
+    /* Top edge plastic highlight (light hits top of monitor) */
+    inset 0 4px 8px rgba(255, 252, 235, 0.75),
+    /* Left edge mild highlight */
+    inset 3px 0 5px rgba(255, 248, 220, 0.3),
+    /* Right-side aging/grime shadow (matches ref: right side darker) */
+    inset -8px 0 20px rgba(80, 55, 25, 0.3),
+    /* Bottom chin underside shadow */
+    inset 0 -6px 16px rgba(40, 25, 8, 0.4);
+  border: 1px solid #a8966d;
+  position: relative;
+}
+
+/* Cabinet wear: Right-side brown grime + bottom-right corner staining — ref shows this clearly */
+.crt-faceplate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+  background:
+    /* Right-edge vertical brown grime streak — visible in ref */
+    linear-gradient(to left, rgba(100, 65, 20, 0.28) 0%, rgba(80, 50, 15, 0.12) 5%, transparent 18%),
+    /* Bottom-right corner accumulated grime */
+    radial-gradient(ellipse 30% 25% at 94% 88%, rgba(90, 58, 18, 0.35) 0%, transparent 75%),
+    /* Top-left subtle yellowing (plastic UV aging) */
+    radial-gradient(ellipse 30% 20% at 8% 10%, rgba(200, 175, 100, 0.18) 0%, transparent 60%),
+    /* Very faint bottom seam line */
+    linear-gradient(to top, rgba(60, 40, 12, 0.18) 0%, transparent 5%);
+}
+
+/* Matte plastic surface texture — very fine grain, subtle */
+.crt-faceplate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+  background-image: radial-gradient(rgba(80, 60, 20, 0.10) 1px, transparent 0);
+  background-size: 4px 4px;
+  opacity: 0.28;
+}
+
+/* Dark Graphite Inner Screen Bezel Frame — clean, slightly sunken */
+.crt-screen-inset {
+  width: 100%;
+  background: linear-gradient(180deg, #1a1815 0%, #111009 55%, #0a0908 100%);
+  border-radius: 30px / 22px;
+  padding: 16px 18px;
+  position: relative;
+  z-index: 2;
+  box-shadow:
+    /* Deep inset shadow — gives the screen depth */
+    inset 14px 14px 35px rgba(0, 0, 0, 1),
+    inset -14px -14px 35px rgba(0, 0, 0, 0.95),
+    /* Very faint warm rim glow from phosphor */
+    inset 0 0 8px rgba(20, 60, 20, 0.15),
+    /* Subtle outer bead separating bezel from cabinet */
+    0 0 0 1px rgba(255, 240, 180, 0.12);
+  border: 2px solid #1c1a15;
+  display: flex;
+}
+
+/* Glass Screen Viewport Tube (Curved CRT Screen Faceplate) */
+.crt-glass-tube {
+  width: 100%;
+  height: 560px;
+  border-radius: 22px / 16px;
+  overflow: hidden;
+  position: relative;
+  background: #000000;
+  box-shadow:
+    /* Deep 3D glass tube inset shadow with glass rim corrosion */
+    inset 0 0 50px rgba(0, 0, 0, 0.95),
+    inset 0 0 20px rgba(110, 45, 12, 0.35),
+    inset 0 0 15px rgba(0, 0, 0, 0.9);
+  transition: filter 0.25s ease;
+}
+
+.crt-glass-tube.crt-powered-off {
+  filter: brightness(0) !important;
+}
+
+/* Moving CRT Scanline Roll & Beam Refresh */
+@keyframes crtScanlineRoll {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 0 100%;
+  }
+}
+
+/* CRT Scanline overlay */
+.crt-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9000;
+  background: repeating-linear-gradient(to bottom,
+      transparent 0px,
+      transparent 2px,
+      rgba(0, 0, 0, 0.18) 2px,
+      rgba(0, 0, 0, 0.18) 4px);
+  background-size: 100% 8px;
+  animation: crtScanlineRoll 10s linear infinite;
+  border-radius: 22px / 16px;
+}
+
+/* Violent Retro CRT Color Shift & Skew Glitch (250ms — old tube pop) */
+@keyframes crtGlitchShift {
+  0% {
+    transform: translate(0, 0) skew(0deg);
+    filter: none;
+  }
+
+  10% {
+    transform: translate(-10px, 3px) skew(-4.5deg, 1.5deg);
+    filter: drop-shadow(-12px 0 0 rgba(255, 0, 90, 0.9)) drop-shadow(12px 0 0 rgba(0, 255, 220, 0.9)) hue-rotate(90deg) contrast(1.5) brightness(1.3);
+  }
+
+  25% {
+    transform: translate(12px, -4px) skew(5deg, -2deg);
+    filter: drop-shadow(14px 0 0 rgba(255, 40, 0, 0.9)) drop-shadow(-14px 0 0 rgba(0, 160, 255, 0.9)) hue-rotate(-120deg) invert(0.15) contrast(1.6);
+  }
+
+  40% {
+    transform: translate(-8px, 5px) skew(-3.5deg, 2deg);
+    filter: drop-shadow(-10px 0 0 rgba(0, 255, 80, 0.85)) drop-shadow(10px 0 0 rgba(255, 0, 200, 0.85)) hue-rotate(180deg) brightness(1.4) saturate(2.5);
+  }
+
+  55% {
+    transform: translate(9px, -2px) skew(3deg, -1.2deg);
+    filter: drop-shadow(11px 0 0 rgba(255, 210, 0, 0.85)) drop-shadow(-11px 0 0 rgba(30, 120, 255, 0.85)) hue-rotate(-60deg) contrast(1.7);
+  }
+
+  75% {
+    transform: translate(-4px, 2px) skew(-2deg, 0.8deg);
+    filter: drop-shadow(-6px 0 0 rgba(255, 0, 100, 0.75)) drop-shadow(6px 0 0 rgba(0, 240, 200, 0.75));
+  }
+
+  90% {
+    transform: translate(2px, -1px) skew(1deg);
+    filter: drop-shadow(3px 0 0 rgba(255, 80, 0, 0.5)) drop-shadow(-3px 0 0 rgba(0, 120, 255, 0.5));
+  }
+
+  100% {
+    transform: translate(0, 0) skew(0deg);
+    filter: none;
+  }
+}
+
+.crt-glitching {
+  animation: crtGlitchShift 0.25s steps(4, end) both !important;
+}
+
+/* CRT Glass Glare — Two large oval overhead-light reflections (dominant ref feature) */
+.crt-glass-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9001;
+  background:
+    /* LEFT overhead light glare blob — large, soft, whitish-grey, upper-left area */
+    radial-gradient(ellipse 30% 38% at 28% 28%,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(240, 245, 240, 0.14) 30%,
+      rgba(220, 235, 220, 0.06) 60%,
+      transparent 100%),
+    /* RIGHT overhead light glare blob — mirror of left, upper-right area */
+    radial-gradient(ellipse 28% 35% at 73% 26%,
+      rgba(255, 255, 255, 0.20) 0%,
+      rgba(240, 245, 240, 0.12) 30%,
+      rgba(220, 235, 220, 0.05) 60%,
+      transparent 100%),
+    /* Very faint center-top ambient glow connecting the two blobs */
+    radial-gradient(ellipse 55% 18% at 50% 8%,
+      rgba(255, 255, 255, 0.04) 0%,
+      transparent 100%),
+    /* Subtle green phosphor center tint */
+    radial-gradient(ellipse 60% 50% at 50% 50%,
+      rgba(10, 35, 12, 0.12) 0%,
+      transparent 80%);
+  border-radius: 22px / 16px;
+}
+
+/* Glass smudges — minimal, just faint dust and fingerprint bloom */
+.crt-glass-smudges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9001;
+  border-radius: 22px / 16px;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  background:
+    /* Faint fingerprint smear center-left */
+    radial-gradient(ellipse 22% 14% at 32% 55%, rgba(255, 255, 235, 0.035) 0%, transparent 100%),
+    /* Very faint dust haze, lower right */
+    radial-gradient(ellipse 18% 12% at 72% 70%, rgba(255, 250, 220, 0.025) 0%, transparent 100%);
+}
+
+.crt-glass-smudges::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Very subtle micro dust texture */
+  background-image: radial-gradient(rgba(255, 245, 220, 0.08) 1px, transparent 0);
+  background-size: 8px 8px;
+  opacity: 0.14;
+}
+
+/* Barrel Edge Vignette — deep black corner falloff matching reference (prominent dark corners) */
+.crt-barrel-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9002;
+  background:
+    /* Main radial darkening — corners go nearly black, center stays visible */
+    radial-gradient(ellipse 88% 78% at 50% 50%,
+      transparent 0%,
+      transparent 48%,
+      rgba(0, 0, 0, 0.25) 65%,
+      rgba(0, 0, 0, 0.72) 82%,
+      rgba(0, 0, 0, 0.95) 100%),
+    /* Extra top-edge darkening */
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0%, transparent 8%),
+    /* Extra bottom-edge darkening */
+    linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, transparent 10%);
+  border-radius: 22px / 16px;
+}
+
+/* Power-off Standby Overlay */
+.crt-off-overlay {
+  position: absolute;
+  inset: 0;
+  background: #040804;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.crt-off-line {
+  width: 60px;
+  height: 2px;
+  background: var(--phosphor-hot);
+  box-shadow: 0 0 12px var(--phosphor-hot), 0 0 30px var(--phosphor);
+  animation: crtPowerPulse 2s infinite ease-in-out;
+}
+
+.crt-off-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--phosphor-dim);
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+/* Bottom Controls & Branding Chin */
+.crt-chin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px 6px;
+  gap: 16px;
+}
+
+/* Brand left */
+.crt-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.crt-brand-name {
+  font-family: var(--font-vt323);
+  font-size: 16px;
+  color: #4f4335;
+  letter-spacing: 3px;
+  line-height: 1;
+  text-shadow: 0 1px 0 rgba(255, 235, 200, 0.3);
+}
+
+.crt-brand-model {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  color: #6e604f;
+  letter-spacing: 1.5px;
+}
+
+/* LED Strip Centre */
+.crt-led-strip {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  background: #181412;
+  border-radius: 20px;
+  padding: 6px 12px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.95), 0 0 8px rgba(120, 45, 14, 0.3);
+}
+
+.crt-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #24272c;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.9);
+  transition: all 0.2s ease;
+}
+
+.crt-led-r.on {
+  background: #ff3b30;
+  box-shadow: 0 0 10px #ff3b30, inset 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.crt-led-g.on {
+  background: #34c759;
+  box-shadow: 0 0 10px #34c759, inset 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.crt-led-b.on {
+  background: #007aff;
+  box-shadow: 0 0 10px #007aff, inset 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+/* Dial Cluster Right */
+.crt-dial-cluster {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.crt-dial-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.crt-dial-knob {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #2a2520 0%, #15110e 70%, #090705 100%);
+  border: 2px solid #2d180b;
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.88),
+    inset 0 2px 3px rgba(255, 230, 180, 0.15),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.9);
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease;
+}
+
+.crt-dial-knob:hover {
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.9),
+    inset 0 2px 4px rgba(255, 235, 200, 0.25);
+}
+
+.crt-dial-knob:active {
+  transform: scale(0.94) !important;
+}
+
+.crt-dial-mark {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+}
+
+.crt-dial-knob.knob-off .crt-dial-mark {
+  background: #ff3b30;
+  box-shadow: 0 0 8px #ff3b30;
+}
+
+.crt-dial-icon {
+  color: #7a8696;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+}
+
+.crt-dial-wrap:hover .crt-dial-icon {
+  color: #c0cbdb;
+}
+
+/* Stand Neck & Pedestal Foot — matches lighter cabinet color in ref */
+.crt-stand-neck {
+  width: 320px;
+  height: 22px;
+  background: linear-gradient(180deg, #c4b48a 0%, #b8a87d 100%);
+  box-shadow:
+    inset 0 4px 6px rgba(0, 0, 0, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.55);
+  border-radius: 0 0 8px 8px;
+}
+
+.crt-stand-foot {
+  width: 820px;
+  height: 46px;
+  background: linear-gradient(180deg, #cdc09a 0%, #c4b48a 40%, #b8a87d 100%);
+  border-radius: 8px 8px 16px 16px;
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.88),
+    inset 0 3px 5px rgba(255, 250, 225, 0.45),
+    inset 0 -4px 10px rgba(40, 25, 8, 0.4);
+  border: 1px solid #a0906a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.crt-stand-foot::after {
+  content: '';
+  width: 180px;
+  height: 4px;
+  background: repeating-linear-gradient(90deg,
+      #8e887e 0px, #8e887e 18px,
+      transparent 18px, transparent 26px);
+  border-radius: 2px;
+  opacity: 0.6;
+}
+
+/* ============================================================
+   WINDOWS XP STYLE START MENU
+   ============================================================ */
+
+.xp-start-menu {
+  background: #060e07;
+  border: 2px solid;
+  border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  box-shadow: 6px 8px 24px rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+}
+
+.xp-start-header {
+  background: linear-gradient(90deg, #0e3f1c 0%, #1a632e 50%, #0c3316 100%);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid var(--bevel-light);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.xp-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background: #06180a;
+  border: 2px solid var(--phosphor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--phosphor-hot);
+  box-shadow: inset 0 0 6px var(--phosphor-dim);
+}
+
+.xp-user-name {
+  font-family: var(--font-vt323);
+  font-size: 20px;
+  color: var(--phosphor-hot);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.xp-user-subtitle {
+  font-size: 9px;
+  color: var(--phosphor-dim);
+  letter-spacing: 1px;
+}
+
+.xp-start-body-single {
+  display: flex;
+  flex-direction: column;
+  height: 320px;
+  background: #071008;
+}
+
+.xp-start-single-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 6px;
+}
+
+.xp-start-item {
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.1s ease;
+}
+
+.xp-start-item:hover {
+  background: #123e1b;
+}
+
+.xp-start-right {
+  flex: 1;
+  background: #040904;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.xp-right-item {
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border-radius: 3px;
+  color: var(--phosphor-dim);
+  transition: all 0.1s ease;
+}
+
+.xp-right-item:hover {
+  background: #0e2a14;
+  color: var(--phosphor-hot);
+}
+
+.xp-right-title {
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--phosphor);
+}
+
+.xp-right-desc {
+  font-size: 8px;
+  color: var(--phosphor-dim);
+  letter-spacing: 0.5px;
+}
+
+.xp-right-separator {
+  height: 1px;
+  background: var(--bevel-mid);
+  margin: 4px 6px;
+}
+
+.xp-start-footer {
+  background: linear-gradient(90deg, #07190b 0%, #0d2e14 100%);
+  border-top: 1px solid var(--bevel-light);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.xp-footer-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 4px 10px;
+  border: 1px solid var(--bevel-light);
+  background: #071e0b;
+  color: var(--phosphor);
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 1px;
+}
+
+.xp-footer-btn:hover {
+  background: #0e3016;
+  color: var(--phosphor-hot);
+}
+
+.xp-btn-reboot {
+  border-color: #842418;
+  color: var(--red-alert);
+  background: #240806;
+}
+
+.xp-btn-reboot:hover {
+  background: #3e0e0a;
+  color: #ff6050;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   MOBILE RESPONSIVE OVERRIDES (max-width: 768px)
+   Disables CRT frame container on mobile, forces clean full-screen windows,
+   fluid start menu & notifications popup, and touch-optimized navigation.
+   DOES NOT ALTER ANYTHING IN THE DESKTOP VERSION (FRAME OR FULLSCREEN MODE).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  /* Full-width responsive windows on mobile */
+  .bg-window {
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: calc(100% - 40px) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-mid) !important;
+  }
+
+  /* Touch scrolling smooth behavior */
+  .window-body-inset,
+  .retro-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Fluid Start Menu on mobile viewports */
+  .start-menu {
+    left: 4px !important;
+    right: 4px !important;
+    width: auto !important;
+    bottom: 44px !important;
+    max-height: calc(100vh - 52px) !important;
+  }
+
+  .xp-start-body-single {
+    max-height: calc(100vh - 160px) !important;
+  }
+
+  /* Taskbar adjustment for mobile */
+  .taskbar {
+    padding: 0 4px !important;
+    height: 40px !important;
+  }
+
+  /* Hide frame toggle button on mobile */
+  .frame-toggle-btn {
+    display: none !important;
+  }
+
+  /* Compact Spotify widget on mobile using proportional scaling */
+  .spotify-widget-container {
+    width: 270px !important;
+    top: 6px !important;
+    right: 6px !important;
+    transform: scale(0.68) !important;
+    transform-origin: top right !important;
+  }
+}
