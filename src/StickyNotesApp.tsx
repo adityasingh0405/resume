@@ -13,7 +13,8 @@ const StickyNotesApp: React.FC = () => {
 
 CONTACT
 aditya@example.com
-github.com/adityasingh`
+github.com/adityasingh
+listen khushi yap`
     );
   });
 
