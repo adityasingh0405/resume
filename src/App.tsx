@@ -1636,7 +1636,7 @@ const App: React.FC = () => {
                                     '4px',
                                 }}
                               >
-                                LEETCODE CONTEST
+                                Instagram
                               </div>
 
                               <div
@@ -1649,7 +1649,7 @@ const App: React.FC = () => {
                                     '1.5',
                                 }}
                               >
-                                LeetCode contest scheduled for Sunday.
+                                Khushi: YO WAKE TF UP!
                               </div>
 
                               <div
