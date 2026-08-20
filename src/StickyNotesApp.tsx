@@ -10,7 +10,6 @@ const StickyNotesApp: React.FC = () => {
 • Update PROJECTS/
 • Take a break :)
 • Fix DISPLAY.CFG
-->listen khushi yap
 
 CONTACT
 aditya@example.com
