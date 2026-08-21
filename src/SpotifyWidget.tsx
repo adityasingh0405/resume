@@ -132,6 +132,9 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
   const [cassetteCollapsed, setCassetteCollapsed] =
     useState(false);
 
+  const [isWidgetMinimized, setIsWidgetMinimized] =
+    useState(false);
+
   const [isMobile, setIsMobile] = useState(() => {
     return typeof window !== 'undefined' ? window.innerWidth <= 768 : false;
   });
@@ -163,6 +166,11 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
 
   const initializedRef =
     useRef(false);
+
+  // Always holds the latest handleTrackChange so Spotify listeners
+  // never call a stale closure.
+  const handleTrackChangeRef =
+    useRef<(uri: string) => void>(() => {});
 
   /* =======================================================
      TRACK HELPERS
@@ -222,6 +230,9 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
 
     setActiveVideo(null);
   };
+
+  // Keep the ref in sync with the latest function on every render.
+  handleTrackChangeRef.current = handleTrackChange;
 
   /* =======================================================
      TRACK VIDEO PLAYBACK
@@ -334,7 +345,9 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                */
               setIsPlaying(true);
 
-              handleTrackChange(uri);
+              // Use the ref so we always call the latest version
+              // of handleTrackChange, avoiding stale closures.
+              handleTrackChangeRef.current(uri);
             }
           );
 
@@ -352,7 +365,9 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                 uri &&
                 uri !== currentTrackRef.current
               ) {
-                handleTrackChange(uri);
+                // Use the ref so we always call the latest version
+                // of handleTrackChange, avoiding stale closures.
+                handleTrackChangeRef.current(uri);
               }
 
               /*
@@ -660,10 +675,10 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
         className="spotify-widget-container"
         style={{
           position: 'absolute',
-          top: 12,
+          bottom: 52,
           right: 12,
           width: 270,
-          height: 420,
+          height: isWidgetMinimized ? 38 : 420,
           zIndex: 50,
           fontFamily:
             'var(--font-mono, "Courier New", monospace)',
@@ -675,736 +690,858 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
             activeVideo
               ? 'none'
               : 'auto',
+          transition: 'height 200ms ease',
+          ...(isWidgetMinimized
+            ? {
+                background: 'linear-gradient(180deg,#1c2b1e 0%,#0c150e 100%)',
+                border: '1px solid #3e8a46',
+                borderRadius: 6,
+                overflow: 'hidden',
+              }
+            : {}),
         }}
       >
-
-        {/* =================================================
-            SPOTIFY LAYER
-        ================================================= */}
-
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: 420,
-            overflow: 'hidden',
-            background: '#07100b',
-            borderRadius: 8,
-            zIndex: 1,
-          }}
-        >
+        {isWidgetMinimized ? (
           <div
             style={{
-              position: 'absolute',
-              top:
-                cassetteCollapsed
-                  ? 0
-                  : SPOTIFY_PLAYLIST_OFFSET,
-              left: 0,
               width: '100%',
-              height: 420,
-              transition:
-                'top 220ms ease',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0 8px',
+              color: 'var(--phosphor)',
             }}
           >
-            <div
-              ref={spotifyContainerRef}
-              style={{
-                width: '100%',
-                height: 420,
-                filter:
-                  'grayscale(1) contrast(1.1) brightness(1.05)',
-              }}
-            />
-          </div>
-        </div>
-
-        {/* =================================================
-            CASSETTE OVERLAY
-        ================================================= */}
-
-        {!cassetteCollapsed && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: PLAYLIST_TOP,
-              zIndex: 10,
-              pointerEvents: 'none',
-            }}
-          >
-
-            {/* =================================================
-                CASSETTE BODY
-            ================================================= */}
-
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: 130,
-                borderRadius: '8px 8px 0 0',
-                background:
-                  'linear-gradient(145deg,#f3e8c8 0%,#decda5 42%,#b6a474 100%)',
-                border:
-                  '2px solid #625b44',
-                borderBottom: 'none',
-                boxShadow:
-                  'inset 0 2px 1px rgba(255,255,255,.85), inset 0 -8px 16px rgba(0,0,0,.24)',
-                overflow: 'hidden',
-              }}
-            >
-
-              {/* SCREW DETAILS */}
-
-              {[
-                { top: 5, left: 6 },
-                { top: 5, right: 6 },
-                { bottom: 5, left: 6 },
-                { bottom: 5, right: 6 },
-              ].map((pos, i) => (
-                <div
-                  key={i}
-                  style={{
-                    position: 'absolute',
-                    ...pos,
-                    width: 5,
-                    height: 5,
-                    borderRadius: '50%',
-                    background:
-                      'radial-gradient(circle at 35% 35%,#a69b78,#4d4736)',
-                    boxShadow:
-                      'inset 0 0 1px rgba(0,0,0,.7)',
-                  }}
-                />
-              ))}
-
-              {/* INNER CASSETTE */}
-
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 10,
-                  left: 11,
-                  right: 11,
-                  bottom: 10,
-                  borderRadius: 5,
-                  background:
-                    'linear-gradient(180deg,#28412f,#0b1710)',
-                  border:
-                    '1px solid #557157',
-                  boxShadow:
-                    'inset 0 0 20px rgba(0,0,0,.9)',
-                  overflow: 'hidden',
-                }}
-              >
-
-                {/* AWESOME MIX */}
-
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 5,
-                    left: 0,
-                    right: 0,
-                    textAlign: 'center',
-                    fontFamily:
-                      '"Comic Sans MS","Bradley Hand",cursive',
-                    color: '#f0e4b8',
-                    fontSize: 12,
-                    fontWeight: 900,
-                    letterSpacing: 1,
-                    textShadow: '0 1px 1px #000',
-                    transform: 'rotate(-1deg)',
-                  }}
-                >
-                  AWESOME MIX
-                </div>
-
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 22,
-                    left: 20,
-                    right: 20,
-                    height: 1,
-                    background:
-                      'rgba(190,210,155,.28)',
-                  }}
-                />
-
-                {/* REEL AREA */}
-
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 30,
-                    left: 13,
-                    right: 13,
-                    bottom: 9,
-                    borderRadius: 5,
-                    background:
-                      'linear-gradient(180deg,#171c18,#070a08)',
-                    border:
-                      '1px solid #536050',
-                    boxShadow:
-                      'inset 0 2px 10px rgba(0,0,0,.9)',
-                    overflow: 'hidden',
-                  }}
-                >
-
-                  {/* =================================================
-                      LEFT REEL
-                  ================================================= */}
-
-                  <div
-                    className={
-                      isPlaying && !activeVideo
-                        ? 'cassette-reel-spinning'
-                        : ''
-                    }
-                    style={{
-                      position: 'absolute',
-                      left: 7,
-                      top: 7,
-                      width: 42,
-                      height: 42,
-                      borderRadius: '50%',
-                      background:
-                        'radial-gradient(circle,#ded2a8 0 9%,#44473c 10% 21%,#a89c78 22% 29%,#292c27 30% 48%,#111410 49% 100%)',
-                      border:
-                        '2px solid #777158',
-                    }}
-                  >
-                    <div
-                      style={{
-                        position: 'absolute',
-                        left: '50%',
-                        top: '50%',
-                        transform:
-                          'translate(-50%,-50%)',
-                        width: 7,
-                        height: 7,
-                        borderRadius: '50%',
-                        background: '#d4c69c',
-                        border:
-                          '2px solid #34362e',
-                      }}
-                    />
-                  </div>
-
-                  {/* =================================================
-                      RIGHT REEL
-                  ================================================= */}
-
-                  <div
-                    className={
-                      isPlaying && !activeVideo
-                        ? 'cassette-reel-spinning'
-                        : ''
-                    }
-                    style={{
-                      position: 'absolute',
-                      right: 7,
-                      top: 7,
-                      width: 42,
-                      height: 42,
-                      borderRadius: '50%',
-                      background:
-                        'radial-gradient(circle,#ded2a8 0 9%,#44473c 10% 21%,#a89c78 22% 29%,#292c27 30% 48%,#111410 49% 100%)',
-                      border:
-                        '2px solid #777158',
-                    }}
-                  >
-                    <div
-                      style={{
-                        position: 'absolute',
-                        left: '50%',
-                        top: '50%',
-                        transform:
-                          'translate(-50%,-50%)',
-                        width: 7,
-                        height: 7,
-                        borderRadius: '50%',
-                        background: '#d4c69c',
-                        border:
-                          '2px solid #34362e',
-                      }}
-                    />
-                  </div>
-
-                  {/* TAPE */}
-
-                  <div
-                    style={{
-                      position: 'absolute',
-                      left: 50,
-                      right: 50,
-                      top: 27,
-                      height: 3,
-                      borderRadius: 2,
-                      background:
-                        'linear-gradient(90deg,#080a08,#303830,#080a08)',
-                    }}
-                  />
-
-                  {/* CENTER LABEL */}
-
-                  <div
-                    style={{
-                      position: 'absolute',
-                      left: '50%',
-                      top: '50%',
-                      transform:
-                        'translate(-50%,-50%)',
-                      width: 38,
-                      height: 17,
-                      borderRadius: 2,
-                      background:
-                        'linear-gradient(180deg,#c2b68b,#8d8464)',
-                      border:
-                        '1px solid #68624c',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 6,
-                      fontWeight: 900,
-                      letterSpacing: 0.5,
-                      color: '#20261f',
-                    }}
-                  >
-                    VOL. 01
-                  </div>
-                </div>
-
-                {/* BOTTOM LABEL */}
-
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: 3,
-                    left: 7,
-                    right: 7,
-                    display: 'flex',
-                    justifyContent:
-                      'space-between',
-                    color: '#89a88c',
-                    fontSize: 6,
-                    fontWeight: 700,
-                  }}
-                >
-                  <span>★</span>
-                  <span>60</span>
-                </div>
-              </div>
+            {/* Keep spotifyContainerRef mounted invisibly so audio player controller persists */}
+            <div style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 1, height: 1, overflow: 'hidden' }}>
+              <div ref={spotifyContainerRef} />
             </div>
 
-            {/* =================================================
-                CONTROLS
-            ================================================= */}
-
-            <div
-              className="cassette-controls-section"
-              style={{
-                position: 'absolute',
-                top: 129,
-                left: 0,
-                right: 0,
-                height: 54,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 8,
-                background:
-                  'linear-gradient(180deg,#ebdfbd 0%,#d4c194 55%,#bda97a 100%)',
-                borderLeft:
-                  '2px solid #625b44',
-                borderRight:
-                  '2px solid #625b44',
-                borderBottom:
-                  '1px solid #756c52',
-                boxShadow:
-                  'inset 0 2px rgba(255,255,255,.5), inset 0 -3px rgba(0,0,0,.08)',
-                zIndex: 2,
-              }}
-            >
-
-              <div
-                className="cassette-btn"
+            {/* LED & Track snippet */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0, overflow: 'hidden' }}>
+              <span
+                className={isPlaying ? 'cassette-led' : ''}
                 style={{
-                  width: 28,
-                  height: 27,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 4,
-                  border:
-                    '1px solid #776c4b',
-                  background:
-                    'linear-gradient(180deg,#dfcea1,#b7a16d)',
-                  color: '#344536',
-                  fontSize: 8,
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  background: isPlaying ? '#4fae63' : '#6b7a6d',
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                style={{
+                  fontSize: 9,
+                  fontWeight: 'bold',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  color: '#d4dfad',
+                  letterSpacing: '0.5px',
                 }}
               >
-                ◀◀
-              </div>
+                {getTrackLabel()}
+              </span>
+            </div>
 
+            {/* Controls */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
               <button
-                className={`cassette-btn ${isPlaying
-                  ? 'cassette-play-active'
-                  : ''
-                  }`}
+                type="button"
+                className="cassette-btn"
                 onClick={togglePlayback}
+                title={isPlaying ? 'Pause' : 'Play'}
                 style={{
-                  width: 42,
-                  height: 32,
+                  width: 26,
+                  height: 24,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  borderRadius: 5,
-                  border:
-                    '1px solid #57523e',
-                  background:
-                    isPlaying
-                      ? 'linear-gradient(180deg,#dce7b5,#aebc7a)'
-                      : 'linear-gradient(180deg,#f5e8c3,#c7ad77)',
+                  borderRadius: 3,
+                  border: '1px solid #57523e',
+                  background: isPlaying
+                    ? 'linear-gradient(180deg,#dce7b5,#aebc7a)'
+                    : 'linear-gradient(180deg,#f5e8c3,#c7ad77)',
                   color: '#1d2c20',
-                  fontSize: 13,
-                  fontWeight: 900,
+                  fontSize: 10,
+                  fontWeight: 'bold',
                   cursor: 'pointer',
-                  pointerEvents: 'auto',
                 }}
               >
                 {isPlaying ? 'Ⅱ' : '▶'}
               </button>
 
-              <div
+              <button
+                type="button"
+                className="cassette-btn"
+                onClick={() => setIsWidgetMinimized(false)}
+                title="Expand Spotify Player"
                 style={{
-                  minWidth: 88,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 2,
-                  color: '#405842',
-                  fontSize: 6,
-                  fontWeight: 900,
-                  letterSpacing: 1.1,
-                }}
-              >
-                <span>
-                  AWESOME MIX
-                </span>
-
-                <span
-                  style={{
-                    fontSize: 5,
-                    opacity: 0.65,
-                  }}
-                >
-                  CASSETTE PLAYER
-                </span>
-              </div>
-
-              <div
-                style={{
-                  width: 25,
-                  height: 25,
+                  width: 24,
+                  height: 24,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  borderRadius: 4,
+                  borderRadius: 3,
+                  border: '1px solid #726844',
+                  background: 'linear-gradient(180deg,#f0dfb2,#bfa978)',
+                  color: '#263a2b',
+                  fontSize: 9,
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
                 }}
               >
-                <IconSpotify size={13} />
-              </div>
+                ▲
+              </button>
             </div>
-
+          </div>
+        ) : (
+          <>
             {/* =================================================
-                NOW PLAYING
+                SPOTIFY LAYER
             ================================================= */}
 
             <div
-              className="cassette-now-playing-container"
               style={{
                 position: 'absolute',
-                top: 182,
-                left: 0,
-                right: 0,
-                height: 75,
-                padding: '7px 9px',
-                background:
-                  'linear-gradient(180deg,#e8dcb9 0%,#d4c49b 100%)',
-                borderLeft:
-                  '2px solid #625b44',
-                borderRight:
-                  '2px solid #625b44',
-                borderBottom:
-                  '1px solid #756c52',
-                boxShadow:
-                  'inset 0 1px rgba(255,255,255,.65), inset 0 -3px rgba(0,0,0,.06)',
-                color: '#243426',
-                zIndex: 3,
+                inset: 0,
+                width: '100%',
+                height: 420,
+                overflow: 'hidden',
+                background: '#07100b',
+                borderRadius: 8,
+                zIndex: 1,
               }}
             >
-
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent:
-                    'space-between',
-                  alignItems: 'center',
-                  fontSize: 6,
-                  fontWeight: 900,
-                  letterSpacing: 1.2,
-                  color: '#536c56',
-                  marginBottom: 4,
-                }}
-              >
-                <span
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 5,
-                  }}
-                >
-                  <span
-                    className={
-                      isPlaying
-                        ? 'cassette-led'
-                        : ''
-                    }
-                    style={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: '50%',
-                      background:
-                        isPlaying
-                          ? '#4fae63'
-                          : '#91876b',
-                      display:
-                        'inline-block',
-                    }}
-                  />
-
-                  {isPlaying
-                    ? 'NOW PLAYING'
-                    : 'PAUSED'}
-                </span>
-
-                <span
-                  style={{
-                    opacity: 0.7,
-                  }}
-                >
-                  AUDIO // A
-                </span>
-              </div>
-
-              {/* TRACK */}
-
-              <div
-                style={{
-                  height: 19,
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '0 6px',
-                  background: '#121a14',
-                  border:
-                    '1px solid #4b5949',
-                  color: '#d4dfad',
-                  fontFamily:
-                    '"Courier New",monospace',
-                  fontSize: 8,
-                  fontWeight: 700,
-                  letterSpacing: 0.7,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  boxShadow:
-                    'inset 0 0 8px rgba(0,0,0,.75)',
-                }}
-              >
-                <span
-                  style={{
-                    marginRight: 5,
-                    opacity: 0.55,
-                    fontSize: 7,
-                  }}
-                >
-                  ►
-                </span>
-
-                {getTrackLabel()}
-              </div>
-
-              {/* PROGRESS */}
-
-              <div
-                className="cassette-timeline-section"
-                style={{
-                  position: 'relative',
-                  marginTop: 6,
-                  height: 5,
-                  background: '#9e9679',
-                  borderRadius: 4,
-                  overflow: 'visible',
+                  position: 'absolute',
+                  top:
+                    cassetteCollapsed
+                      ? 0
+                      : SPOTIFY_PLAYLIST_OFFSET,
+                  left: 0,
+                  width: '100%',
+                  height: 420,
+                  transition:
+                    'top 220ms ease',
                 }}
               >
                 <div
+                  ref={spotifyContainerRef}
                   style={{
-                    position: 'relative',
-                    width: `${progress}%`,
-                    height: '100%',
-                    minWidth:
-                      progress > 0 ? 3 : 0,
-                    background:
-                      'linear-gradient(90deg,#405f45,#6f9b68)',
-                    borderRadius: 4,
-                    transition:
-                      'width .15s linear',
+                    width: '100%',
+                    height: 420,
+                    filter:
+                      'grayscale(1) contrast(1.1) brightness(1.05)',
                   }}
-                >
-                  {progress > 0 && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        right: -2,
-                        top: '50%',
-                        transform:
-                          'translateY(-50%)',
-                        width: 7,
-                        height: 7,
-                        borderRadius: '50%',
-                        background:
-                          '#dce4b9',
-                        border:
-                          '1px solid #506b50',
-                      }}
-                    />
-                  )}
-                </div>
-              </div>
-
-              <div
-                className="cassette-timeline-section"
-                style={{
-                  display: 'flex',
-                  justifyContent:
-                    'space-between',
-                  marginTop: 4,
-                  fontSize: 6,
-                  fontWeight: 700,
-                  color: '#68705f',
-                }}
-              >
-                <span>
-                  {formatTime(position)}
-                </span>
-
-                <span>
-                  {formatTime(duration)}
-                </span>
+                />
               </div>
             </div>
 
             {/* =================================================
-                PLAYLIST HEADER
+                CASSETTE OVERLAY
             ================================================= */}
 
-            <div
-              style={{
-                position: 'absolute',
-                top: 256,
-                left: 0,
-                right: 0,
-                height: 22,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent:
-                  'space-between',
-                padding: '0 8px',
-                background:
-                  'linear-gradient(180deg,#171b16,#0c0f0d)',
-                color: '#9cac9d',
-                fontSize: 6.5,
-                fontWeight: 700,
-                letterSpacing: 1,
-                border:
-                  '1px solid #3c443c',
-                zIndex: 4,
-              }}
-            >
-              <span>
-                MIX_TAPE.PLS
-              </span>
-
-              <span
+            {!cassetteCollapsed && (
+              <div
                 style={{
-                  opacity: 0.6,
-                  fontSize: 6,
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: PLAYLIST_TOP,
+                  zIndex: 10,
+                  pointerEvents: 'none',
                 }}
               >
-                ↑ ↓ SCROLL
-              </span>
-            </div>
-          </div>
+                {/* CASSETTE BODY */}
+
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 130,
+                    borderRadius: '8px 8px 0 0',
+                    background:
+                      'linear-gradient(145deg,#f3e8c8 0%,#decda5 42%,#b6a474 100%)',
+                    border:
+                      '2px solid #625b44',
+                    borderBottom: 'none',
+                    boxShadow:
+                      'inset 0 2px 1px rgba(255,255,255,.85), inset 0 -8px 16px rgba(0,0,0,.24)',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {/* SCREW DETAILS */}
+
+                  {[
+                    { top: 5, left: 6 },
+                    { top: 5, right: 6 },
+                    { bottom: 5, left: 6 },
+                    { bottom: 5, right: 6 },
+                  ].map((pos, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        position: 'absolute',
+                        ...pos,
+                        width: 5,
+                        height: 5,
+                        borderRadius: '50%',
+                        background:
+                          'radial-gradient(circle at 35% 35%,#a69b78,#4d4736)',
+                        boxShadow:
+                          'inset 0 0 1px rgba(0,0,0,.7)',
+                      }}
+                    />
+                  ))}
+
+                  {/* INNER CASSETTE */}
+
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 10,
+                      left: 11,
+                      right: 11,
+                      bottom: 10,
+                      borderRadius: 5,
+                      background:
+                        'linear-gradient(180deg,#28412f,#0b1710)',
+                      border:
+                        '1px solid #557157',
+                      boxShadow:
+                        'inset 0 0 20px rgba(0,0,0,.9)',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {/* AWESOME MIX */}
+
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 5,
+                        left: 0,
+                        right: 0,
+                        textAlign: 'center',
+                        fontFamily:
+                          '"Comic Sans MS","Bradley Hand",cursive',
+                        color: '#f0e4b8',
+                        fontSize: 12,
+                        fontWeight: 900,
+                        letterSpacing: 1,
+                        textShadow: '0 1px 1px #000',
+                        transform: 'rotate(-1deg)',
+                      }}
+                    >
+                      AWESOME MIX
+                    </div>
+
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 22,
+                        left: 20,
+                        right: 20,
+                        height: 1,
+                        background:
+                          'rgba(190,210,155,.28)',
+                      }}
+                    />
+
+                    {/* REEL AREA */}
+
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 30,
+                        left: 13,
+                        right: 13,
+                        bottom: 9,
+                        borderRadius: 5,
+                        background:
+                          'linear-gradient(180deg,#171c18,#070a08)',
+                        border:
+                          '1px solid #536050',
+                        boxShadow:
+                          'inset 0 2px 10px rgba(0,0,0,.9)',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {/* LEFT REEL */}
+
+                      <div
+                        className={
+                          isPlaying && !activeVideo
+                            ? 'cassette-reel-spinning'
+                            : ''
+                        }
+                        style={{
+                          position: 'absolute',
+                          left: 7,
+                          top: 7,
+                          width: 42,
+                          height: 42,
+                          borderRadius: '50%',
+                          background:
+                            'radial-gradient(circle,#ded2a8 0 9%,#44473c 10% 21%,#a89c78 22% 29%,#292c27 30% 48%,#111410 49% 100%)',
+                          border:
+                            '2px solid #777158',
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            transform:
+                              'translate(-50%,-50%)',
+                            width: 7,
+                            height: 7,
+                            borderRadius: '50%',
+                            background: '#d4c69c',
+                            border:
+                              '2px solid #34362e',
+                          }}
+                        />
+                      </div>
+
+                      {/* RIGHT REEL */}
+
+                      <div
+                        className={
+                          isPlaying && !activeVideo
+                            ? 'cassette-reel-spinning'
+                            : ''
+                        }
+                        style={{
+                          position: 'absolute',
+                          right: 7,
+                          top: 7,
+                          width: 42,
+                          height: 42,
+                          borderRadius: '50%',
+                          background:
+                            'radial-gradient(circle,#ded2a8 0 9%,#44473c 10% 21%,#a89c78 22% 29%,#292c27 30% 48%,#111410 49% 100%)',
+                          border:
+                            '2px solid #777158',
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            transform:
+                              'translate(-50%,-50%)',
+                            width: 7,
+                            height: 7,
+                            borderRadius: '50%',
+                            background: '#d4c69c',
+                            border:
+                              '2px solid #34362e',
+                          }}
+                        />
+                      </div>
+
+                      {/* TAPE */}
+
+                      <div
+                        style={{
+                          position: 'absolute',
+                          left: 50,
+                          right: 50,
+                          top: 27,
+                          height: 3,
+                          borderRadius: 2,
+                          background:
+                            'linear-gradient(90deg,#080a08,#303830,#080a08)',
+                        }}
+                      />
+
+                      {/* CENTER LABEL */}
+
+                      <div
+                        style={{
+                          position: 'absolute',
+                          left: '50%',
+                          top: '50%',
+                          transform:
+                            'translate(-50%,-50%)',
+                          width: 38,
+                          height: 17,
+                          borderRadius: 2,
+                          background:
+                            'linear-gradient(180deg,#c2b68b,#8d8464)',
+                          border:
+                            '1px solid #68624c',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: 6,
+                          fontWeight: 900,
+                          letterSpacing: 0.5,
+                          color: '#20261f',
+                        }}
+                      >
+                        VOL. 01
+                      </div>
+                    </div>
+
+                    {/* BOTTOM LABEL */}
+
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: 3,
+                        left: 7,
+                        right: 7,
+                        display: 'flex',
+                        justifyContent:
+                          'space-between',
+                        color: '#89a88c',
+                        fontSize: 6,
+                        fontWeight: 700,
+                      }}
+                    >
+                      <span>★</span>
+                      <span>60</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CONTROLS */}
+
+                <div
+                  className="cassette-controls-section"
+                  style={{
+                    position: 'absolute',
+                    top: 129,
+                    left: 0,
+                    right: 0,
+                    height: 54,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                    background:
+                      'linear-gradient(180deg,#ebdfbd 0%,#d4c194 55%,#bda97a 100%)',
+                    borderLeft:
+                      '2px solid #625b44',
+                    borderRight:
+                      '2px solid #625b44',
+                    borderBottom:
+                      '1px solid #756c52',
+                    boxShadow:
+                      'inset 0 2px rgba(255,255,255,.5), inset 0 -3px rgba(0,0,0,.08)',
+                    zIndex: 2,
+                  }}
+                >
+                  <div
+                    className="cassette-btn"
+                    style={{
+                      width: 28,
+                      height: 27,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 4,
+                      border:
+                        '1px solid #776c4b',
+                      background:
+                        'linear-gradient(180deg,#dfcea1,#b7a16d)',
+                      color: '#344536',
+                      fontSize: 8,
+                    }}
+                  >
+                    ◀◀
+                  </div>
+
+                  <button
+                    className={`cassette-btn ${isPlaying
+                      ? 'cassette-play-active'
+                      : ''
+                      }`}
+                    onClick={togglePlayback}
+                    style={{
+                      width: 42,
+                      height: 32,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 5,
+                      border:
+                        '1px solid #57523e',
+                      background:
+                        isPlaying
+                          ? 'linear-gradient(180deg,#dce7b5,#aebc7a)'
+                          : 'linear-gradient(180deg,#f5e8c3,#c7ad77)',
+                      color: '#1d2c20',
+                      fontSize: 13,
+                      fontWeight: 900,
+                      cursor: 'pointer',
+                      pointerEvents: 'auto',
+                    }}
+                  >
+                    {isPlaying ? 'Ⅱ' : '▶'}
+                  </button>
+
+                  <div
+                    style={{
+                      minWidth: 88,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 2,
+                      color: '#405842',
+                      fontSize: 6,
+                      fontWeight: 900,
+                      letterSpacing: 1.1,
+                    }}
+                  >
+                    <span>
+                      AWESOME MIX
+                    </span>
+
+                    <span
+                      style={{
+                        fontSize: 5,
+                        opacity: 0.65,
+                      }}
+                    >
+                      CASSETTE PLAYER
+                    </span>
+                  </div>
+
+                  <div
+                    style={{
+                      width: 25,
+                      height: 25,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 4,
+                    }}
+                  >
+                    <IconSpotify size={13} />
+                  </div>
+                </div>
+
+                {/* NOW PLAYING */}
+
+                <div
+                  className="cassette-now-playing-container"
+                  style={{
+                    position: 'absolute',
+                    top: 182,
+                    left: 0,
+                    right: 0,
+                    height: 75,
+                    padding: '7px 9px',
+                    background:
+                      'linear-gradient(180deg,#e8dcb9 0%,#d4c49b 100%)',
+                    borderLeft:
+                      '2px solid #625b44',
+                    borderRight:
+                      '2px solid #625b44',
+                    borderBottom:
+                      '1px solid #756c52',
+                    boxShadow:
+                      'inset 0 1px rgba(255,255,255,.65), inset 0 -3px rgba(0,0,0,.06)',
+                    color: '#243426',
+                    zIndex: 3,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent:
+                        'space-between',
+                      alignItems: 'center',
+                      fontSize: 6,
+                      fontWeight: 900,
+                      letterSpacing: 1.2,
+                      color: '#536c56',
+                      marginBottom: 4,
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 5,
+                      }}
+                    >
+                      <span
+                        className={
+                          isPlaying
+                            ? 'cassette-led'
+                            : ''
+                        }
+                        style={{
+                          width: 6,
+                          height: 6,
+                          borderRadius: '50%',
+                          background:
+                            isPlaying
+                              ? '#4fae63'
+                              : '#91876b',
+                          display:
+                            'inline-block',
+                        }}
+                      />
+
+                      {isPlaying
+                        ? 'NOW PLAYING'
+                        : 'PAUSED'}
+                    </span>
+
+                    <span
+                      style={{
+                        opacity: 0.7,
+                      }}
+                    >
+                      AUDIO // A
+                    </span>
+                  </div>
+
+                  {/* TRACK */}
+
+                  <div
+                    style={{
+                      height: 19,
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '0 6px',
+                      background: '#121a14',
+                      border:
+                        '1px solid #4b5949',
+                      color: '#d4dfad',
+                      fontFamily:
+                        '"Courier New",monospace',
+                      fontSize: 8,
+                      fontWeight: 700,
+                      letterSpacing: 0.7,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      boxShadow:
+                        'inset 0 0 8px rgba(0,0,0,.75)',
+                    }}
+                  >
+                    <span
+                      style={{
+                        marginRight: 5,
+                        opacity: 0.55,
+                        fontSize: 7,
+                      }}
+                    >
+                      ►
+                    </span>
+
+                    {getTrackLabel()}
+                  </div>
+
+                  {/* PROGRESS */}
+
+                  <div
+                    className="cassette-timeline-section"
+                    style={{
+                      position: 'relative',
+                      marginTop: 6,
+                      height: 5,
+                      background: '#9e9679',
+                      borderRadius: 4,
+                      overflow: 'visible',
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: 'relative',
+                        width: `${progress}%`,
+                        height: '100%',
+                        minWidth:
+                          progress > 0 ? 3 : 0,
+                        background:
+                          'linear-gradient(90deg,#405f45,#6f9b68)',
+                        borderRadius: 4,
+                        transition:
+                          'width .15s linear',
+                      }}
+                    >
+                      {progress > 0 && (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            right: -2,
+                            top: '50%',
+                            transform:
+                              'translateY(-50%)',
+                            width: 7,
+                            height: 7,
+                            borderRadius: '50%',
+                            background:
+                              '#dce4b9',
+                            border:
+                              '1px solid #506b50',
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
+
+                  <div
+                    className="cassette-timeline-section"
+                    style={{
+                      display: 'flex',
+                      justifyContent:
+                        'space-between',
+                      marginTop: 4,
+                      fontSize: 6,
+                      fontWeight: 700,
+                      color: '#68705f',
+                    }}
+                  >
+                    <span>
+                      {formatTime(position)}
+                    </span>
+
+                    <span>
+                      {formatTime(duration)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* PLAYLIST HEADER */}
+
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 256,
+                    left: 0,
+                    right: 0,
+                    height: 22,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent:
+                      'space-between',
+                    padding: '0 8px',
+                    background:
+                      'linear-gradient(180deg,#171b16,#0c0f0d)',
+                    color: '#9cac9d',
+                    fontSize: 6.5,
+                    fontWeight: 700,
+                    letterSpacing: 1,
+                    border:
+                      '1px solid #3c443c',
+                    zIndex: 4,
+                  }}
+                >
+                  <span>
+                    MIX_TAPE.PLS
+                  </span>
+
+                  <span
+                    style={{
+                      opacity: 0.6,
+                      fontSize: 6,
+                    }}
+                  >
+                    ↑ ↓ SCROLL
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* COLLAPSE BUTTON */}
+
+            <button
+              type="button"
+              className="cassette-btn"
+              onClick={() =>
+                setCassetteCollapsed(
+                  (previous) => !previous
+                )
+              }
+              aria-label={
+                cassetteCollapsed
+                  ? 'Expand cassette player'
+                  : 'Collapse cassette player'
+              }
+              title={
+                cassetteCollapsed
+                  ? 'Show cassette'
+                  : 'Hide cassette'
+              }
+              style={{
+                position: 'absolute',
+                top: 5,
+                left: 5,
+                width: 21,
+                height: 21,
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 4,
+                border:
+                  '1px solid #726844',
+                background:
+                  'linear-gradient(180deg,#f0dfb2,#bfa978)',
+                color: '#263a2b',
+                fontSize: 9,
+                fontWeight: 900,
+                cursor: 'pointer',
+                zIndex: 1000,
+                boxShadow:
+                  '0 2px 3px rgba(0,0,0,.45)',
+              }}
+            >
+              {cassetteCollapsed
+                ? '▲'
+                : '▼'}
+            </button>
+
+            {/* MINIMIZE BUTTON */}
+
+            <button
+              type="button"
+              className="cassette-btn"
+              onClick={() => setIsWidgetMinimized(true)}
+              aria-label="Minimize widget"
+              title="Minimize widget"
+              style={{
+                position: 'absolute',
+                top: 5,
+                left: 30,
+                width: 21,
+                height: 21,
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 4,
+                border:
+                  '1px solid #726844',
+                background:
+                  'linear-gradient(180deg,#f0dfb2,#bfa978)',
+                color: '#263a2b',
+                fontSize: 9,
+                fontWeight: 900,
+                cursor: 'pointer',
+                zIndex: 1000,
+                boxShadow:
+                  '0 2px 3px rgba(0,0,0,.45)',
+              }}
+            >
+              🗕
+            </button>
+          </>
         )}
-
-        {/* =================================================
-            COLLAPSE BUTTON
-        ================================================= */}
-
-        <button
-          type="button"
-          className="cassette-btn"
-          onClick={() =>
-            setCassetteCollapsed(
-              (previous) => !previous
-            )
-          }
-          aria-label={
-            cassetteCollapsed
-              ? 'Expand cassette player'
-              : 'Collapse cassette player'
-          }
-          title={
-            cassetteCollapsed
-              ? 'Show cassette'
-              : 'Hide cassette'
-          }
-          style={{
-            position: 'absolute',
-            top: 5,
-            left: 5,
-            width: 21,
-            height: 21,
-            padding: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 4,
-            border:
-              '1px solid #726844',
-            background:
-              'linear-gradient(180deg,#f0dfb2,#bfa978)',
-            color: '#263a2b',
-            fontSize: 9,
-            fontWeight: 900,
-            cursor: 'pointer',
-            zIndex: 1000,
-            boxShadow:
-              '0 2px 3px rgba(0,0,0,.45)',
-          }}
-        >
-          {cassetteCollapsed
-            ? '▲'
-            : '▼'}
-        </button>
       </div>
     </>
   );
