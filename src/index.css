@@ -1716,12 +1716,24 @@ body {
     display: none !important;
   }
 
-  /* Compact Spotify widget on mobile using proportional scaling */
+  /* Grounded Spotify widget on mobile mode - Compact & Small with all sections */
   .spotify-widget-container {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 44px !important;
+    right: 4px !important;
+    left: auto !important;
     width: 270px !important;
-    top: 6px !important;
-    right: 6px !important;
-    transform: scale(0.68) !important;
-    transform-origin: top right !important;
+    transform: scale(0.6) !important;
+    transform-origin: bottom right !important;
+    z-index: 9990 !important;
+  }
+
+  .spotify-video-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 999999 !important;
   }
 }

@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  GitBranch,
-  Link,
-  Mail,
-  Phone,
-  Globe,
-  Terminal,
-  Radio,
-  Send,
+  GitBranch, Link, Mail, Phone, Globe, Terminal, Radio, Send,
   User,
   Activity,
   MapPin,
@@ -320,7 +313,7 @@ const ContactApp: React.FC = () => {
               }}
             >
               <img
-                src="public/aditya_portrait.png"
+                src={"public/aditya_portrait.png"}
                 alt="Aditya Singh"
                 style={{
                   width: '100%',
