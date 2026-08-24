@@ -43,7 +43,7 @@ export const RetroMonitorFrame: React.FC<RetroMonitorFrameProps> = ({
       setIsGlitching(true);
       glitchTimeoutId = setTimeout(() => {
         setIsGlitching(false);
-      }, 400);
+      }, 600);
     };
 
     const scheduleNextGlitch = () => {
