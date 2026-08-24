@@ -804,1021 +804,914 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
           top: 14,
           right: 14,
           width: 270,
-          height: isWidgetMinimized ? 38 : 420,
+          height: isWidgetMinimized ? 183 : 420,
           zIndex: 50,
           fontFamily: 'var(--font-mono, "Courier New", monospace)',
           filter: 'drop-shadow(0 14px 28px rgba(0,0,0,0.75))',
           opacity: activeVideo ? 0 : 1,
           pointerEvents: activeVideo ? 'none' : 'auto',
           transition: 'height 220ms cubic-bezier(0.16, 1, 0.3, 1)',
-          ...(isWidgetMinimized
-            ? {
-              background: 'linear-gradient(180deg, #142217 0%, #09120b 100%)',
-              border: '1px solid var(--bevel-light, #3e8a46)',
-              borderRadius: 6,
-              overflow: 'hidden',
-              boxShadow: '0 8px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1)',
-            }
-            : {}),
+          overflow: 'hidden',
         }}
       >
-        {isWidgetMinimized ? (
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '0 8px',
-              color: 'var(--phosphor)',
-            }}
-          >
-            {/* Keep spotifyContainerRef mounted invisibly so audio player controller persists */}
-            <div style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 1, height: 1, overflow: 'hidden' }}>
-              <div ref={spotifyContainerRef} />
-            </div>
-
-            {/* LED & Track snippet */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0, overflow: 'hidden' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                <IconSpotify size={14} />
-                <span
-                  className={isPlaying ? 'cassette-led' : ''}
-                  style={{
-                    width: 6,
-                    height: 6,
-                    borderRadius: '50%',
-                    background: isPlaying ? '#1db954' : '#576559',
-                    flexShrink: 0,
-                    boxShadow: isPlaying ? '0 0 6px #1db954' : 'none',
-                  }}
-                />
-              </div>
-              <span
-                style={{
-                  fontSize: 9,
-                  fontWeight: 'bold',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  color: '#d4dfad',
-                  letterSpacing: '0.5px',
-                }}
-              >
-                {getTrackLabel()}
-              </span>
-            </div>
-
-            {/* Controls */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
-              <button
-                type="button"
-                className="cassette-btn"
-                onClick={togglePlayback}
-                title={isPlaying ? 'Pause' : 'Play'}
-                style={{
-                  width: 26,
-                  height: 24,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 3,
-                  border: '1px solid #3e8a46',
-                  background: isPlaying
-                    ? 'linear-gradient(180deg,#22c55e,#15803d)'
-                    : 'linear-gradient(180deg,#1c3822,#0d2012)',
-                  color: '#ffffff',
-                  fontSize: 10,
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.4)',
-                }}
-              >
-                {isPlaying ? 'Ⅱ' : '▶'}
-              </button>
-
-              <button
-                type="button"
-                className="cassette-btn"
-                onClick={() => setIsWidgetMinimized(false)}
-                title="Expand Spotify Player"
-                style={{
-                  width: 24,
-                  height: 24,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 3,
-                  border: '1px solid #4a584a',
-                  background: 'linear-gradient(180deg,#243828,#122016)',
-                  color: '#a3c4a7',
-                  fontSize: 9,
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                }}
-              >
-                ▲
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {/* =================================================
+        <>
+          {/* =================================================
                 SPOTIFY LAYER
             ================================================= */}
 
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: 420,
+              overflow: 'hidden',
+              background: '#07100b',
+              borderRadius: 8,
+              zIndex: 1,
+              opacity: isWidgetMinimized ? 0 : 1,
+              pointerEvents: isWidgetMinimized ? 'none' : 'auto',
+              transition: 'opacity 180ms ease',
+            }}
+          >
             <div
               style={{
                 position: 'absolute',
-                inset: 0,
+                top:
+                  cassetteCollapsed
+                    ? 0
+                    : SPOTIFY_PLAYLIST_OFFSET,
+                left: 0,
                 width: '100%',
                 height: 420,
-                overflow: 'hidden',
-                background: '#07100b',
-                borderRadius: 8,
-                zIndex: 1,
+                transition:
+                  'top 220ms ease',
               }}
             >
               <div
+                ref={spotifyContainerRef}
                 style={{
-                  position: 'absolute',
-                  top:
-                    cassetteCollapsed
-                      ? 0
-                      : SPOTIFY_PLAYLIST_OFFSET,
-                  left: 0,
                   width: '100%',
                   height: 420,
-                  transition:
-                    'top 220ms ease',
+                  filter:
+                    'grayscale(1) contrast(1.1) brightness(1.05)',
                 }}
-              >
-                <div
-                  ref={spotifyContainerRef}
-                  style={{
-                    width: '100%',
-                    height: 420,
-                    filter:
-                      'grayscale(1) contrast(1.1) brightness(1.05)',
-                  }}
-                />
-              </div>
+              />
             </div>
+          </div>
 
-            {/* =================================================
+          {/* =================================================
                 CASSETTE OVERLAY
             ================================================= */}
 
-            {!cassetteCollapsed && (
+          {!cassetteCollapsed && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: PLAYLIST_TOP,
+                zIndex: 10,
+                pointerEvents: 'none',
+              }}
+            >
+              {/* CASSETTE BODY */}
+
               <div
                 style={{
                   position: 'absolute',
                   top: 0,
                   left: 0,
                   right: 0,
-                  height: PLAYLIST_TOP,
-                  zIndex: 10,
-                  pointerEvents: 'none',
+                  height: 130,
+                  borderRadius: '8px 8px 0 0',
+                  background:
+                    'linear-gradient(145deg,#f3e8c8 0%,#decda5 42%,#b6a474 100%)',
+                  border:
+                    '2px solid #625b44',
+                  borderBottom: 'none',
+                  boxShadow:
+                    'inset 0 2px 1px rgba(255,255,255,.85), inset 0 -8px 16px rgba(0,0,0,.24)',
+                  overflow: 'hidden',
                 }}
               >
-                {/* CASSETTE BODY */}
+                {/* SCREW DETAILS */}
+
+                {[
+                  { top: 5, left: 6 },
+                  { top: 5, right: 6 },
+                  { bottom: 5, left: 6 },
+                  { bottom: 5, right: 6 },
+                ].map((pos, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      position: 'absolute',
+                      ...pos,
+                      width: 5,
+                      height: 5,
+                      borderRadius: '50%',
+                      background:
+                        'radial-gradient(circle at 35% 35%,#a69b78,#4d4736)',
+                      boxShadow:
+                        'inset 0 0 1px rgba(0,0,0,.7)',
+                    }}
+                  />
+                ))}
+
+                {/* INNER CASSETTE */}
 
                 <div
                   style={{
                     position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: 130,
-                    borderRadius: '8px 8px 0 0',
+                    top: 10,
+                    left: 11,
+                    right: 11,
+                    bottom: 10,
+                    borderRadius: 5,
                     background:
-                      'linear-gradient(145deg,#f3e8c8 0%,#decda5 42%,#b6a474 100%)',
+                      'linear-gradient(180deg,#28412f,#0b1710)',
                     border:
-                      '2px solid #625b44',
-                    borderBottom: 'none',
+                      '1px solid #557157',
                     boxShadow:
-                      'inset 0 2px 1px rgba(255,255,255,.85), inset 0 -8px 16px rgba(0,0,0,.24)',
+                      'inset 0 0 20px rgba(0,0,0,.9)',
                     overflow: 'hidden',
                   }}
                 >
-                  {/* SCREW DETAILS */}
-
-                  {[
-                    { top: 5, left: 6 },
-                    { top: 5, right: 6 },
-                    { bottom: 5, left: 6 },
-                    { bottom: 5, right: 6 },
-                  ].map((pos, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        position: 'absolute',
-                        ...pos,
-                        width: 5,
-                        height: 5,
-                        borderRadius: '50%',
-                        background:
-                          'radial-gradient(circle at 35% 35%,#a69b78,#4d4736)',
-                        boxShadow:
-                          'inset 0 0 1px rgba(0,0,0,.7)',
-                      }}
-                    />
-                  ))}
-
-                  {/* INNER CASSETTE */}
-
+                  {/* REALISTIC STUCK PAPER MASKING TAPE */}
                   <div
                     style={{
                       position: 'absolute',
-                      top: 10,
-                      left: 11,
-                      right: 11,
-                      bottom: 10,
-                      borderRadius: 5,
-                      background:
-                        'linear-gradient(180deg,#28412f,#0b1710)',
-                      border:
-                        '1px solid #557157',
-                      boxShadow:
-                        'inset 0 0 20px rgba(0,0,0,.9)',
-                      overflow: 'hidden',
+                      top: 2,
+                      left: '50%',
+                      transform: 'translateX(-50%) rotate(-1.5deg)',
+                      width: '150px',
+                      height: '22px',
+                      zIndex: 10,
+                      filter: 'drop-shadow(1px 3px 3px rgba(0,0,0,0.35))',
                     }}
                   >
-                    {/* REALISTIC STUCK PAPER MASKING TAPE */}
+                    {/* Tape body — soft irregular edges via clip-path, translucent + fibrous */}
                     <div
                       style={{
                         position: 'absolute',
-                        top: 2,
-                        left: '50%',
-                        transform: 'translateX(-50%) rotate(-1.5deg)',
-                        width: '150px',
-                        height: '22px',
-                        zIndex: 10,
-                        filter: 'drop-shadow(1px 3px 3px rgba(0,0,0,0.35))',
-                      }}
-                    >
-                      {/* Tape body — soft irregular edges via clip-path, translucent + fibrous */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          backgroundColor: '#f2e9d3',
-                          opacity: 0.88,
-                          mixBlendMode: 'multiply',
-                          clipPath:
-                            'polygon(0% 8%, 8% 3%, 18% 9%, 30% 2%, 44% 8%, 58% 3%, 72% 9%, 86% 2%, 100% 7%, 100% 93%, 88% 97%, 74% 92%, 60% 98%, 46% 92%, 32% 98%, 20% 91%, 10% 97%, 0% 92%)',
-                          backgroundImage: `
+                        inset: 0,
+                        backgroundColor: '#f2e9d3',
+                        opacity: 0.88,
+                        mixBlendMode: 'multiply',
+                        clipPath:
+                          'polygon(0% 8%, 8% 3%, 18% 9%, 30% 2%, 44% 8%, 58% 3%, 72% 9%, 86% 2%, 100% 7%, 100% 93%, 88% 97%, 74% 92%, 60% 98%, 46% 92%, 32% 98%, 20% 91%, 10% 97%, 0% 92%)',
+                        backgroundImage: `
         linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.55) 40%, rgba(0,0,0,0.04) 100%),
         repeating-linear-gradient(90deg, rgba(160,140,80,0.05) 0px, rgba(160,140,80,0.05) 1.5px, transparent 1.5px, transparent 3.5px),
         repeating-linear-gradient(3deg, rgba(0,0,0,0.015) 0px, transparent 1px, transparent 3px)
       `,
-                          boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.12)',
-                        }}
-                      />
+                        boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.12)',
+                      }}
+                    />
 
-                      {/* Peeling corner highlight — bottom-right lifts slightly like real tape */}
+                    {/* Peeling corner highlight — bottom-right lifts slightly like real tape */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        right: '-1px',
+                        bottom: '-1px',
+                        width: '14px',
+                        height: '10px',
+                        background: 'linear-gradient(135deg, transparent 45%, rgba(255,255,255,0.6) 55%, rgba(0,0,0,0.08) 100%)',
+                        clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%)',
+                        pointerEvents: 'none',
+                      }}
+                    />
+
+                    {/* Handwritten text, per-word jitter for an organic, non-uniform look */}
+                    <div
+                      style={{
+                        position: 'relative',
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '3px',
+                        fontFamily: '"Caveat", "Kalam", "Patrick Hand", "Segoe Print", cursive',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        color: '#212a3a',
+                      }}
+                    >
+                      <span style={{ transform: 'rotate(-3deg) translateY(0.5px)', textShadow: '0.3px 0.3px 0 rgba(30,40,60,0.25)' }}>
+                        Awesome
+                      </span>
+                      <span style={{ transform: 'rotate(1.5deg) translateY(-0.5px)', textShadow: '0.3px 0.3px 0 rgba(30,40,60,0.25)' }}>
+                        Mix
+                      </span>
+                      <span style={{ transform: 'rotate(-1deg)', textShadow: '0.3px 0.3px 0 rgba(30,40,60,0.25)' }}>
+                        VOL.1
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 22,
+                      left: 20,
+                      right: 20,
+                      height: 1,
+                      background:
+                        'rgba(190,210,155,.28)',
+                    }}
+                  />
+
+                  {/* REEL AREA */}
+
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 30,
+                      left: 13,
+                      right: 13,
+                      bottom: 9,
+                      borderRadius: 5,
+                      background:
+                        'linear-gradient(180deg,#171c18,#070a08)',
+                      border:
+                        '1px solid #536050',
+                      boxShadow:
+                        'inset 0 2px 10px rgba(0,0,0,.9)',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {/* LEFT REEL */}
+                    {/* LEFT REEL */}
+                    <div
+                      className={isPlaying && !activeVideo ? 'cassette-reel-spinning' : ''}
+                      style={{
+                        position: 'absolute',
+                        left: 7,
+                        top: 7,
+                        width: 42,
+                        height: 42,
+                        borderRadius: '50%',
+                        background:
+                          'radial-gradient(circle,#ded2a8 0 9%,#44473c 10% 21%,#a89c78 22% 29%,#292c27 30% 48%,#111410 49% 100%)',
+                        border: '2px solid #777158',
+                        boxShadow:
+                          'inset 0 0 5px rgba(0,0,0,0.65), inset 2px 2px 3px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)',
+                      }}
+                    >
+                      {/* Toothed cog ring — the asymmetric detail that actually makes rotation visible */}
                       <div
                         style={{
                           position: 'absolute',
-                          right: '-1px',
-                          bottom: '-1px',
-                          width: '14px',
-                          height: '10px',
-                          background: 'linear-gradient(135deg, transparent 45%, rgba(255,255,255,0.6) 55%, rgba(0,0,0,0.08) 100%)',
-                          clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%)',
+                          inset: '27%',
+                          borderRadius: '50%',
+                          background:
+                            'repeating-conic-gradient(rgba(15,17,13,0.95) 0deg 7deg, rgba(168,156,120,0.5) 7deg 14deg, rgba(15,17,13,0.95) 14deg 21deg, rgba(60,58,44,0.3) 21deg 28deg)',
+                          boxShadow: 'inset 0 0 3px rgba(0,0,0,0.8)',
+                        }}
+                      />
+
+                      {/* Sprocket holes arranged around the hub */}
+                      {[0, 60, 120, 180, 240, 300].map((angle) => (
+                        <div
+                          key={angle}
+                          style={{
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            width: 3,
+                            height: 3,
+                            borderRadius: '50%',
+                            background: '#0a0c08',
+                            boxShadow: 'inset 0 0 1px rgba(255,255,255,0.15)',
+                            transform: `translate(-50%,-50%) rotate(${angle}deg) translateY(-11px)`,
+                          }}
+                        />
+                      ))}
+
+                      {/* Gloss highlight sweep for a slight 3D sheen */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          borderRadius: '50%',
+                          background:
+                            'conic-gradient(from -40deg, rgba(255,255,255,0.14) 0deg 18deg, transparent 40deg 320deg, rgba(255,255,255,0.08) 342deg 360deg)',
                           pointerEvents: 'none',
                         }}
                       />
 
-                      {/* Handwritten text, per-word jitter for an organic, non-uniform look */}
-                      <div
-                        style={{
-                          position: 'relative',
-                          width: '100%',
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '3px',
-                          fontFamily: '"Caveat", "Kalam", "Patrick Hand", "Segoe Print", cursive',
-                          fontSize: '13px',
-                          fontWeight: 700,
-                          color: '#212a3a',
-                        }}
-                      >
-                        <span style={{ transform: 'rotate(-3deg) translateY(0.5px)', textShadow: '0.3px 0.3px 0 rgba(30,40,60,0.25)' }}>
-                          Awesome
-                        </span>
-                        <span style={{ transform: 'rotate(1.5deg) translateY(-0.5px)', textShadow: '0.3px 0.3px 0 rgba(30,40,60,0.25)' }}>
-                          Mix
-                        </span>
-                        <span style={{ transform: 'rotate(-1deg)', textShadow: '0.3px 0.3px 0 rgba(30,40,60,0.25)' }}>
-                          VOL.1
-                        </span>
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: 22,
-                        left: 20,
-                        right: 20,
-                        height: 1,
-                        background:
-                          'rgba(190,210,155,.28)',
-                      }}
-                    />
-
-                    {/* REEL AREA */}
-
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: 30,
-                        left: 13,
-                        right: 13,
-                        bottom: 9,
-                        borderRadius: 5,
-                        background:
-                          'linear-gradient(180deg,#171c18,#070a08)',
-                        border:
-                          '1px solid #536050',
-                        boxShadow:
-                          'inset 0 2px 10px rgba(0,0,0,.9)',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      {/* LEFT REEL */}
-                      {/* LEFT REEL */}
-                      <div
-                        className={isPlaying && !activeVideo ? 'cassette-reel-spinning' : ''}
-                        style={{
-                          position: 'absolute',
-                          left: 7,
-                          top: 7,
-                          width: 42,
-                          height: 42,
-                          borderRadius: '50%',
-                          background:
-                            'radial-gradient(circle,#ded2a8 0 9%,#44473c 10% 21%,#a89c78 22% 29%,#292c27 30% 48%,#111410 49% 100%)',
-                          border: '2px solid #777158',
-                          boxShadow:
-                            'inset 0 0 5px rgba(0,0,0,0.65), inset 2px 2px 3px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)',
-                        }}
-                      >
-                        {/* Toothed cog ring — the asymmetric detail that actually makes rotation visible */}
-                        <div
-                          style={{
-                            position: 'absolute',
-                            inset: '27%',
-                            borderRadius: '50%',
-                            background:
-                              'repeating-conic-gradient(rgba(15,17,13,0.95) 0deg 7deg, rgba(168,156,120,0.5) 7deg 14deg, rgba(15,17,13,0.95) 14deg 21deg, rgba(60,58,44,0.3) 21deg 28deg)',
-                            boxShadow: 'inset 0 0 3px rgba(0,0,0,0.8)',
-                          }}
-                        />
-
-                        {/* Sprocket holes arranged around the hub */}
-                        {[0, 60, 120, 180, 240, 300].map((angle) => (
-                          <div
-                            key={angle}
-                            style={{
-                              position: 'absolute',
-                              left: '50%',
-                              top: '50%',
-                              width: 3,
-                              height: 3,
-                              borderRadius: '50%',
-                              background: '#0a0c08',
-                              boxShadow: 'inset 0 0 1px rgba(255,255,255,0.15)',
-                              transform: `translate(-50%,-50%) rotate(${angle}deg) translateY(-11px)`,
-                            }}
-                          />
-                        ))}
-
-                        {/* Gloss highlight sweep for a slight 3D sheen */}
-                        <div
-                          style={{
-                            position: 'absolute',
-                            inset: 0,
-                            borderRadius: '50%',
-                            background:
-                              'conic-gradient(from -40deg, rgba(255,255,255,0.14) 0deg 18deg, transparent 40deg 320deg, rgba(255,255,255,0.08) 342deg 360deg)',
-                            pointerEvents: 'none',
-                          }}
-                        />
-
-                        {/* Center hub cap */}
-                        <div
-                          style={{
-                            position: 'absolute',
-                            left: '50%',
-                            top: '50%',
-                            transform: 'translate(-50%,-50%)',
-                            width: 7,
-                            height: 7,
-                            borderRadius: '50%',
-                            background: '#d4c69c',
-                            border: '2px solid #34362e',
-                          }}
-                        />
-                      </div>
-
-                      {/* RIGHT REEL */}
-                      <div
-                        className={isPlaying && !activeVideo ? 'cassette-reel-spinning' : ''}
-                        style={{
-                          position: 'absolute',
-                          right: 7,
-                          top: 7,
-                          width: 42,
-                          height: 42,
-                          borderRadius: '50%',
-                          background:
-                            'radial-gradient(circle,#ded2a8 0 9%,#44473c 10% 21%,#a89c78 22% 29%,#292c27 30% 48%,#111410 49% 100%)',
-                          border: '2px solid #777158',
-                          boxShadow:
-                            'inset 0 0 5px rgba(0,0,0,0.65), inset 2px 2px 3px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)',
-                        }}
-                      >
-                        <div
-                          style={{
-                            position: 'absolute',
-                            inset: '27%',
-                            borderRadius: '50%',
-                            background:
-                              'repeating-conic-gradient(rgba(15,17,13,0.95) 0deg 7deg, rgba(168,156,120,0.5) 7deg 14deg, rgba(15,17,13,0.95) 14deg 21deg, rgba(60,58,44,0.3) 21deg 28deg)',
-                            boxShadow: 'inset 0 0 3px rgba(0,0,0,0.8)',
-                          }}
-                        />
-
-                        {[0, 60, 120, 180, 240, 300].map((angle) => (
-                          <div
-                            key={angle}
-                            style={{
-                              position: 'absolute',
-                              left: '50%',
-                              top: '50%',
-                              width: 3,
-                              height: 3,
-                              borderRadius: '50%',
-                              background: '#0a0c08',
-                              boxShadow: 'inset 0 0 1px rgba(255,255,255,0.15)',
-                              transform: `translate(-50%,-50%) rotate(${angle}deg) translateY(-11px)`,
-                            }}
-                          />
-                        ))}
-
-                        <div
-                          style={{
-                            position: 'absolute',
-                            inset: 0,
-                            borderRadius: '50%',
-                            background:
-                              'conic-gradient(from -40deg, rgba(255,255,255,0.14) 0deg 18deg, transparent 40deg 320deg, rgba(255,255,255,0.08) 342deg 360deg)',
-                            pointerEvents: 'none',
-                          }}
-                        />
-
-                        <div
-                          style={{
-                            position: 'absolute',
-                            left: '50%',
-                            top: '50%',
-                            transform: 'translate(-50%,-50%)',
-                            width: 7,
-                            height: 7,
-                            borderRadius: '50%',
-                            background: '#d4c69c',
-                            border: '2px solid #34362e',
-                          }}
-                        />
-                      </div>
-
-                      {/* TAPE */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          left: 50,
-                          right: 50,
-                          top: 27,
-                          height: 3,
-                          borderRadius: 2,
-                          background: 'linear-gradient(90deg,#080a08,#303830,#080a08)',
-                          boxShadow: '0 1px 1px rgba(0,0,0,0.3)',
-                        }}
-                      />
-
-                      {/* CENTER LABEL — SONY EMBOSSED METALLIC BADGE */}
+                      {/* Center hub cap */}
                       <div
                         style={{
                           position: 'absolute',
                           left: '50%',
                           top: '50%',
                           transform: 'translate(-50%,-50%)',
-                          width: 60,
-                          height: 26,
-                          borderRadius: 3,
-                          background:
-                            'linear-gradient(180deg,#e8dfc3 0%,#b8ac84 50%,#8c825b 100%)',
-                          border: '1px solid #524b38',
-                          boxShadow:
-                            'inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.6)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          width: 7,
+                          height: 7,
+                          borderRadius: '50%',
+                          background: '#d4c69c',
+                          border: '2px solid #34362e',
                         }}
-                      >
-                        <img
-                          src="/sony.png"
-                          alt="SONY"
-                          style={{
-                            width: '112px',
-                            height: '48px',
-                            objectFit: 'contain',
-                            display: 'block',
-                            userSelect: 'none',
-                            pointerEvents: 'none',
-                          }}
-                        />
-                      </div>
+                      />
                     </div>
 
-                    {/* BOTTOM LABEL */}
+                    {/* RIGHT REEL */}
+                    <div
+                      className={isPlaying && !activeVideo ? 'cassette-reel-spinning' : ''}
+                      style={{
+                        position: 'absolute',
+                        right: 7,
+                        top: 7,
+                        width: 42,
+                        height: 42,
+                        borderRadius: '50%',
+                        background:
+                          'radial-gradient(circle,#ded2a8 0 9%,#44473c 10% 21%,#a89c78 22% 29%,#292c27 30% 48%,#111410 49% 100%)',
+                        border: '2px solid #777158',
+                        boxShadow:
+                          'inset 0 0 5px rgba(0,0,0,0.65), inset 2px 2px 3px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)',
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: '27%',
+                          borderRadius: '50%',
+                          background:
+                            'repeating-conic-gradient(rgba(15,17,13,0.95) 0deg 7deg, rgba(168,156,120,0.5) 7deg 14deg, rgba(15,17,13,0.95) 14deg 21deg, rgba(60,58,44,0.3) 21deg 28deg)',
+                          boxShadow: 'inset 0 0 3px rgba(0,0,0,0.8)',
+                        }}
+                      />
 
+                      {[0, 60, 120, 180, 240, 300].map((angle) => (
+                        <div
+                          key={angle}
+                          style={{
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            width: 3,
+                            height: 3,
+                            borderRadius: '50%',
+                            background: '#0a0c08',
+                            boxShadow: 'inset 0 0 1px rgba(255,255,255,0.15)',
+                            transform: `translate(-50%,-50%) rotate(${angle}deg) translateY(-11px)`,
+                          }}
+                        />
+                      ))}
+
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          borderRadius: '50%',
+                          background:
+                            'conic-gradient(from -40deg, rgba(255,255,255,0.14) 0deg 18deg, transparent 40deg 320deg, rgba(255,255,255,0.08) 342deg 360deg)',
+                          pointerEvents: 'none',
+                        }}
+                      />
+
+                      <div
+                        style={{
+                          position: 'absolute',
+                          left: '50%',
+                          top: '50%',
+                          transform: 'translate(-50%,-50%)',
+                          width: 7,
+                          height: 7,
+                          borderRadius: '50%',
+                          background: '#d4c69c',
+                          border: '2px solid #34362e',
+                        }}
+                      />
+                    </div>
+
+                    {/* TAPE */}
                     <div
                       style={{
                         position: 'absolute',
-                        bottom: 3,
-                        left: 7,
-                        right: 7,
+                        left: 50,
+                        right: 50,
+                        top: 27,
+                        height: 3,
+                        borderRadius: 2,
+                        background: 'linear-gradient(90deg,#080a08,#303830,#080a08)',
+                        boxShadow: '0 1px 1px rgba(0,0,0,0.3)',
+                      }}
+                    />
+
+                    {/* CENTER LABEL — SONY EMBOSSED METALLIC BADGE */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%,-50%)',
+                        width: 60,
+                        height: 26,
+                        borderRadius: 3,
+                        background:
+                          'linear-gradient(180deg,#e8dfc3 0%,#b8ac84 50%,#8c825b 100%)',
+                        border: '1px solid #524b38',
+                        boxShadow:
+                          'inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.6)',
                         display: 'flex',
-                        justifyContent:
-                          'space-between',
-                        color: '#89a88c',
-                        fontSize: 6,
-                        fontWeight: 700,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      <span>★</span>
-                      <span>60</span>
+                      <img
+                        src="/sony.png"
+                        alt="SONY"
+                        style={{
+                          width: '112px',
+                          height: '48px',
+                          objectFit: 'contain',
+                          display: 'block',
+                          userSelect: 'none',
+                          pointerEvents: 'none',
+                        }}
+                      />
                     </div>
                   </div>
-                </div>
 
-                {/* CONTROLS — REAL WALKMAN HARDWARE DECK */}
+                  {/* BOTTOM LABEL */}
 
-                <div
-                  className="cassette-controls-section"
-                  style={{
-                    position: 'absolute',
-                    top: 129,
-                    left: 0,
-                    right: 0,
-                    height: 54,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 10,
-                    padding: '0 12px',
-                    background:
-                      'linear-gradient(180deg,#ebdfbd 0%,#d4c194 55%,#bda97a 100%)',
-                    borderLeft:
-                      '2px solid #625b44',
-                    borderRight:
-                      '2px solid #625b44',
-                    borderBottom:
-                      '1px solid #756c52',
-                    boxShadow:
-                      'inset 0 2px rgba(255,255,255,.5), inset 0 -3px rgba(0,0,0,.08)',
-                    zIndex: 2,
-                  }}
-                >
-                  {/* PLAY / PAUSE button (left-aligned tactile 3D key) */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, flexShrink: 0 }}>
-                    <button
-                      type="button"
-                      className={`cassette-btn ${isPlaying ? 'cassette-play-active' : ''}`}
-                      onClick={togglePlayback}
-                      style={{
-                        width: 44,
-                        height: 32,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: 5,
-                        border: '1px solid #4a5438',
-                        background: isPlaying
-                          ? 'linear-gradient(180deg,#cce2a4,#8eb364)'
-                          : 'linear-gradient(180deg,#f3e5be,#c2aa72)',
-                        color: '#1d2c20',
-                        fontSize: 13,
-                        fontWeight: 900,
-                        cursor: 'pointer',
-                        pointerEvents: 'auto',
-                        boxShadow: isPlaying
-                          ? '0 0 8px rgba(79,174,99,0.5), inset 0 1px 0 rgba(255,255,255,0.8)'
-                          : '0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.7)',
-                      }}
-                      title={isPlaying ? 'Pause (Ⅱ)' : 'Play (▶)'}
-                    >
-                      {isPlaying ? 'Ⅱ' : '▶'}
-                    </button>
-                    <span style={{ fontSize: 5.5, fontWeight: 900, color: isPlaying ? '#294f26' : '#574e35', letterSpacing: 0.5 }}>
-                      {isPlaying ? 'PAUSE' : 'PLAY'}
-                    </span>
-                  </div>
-
-                  {/* SPOTIFY ACCOUNT / PLAYLIST BUTTON (aligned perfectly in between, no text underneath) */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, minWidth: 0 }}>
-                    <a
-                      href={`https://open.spotify.com/playlist/${SPOTIFY_PLAYLIST_ID}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="cassette-btn"
-                      style={{
-                        width: '100%',
-                        height: 32,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 6,
-                        padding: '0 8px',
-                        borderRadius: 5,
-                        border: '1px solid #148037',
-                        background: 'linear-gradient(180deg, #1db954 0%, #15803d 100%)',
-                        color: '#ffffff',
-                        fontSize: 9.5,
-                        fontWeight: 900,
-                        letterSpacing: '0.6px',
-                        textDecoration: 'none',
-                        cursor: 'pointer',
-                        pointerEvents: 'auto',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4)',
-                        boxSizing: 'border-box',
-                      }}
-                      title="Open Spotify Account / Playlist"
-                    >
-                      <IconSpotify size={15} />
-                      <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>SPOTIFY</span>
-                    </a>
-                    {/* Spacer to match Play/Pause column height for exact alignment */}
-                    <div style={{ height: 9 }} />
-                  </div>
-
-                  {/* Official Walkman metallic logo badge */}
                   <div
                     style={{
+                      position: 'absolute',
+                      bottom: 3,
+                      left: 7,
+                      right: 7,
+                      display: 'flex',
+                      justifyContent:
+                        'space-between',
+                      color: '#89a88c',
+                      fontSize: 6,
+                      fontWeight: 700,
+                    }}
+                  >
+                    <span>★</span>
+                    <span>60</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CONTROLS — REAL WALKMAN HARDWARE DECK */}
+
+              <div
+                className="cassette-controls-section"
+                style={{
+                  position: 'absolute',
+                  top: 129,
+                  left: 0,
+                  right: 0,
+                  height: 54,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 10,
+                  padding: '0 12px',
+                  background:
+                    'linear-gradient(180deg,#ebdfbd 0%,#d4c194 55%,#bda97a 100%)',
+                  borderLeft:
+                    '2px solid #625b44',
+                  borderRight:
+                    '2px solid #625b44',
+                  borderBottom: '1px solid #756c52',
+                  borderBottomLeftRadius: isWidgetMinimized ? 7 : 0,
+                  borderBottomRightRadius: isWidgetMinimized ? 7 : 0,
+                  boxShadow:
+                    'inset 0 2px rgba(255,255,255,.5), inset 0 -3px rgba(0,0,0,.08)',
+                  zIndex: 2,
+                }}
+              >
+                {/* PLAY / PAUSE button (left-aligned tactile 3D key) */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+                  <button
+                    type="button"
+                    className={`cassette-btn ${isPlaying ? 'cassette-play-active' : ''}`}
+                    onClick={togglePlayback}
+                    style={{
+                      width: 44,
+                      height: 32,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      padding: '4px 6px',
-                      background: 'linear-gradient(180deg,#e8dfc3 0%,#baaf86 50%,#90845c 100%)',
-                      border: '1px solid #574c35',
-                      borderRadius: 4,
-                      boxShadow: `
+                      borderRadius: 5,
+                      border: '1px solid #4a5438',
+                      background: isPlaying
+                        ? 'linear-gradient(180deg,#cce2a4,#8eb364)'
+                        : 'linear-gradient(180deg,#f3e5be,#c2aa72)',
+                      color: '#1d2c20',
+                      fontSize: 13,
+                      fontWeight: 900,
+                      cursor: 'pointer',
+                      pointerEvents: 'auto',
+                      boxShadow: isPlaying
+                        ? '0 0 8px rgba(79,174,99,0.5), inset 0 1px 0 rgba(255,255,255,0.8)'
+                        : '0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.7)',
+                    }}
+                    title={isPlaying ? 'Pause (Ⅱ)' : 'Play (▶)'}
+                  >
+                    {isPlaying ? 'Ⅱ' : '▶'}
+                  </button>
+                  <span style={{ fontSize: 5.5, fontWeight: 900, color: isPlaying ? '#294f26' : '#574e35', letterSpacing: 0.5 }}>
+
+                  </span>
+                </div>
+
+                {/* SPOTIFY ACCOUNT / PLAYLIST BUTTON (aligned perfectly in between, no text underneath) */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, minWidth: 0 }}>
+                  <a
+                    href={`https://open.spotify.com/playlist/${SPOTIFY_PLAYLIST_ID}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cassette-btn"
+                    style={{
+                      width: '100%',
+                      height: 32,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 6,
+                      padding: '0 8px',
+                      borderRadius: 5,
+                      border: '1px solid #148037',
+                      background: 'linear-gradient(180deg, #1db954 0%, #15803d 100%)',
+                      color: '#ffffff',
+                      fontSize: 9.5,
+                      fontWeight: 900,
+                      letterSpacing: '0.6px',
+                      textDecoration: 'none',
+                      cursor: 'pointer',
+                      pointerEvents: 'auto',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4)',
+                      boxSizing: 'border-box',
+                    }}
+                    title="Open Spotify Account / Playlist"
+                  >
+                    <IconSpotify size={15} />
+                    <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>SPOTIFY</span>
+                  </a>
+                  {/* Spacer to match Play/Pause column height for exact alignment */}
+                  <div style={{ height: 9 }} />
+                </div>
+
+                {/* Official Walkman metallic logo badge */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '4px 6px',
+                    background: 'linear-gradient(180deg,#e8dfc3 0%,#baaf86 50%,#90845c 100%)',
+                    border: '1px solid #574c35',
+                    borderRadius: 4,
+                    boxShadow: `
                         inset 0 1px 0 rgba(255,255,255,0.7), 
                         inset 0 -1px 1px rgba(0,0,0,0.3), 
                         0 1px 3px rgba(0,0,0,0.35)
                       `,
-                      userSelect: 'none',
-                      overflow: 'hidden',
-                      flexShrink: 0,
+                    userSelect: 'none',
+                    overflow: 'hidden',
+                    flexShrink: 0,
+                  }}
+                  title="Sony WALKMAN"
+                >
+                  <img
+                    src="/walkman.png"
+                    alt="Sony WALKMAN"
+                    style={{
+                      width: 66,
+                      height: 28,
+                      objectFit: 'contain',
+                      display: 'block',
+                      mixBlendMode: 'multiply',
                     }}
-                    title="Sony WALKMAN"
+                  />
+                </div>
+              </div>
+
+              {/* NOW PLAYING */}
+
+              <div
+                className="cassette-now-playing-container"
+                style={{
+                  position: 'absolute',
+                  top: 182,
+                  left: 0,
+                  right: 0,
+                  height: 75,
+                  padding: '7px 9px',
+                  background:
+                    'linear-gradient(180deg,#e8dcb9 0%,#d4c49b 100%)',
+                  borderLeft:
+                    '2px solid #625b44',
+                  borderRight:
+                    '2px solid #625b44',
+                  borderBottom:
+                    '1px solid #756c52',
+                  boxShadow:
+                    'inset 0 1px rgba(255,255,255,.65), inset 0 -3px rgba(0,0,0,.06)',
+                  color: '#243426',
+                  zIndex: 3,
+                  display: isWidgetMinimized ? 'none' : 'block',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent:
+                      'space-between',
+                    alignItems: 'center',
+                    fontSize: 6,
+                    fontWeight: 900,
+                    letterSpacing: 1.2,
+                    color: '#536c56',
+                    marginBottom: 4,
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 5,
+                    }}
                   >
-                    <img
-                      src="/walkman.png"
-                      alt="Sony WALKMAN"
-                      style={{
-                        width: 66,
-                        height: 28,
-                        objectFit: 'contain',
-                        display: 'block',
-                        mixBlendMode: 'multiply',
-                      }}
-                    />
-                  </div>
+                    {/* Waveform equalizer bars */}
+                    <span style={{ display: 'inline-flex', alignItems: 'flex-end', gap: 1.5, height: 14, marginRight: 2 }}>
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <span
+                          key={n}
+                          className={isPlaying && !activeVideo ? `eq-bar-${n}` : ''}
+                          style={{
+                            display: 'inline-block',
+                            width: 2,
+                            height: isPlaying && !activeVideo ? undefined : 4,
+                            background: isPlaying ? '#4fae63' : '#91876b',
+                            borderRadius: 1,
+                            transition: 'background 0.3s ease',
+                            flexShrink: 0,
+                          }}
+                        />
+                      ))}
+                    </span>
+
+                    {isPlaying ? 'NOW PLAYING' : 'PAUSED'}
+                  </span>
+
+                  <span style={{ opacity: 0.7 }}>AUDIO // A</span>
                 </div>
 
-                {/* NOW PLAYING */}
+                {/* TRACK */}
 
                 <div
-                  className="cassette-now-playing-container"
                   style={{
-                    position: 'absolute',
-                    top: 182,
-                    left: 0,
-                    right: 0,
-                    height: 75,
-                    padding: '7px 9px',
-                    background:
-                      'linear-gradient(180deg,#e8dcb9 0%,#d4c49b 100%)',
-                    borderLeft:
-                      '2px solid #625b44',
-                    borderRight:
-                      '2px solid #625b44',
-                    borderBottom:
-                      '1px solid #756c52',
+                    height: 19,
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '0 6px',
+                    background: '#121a14',
+                    border:
+                      '1px solid #4b5949',
+                    color: '#d4dfad',
+                    fontFamily:
+                      '"Courier New",monospace',
+                    fontSize: 8,
+                    fontWeight: 700,
+                    letterSpacing: 0.7,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                     boxShadow:
-                      'inset 0 1px rgba(255,255,255,.65), inset 0 -3px rgba(0,0,0,.06)',
-                    color: '#243426',
-                    zIndex: 3,
+                      'inset 0 0 8px rgba(0,0,0,.75)',
+                  }}
+                >
+                  <span
+                    style={{
+                      marginRight: 5,
+                      opacity: 0.55,
+                      fontSize: 7,
+                      flexShrink: 0,
+                    }}
+                  >
+                    ►
+                  </span>
+
+                  {/* Marquee scrolling track name */}
+                  <span
+                    style={{
+                      flex: 1,
+                      overflow: 'hidden',
+                      position: 'relative',
+                    }}
+                  >
+                    <span
+                      className={`track-marquee-inner${!isPlaying ? ' paused' : ''}`}
+                    >
+                      {getTrackLabel()}
+                    </span>
+                  </span>
+                </div>
+
+                {/* PROGRESS */}
+
+                <div
+                  className="cassette-timeline-section"
+                  style={{
+                    position: 'relative',
+                    marginTop: 6,
+                    height: 5,
+                    background: '#9e9679',
+                    borderRadius: 4,
+                    overflow: 'visible',
                   }}
                 >
                   <div
                     style={{
-                      display: 'flex',
-                      justifyContent:
-                        'space-between',
-                      alignItems: 'center',
-                      fontSize: 6,
-                      fontWeight: 900,
-                      letterSpacing: 1.2,
-                      color: '#536c56',
-                      marginBottom: 4,
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 5,
-                      }}
-                    >
-                      {/* Waveform equalizer bars */}
-                      <span style={{ display: 'inline-flex', alignItems: 'flex-end', gap: 1.5, height: 14, marginRight: 2 }}>
-                        {[1, 2, 3, 4, 5].map((n) => (
-                          <span
-                            key={n}
-                            className={isPlaying && !activeVideo ? `eq-bar-${n}` : ''}
-                            style={{
-                              display: 'inline-block',
-                              width: 2,
-                              height: isPlaying && !activeVideo ? undefined : 4,
-                              background: isPlaying ? '#4fae63' : '#91876b',
-                              borderRadius: 1,
-                              transition: 'background 0.3s ease',
-                              flexShrink: 0,
-                            }}
-                          />
-                        ))}
-                      </span>
-
-                      {isPlaying ? 'NOW PLAYING' : 'PAUSED'}
-                    </span>
-
-                    <span style={{ opacity: 0.7 }}>AUDIO // A</span>
-                  </div>
-
-                  {/* TRACK */}
-
-                  <div
-                    style={{
-                      height: 19,
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: '0 6px',
-                      background: '#121a14',
-                      border:
-                        '1px solid #4b5949',
-                      color: '#d4dfad',
-                      fontFamily:
-                        '"Courier New",monospace',
-                      fontSize: 8,
-                      fontWeight: 700,
-                      letterSpacing: 0.7,
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      boxShadow:
-                        'inset 0 0 8px rgba(0,0,0,.75)',
-                    }}
-                  >
-                    <span
-                      style={{
-                        marginRight: 5,
-                        opacity: 0.55,
-                        fontSize: 7,
-                        flexShrink: 0,
-                      }}
-                    >
-                      ►
-                    </span>
-
-                    {/* Marquee scrolling track name */}
-                    <span
-                      style={{
-                        flex: 1,
-                        overflow: 'hidden',
-                        position: 'relative',
-                      }}
-                    >
-                      <span
-                        className={`track-marquee-inner${!isPlaying ? ' paused' : ''}`}
-                      >
-                        {getTrackLabel()}
-                      </span>
-                    </span>
-                  </div>
-
-                  {/* PROGRESS */}
-
-                  <div
-                    className="cassette-timeline-section"
-                    style={{
                       position: 'relative',
-                      marginTop: 6,
-                      height: 5,
-                      background: '#9e9679',
+                      width: `${progress}%`,
+                      height: '100%',
+                      minWidth:
+                        progress > 0 ? 3 : 0,
+                      background:
+                        'linear-gradient(90deg,#405f45,#6f9b68)',
                       borderRadius: 4,
-                      overflow: 'visible',
+                      transition:
+                        'width .15s linear',
                     }}
                   >
-                    <div
-                      style={{
-                        position: 'relative',
-                        width: `${progress}%`,
-                        height: '100%',
-                        minWidth:
-                          progress > 0 ? 3 : 0,
-                        background:
-                          'linear-gradient(90deg,#405f45,#6f9b68)',
-                        borderRadius: 4,
-                        transition:
-                          'width .15s linear',
-                      }}
-                    >
-                      {progress > 0 && (
-                        <div
-                          style={{
-                            position: 'absolute',
-                            right: -2,
-                            top: '50%',
-                            transform:
-                              'translateY(-50%)',
-                            width: 7,
-                            height: 7,
-                            borderRadius: '50%',
-                            background:
-                              '#dce4b9',
-                            border:
-                              '1px solid #506b50',
-                          }}
-                        />
-                      )}
-                    </div>
-                  </div>
-
-                  <div
-                    className="cassette-timeline-section"
-                    style={{
-                      display: 'flex',
-                      justifyContent:
-                        'space-between',
-                      marginTop: 4,
-                      fontSize: 6,
-                      fontWeight: 700,
-                      color: '#68705f',
-                    }}
-                  >
-                    <span>
-                      {formatTime(position)}
-                    </span>
-
-                    <span>
-                      {formatTime(duration)}
-                    </span>
+                    {progress > 0 && (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          right: -2,
+                          top: '50%',
+                          transform:
+                            'translateY(-50%)',
+                          width: 7,
+                          height: 7,
+                          borderRadius: '50%',
+                          background:
+                            '#dce4b9',
+                          border:
+                            '1px solid #506b50',
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
 
-                {/* PLAYLIST HEADER */}
-
                 <div
+                  className="cassette-timeline-section"
                   style={{
-                    position: 'absolute',
-                    top: 256,
-                    left: 0,
-                    right: 0,
-                    height: 22,
                     display: 'flex',
-                    alignItems: 'center',
                     justifyContent:
                       'space-between',
-                    padding: '0 8px',
-                    background:
-                      'linear-gradient(180deg,#171b16,#0c0f0d)',
-                    color: '#9cac9d',
-                    fontSize: 6.5,
+                    marginTop: 4,
+                    fontSize: 6,
                     fontWeight: 700,
-                    letterSpacing: 1,
-                    border:
-                      '1px solid #3c443c',
-                    zIndex: 4,
+                    color: '#68705f',
                   }}
                 >
                   <span>
-                    MIX_TAPE.PLS
+                    {formatTime(position)}
                   </span>
 
-                  <span
-                    style={{
-                      opacity: 0.6,
-                      fontSize: 6,
-                    }}
-                  >
-                    ↑ ↓ SCROLL
+                  <span>
+                    {formatTime(duration)}
                   </span>
                 </div>
               </div>
-            )}
 
-            {/* COLLAPSE BUTTON */}
+              {/* PLAYLIST HEADER */}
 
-            <button
-              type="button"
-              className="cassette-btn"
-              onClick={() =>
-                setCassetteCollapsed(
-                  (previous) => !previous
-                )
-              }
-              aria-label={
-                cassetteCollapsed
-                  ? 'Expand cassette player'
-                  : 'Collapse cassette player'
-              }
-              title={
-                cassetteCollapsed
-                  ? 'Show cassette'
-                  : 'Hide cassette'
-              }
-              style={{
-                position: 'absolute',
-                top: 5,
-                left: 5,
-                width: 21,
-                height: 21,
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 4,
-                border:
-                  '1px solid #726844',
-                background:
-                  'linear-gradient(180deg,#f0dfb2,#bfa978)',
-                color: '#263a2b',
-                fontSize: 9,
-                fontWeight: 900,
-                cursor: 'pointer',
-                zIndex: 1000,
-                boxShadow:
-                  '0 2px 3px rgba(0,0,0,.45)',
-              }}
-            >
-              {cassetteCollapsed
-                ? '▲'
-                : '▼'}
-            </button>
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 256,
+                  left: 0,
+                  right: 0,
+                  height: 22,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0 8px',
+                  background:
+                    'linear-gradient(180deg,#171b16,#0c0f0d)',
+                  color: '#9cac9d',
+                  fontSize: 6.5,
+                  fontWeight: 700,
+                  letterSpacing: 1,
+                  border: '1px solid #3c443c',
+                  zIndex: 4,
+                  display: isWidgetMinimized ? 'none' : 'flex',
+                }}
+              >
+                <span>
+                  MIX_TAPE.PLS
+                </span>
 
-            {/* MINIMIZE BUTTON */}
+                <span
+                  style={{
+                    opacity: 0.6,
+                    fontSize: 6,
+                  }}
+                >
+                  ↑ ↓ SCROLL
+                </span>
+              </div>
+            </div>
+          )}
 
-            <button
-              type="button"
-              className="cassette-btn"
-              onClick={() => setIsWidgetMinimized(true)}
-              aria-label="Minimize widget"
-              title="Minimize widget"
-              style={{
-                position: 'absolute',
-                top: 5,
-                left: 30,
-                width: 21,
-                height: 21,
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 4,
-                border:
-                  '1px solid #726844',
-                background:
-                  'linear-gradient(180deg,#f0dfb2,#bfa978)',
-                color: '#263a2b',
-                fontSize: 9,
-                fontWeight: 900,
-                cursor: 'pointer',
-                zIndex: 1000,
-                boxShadow:
-                  '0 2px 3px rgba(0,0,0,.45)',
-              }}
-            >
-              🗕
-            </button>
-          </>
-        )}
+          {/* COLLAPSE BUTTON */}
+
+          {!isWidgetMinimized && (
+            <>
+              {/* COLLAPSE BUTTON */}
+
+              <button
+                type="button"
+                className="cassette-btn"
+                onClick={() =>
+                  setCassetteCollapsed((previous) => !previous)
+                }
+                aria-label={
+                  cassetteCollapsed
+                    ? 'Expand cassette player'
+                    : 'Collapse cassette player'
+                }
+                title={
+                  cassetteCollapsed
+                    ? 'Show cassette'
+                    : 'Hide cassette'
+                }
+                style={{
+                  position: 'absolute',
+                  top: 5,
+                  left: 5,
+                  width: 21,
+                  height: 21,
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 4,
+                  border: '1px solid #726844',
+                  background:
+                    'linear-gradient(180deg,#f0dfb2,#bfa978)',
+                  color: '#263a2b',
+                  fontSize: 9,
+                  fontWeight: 900,
+                  cursor: 'pointer',
+                  zIndex: 1000,
+                  boxShadow:
+                    '0 2px 3px rgba(0,0,0,.45)',
+                }}
+              >
+                {cassetteCollapsed ? '▲' : '▼'}
+              </button>
+            </>
+          )}
+          {/* MINIMIZE BUTTON */}
+
+          <button
+            type="button"
+            className="cassette-btn"
+            onClick={() => setIsWidgetMinimized((previous) => !previous)}
+            aria-label={isWidgetMinimized ? 'Expand widget' : 'Minimize widget'}
+            title={isWidgetMinimized ? 'Expand widget' : 'Minimize widget'}
+            style={{
+              position: 'absolute',
+              top: 5,
+              left: 30,
+              width: 21,
+              height: 21,
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 4,
+              border:
+                '1px solid #726844',
+              background:
+                'linear-gradient(180deg,#f0dfb2,#bfa978)',
+              color: '#263a2b',
+              fontSize: 9,
+              fontWeight: 900,
+              cursor: 'pointer',
+              zIndex: 1000,
+              boxShadow:
+                '0 2px 3px rgba(0,0,0,.45)',
+            }}
+          >
+            {isWidgetMinimized ? '🗗' : '🗕'}
+          </button>
+        </>
       </div>
     </>
   );
