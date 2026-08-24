@@ -319,7 +319,7 @@ const ContactApp: React.FC = () => {
               }}
             >
               <img
-                src={"public/aditya_portrait.png"}
+                src="https://ik.imagekit.io/hzvbqwpg8/imague.png"
                 alt="Aditya Singh"
                 style={{
                   width: '100%',

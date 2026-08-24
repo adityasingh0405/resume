@@ -341,7 +341,7 @@ const AboutApp: React.FC = () => {
             }}
           >
             <img
-              src="/aditya_portrait.png"
+              src="https://ik.imagekit.io/hzvbqwpg8/imague.png"
               alt="Portrait"
               style={{
                 width: '100%',
