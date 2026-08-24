@@ -313,7 +313,7 @@ const ContactApp: React.FC = () => {
               }}
             >
               <img
-                src={"public/aditya_portrait.png"}
+                src="public/aditya_portrait.png"
                 alt="Aditya Singh"
                 style={{
                   width: '100%',
