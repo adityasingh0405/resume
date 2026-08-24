@@ -43,22 +43,19 @@ export const RetroMonitorFrame: React.FC<RetroMonitorFrameProps> = ({
       setIsGlitching(true);
       glitchTimeoutId = setTimeout(() => {
         setIsGlitching(false);
-      }, 250);
+      }, 400);
     };
 
     const scheduleNextGlitch = () => {
-      // ~30s interval with ±6s jitter
-      const randomInterval = 27000 + Math.random() * 6000;
+      // Exact 20-second loop interval
       nextGlitchTimerId = setTimeout(() => {
         triggerGlitch();
 
-        // 30% chance of a second hit 400ms later for a violent double-pop
-        if (Math.random() < 0.3) {
-          setTimeout(triggerGlitch, 400);
-        }
+        // Spider-Verse signature double-snap echo pop 320ms later
+        setTimeout(triggerGlitch, 320);
 
         scheduleNextGlitch();
-      }, randomInterval);
+      }, 20000);
     };
 
     scheduleNextGlitch();
@@ -268,6 +265,58 @@ export const RetroMonitorFrame: React.FC<RetroMonitorFrameProps> = ({
                     fill="none"
                     stroke="url(#scratchFade2)"
                     strokeWidth="0.3"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Scratch 6: Faint diagonal micro-tick near top-left bezel */}
+                  <path
+                    d="M 140,95 C 160,110 178,125 195,142"
+                    fill="none"
+                    stroke="url(#scratchFade1)"
+                    strokeWidth="0.32"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Scratch 7: Fine organic curve lower-left center */}
+                  <path
+                    d="M 310,440 C 335,455 365,462 395,458"
+                    fill="none"
+                    stroke="url(#scratchFade2)"
+                    strokeWidth="0.35"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Scratch 8: Delicate vertical wipe scratch near mid-right */}
+                  <path
+                    d="M 845,210 C 848,235 842,260 838,285"
+                    fill="none"
+                    stroke="url(#scratchFade3)"
+                    strokeWidth="0.34"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Scratch 9: Faint micro hairline arc bottom-center */}
+                  <path
+                    d="M 460,510 C 490,522 525,518 555,505"
+                    fill="none"
+                    stroke="url(#scratchFade1)"
+                    strokeWidth="0.3"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Scratch 10: Subtle double hairline scuff upper-center-right */}
+                  <path
+                    d="M 620,85 C 640,92 662,102 680,115"
+                    fill="none"
+                    stroke="url(#scratchFade2)"
+                    strokeWidth="0.33"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M 626,92 C 645,99 667,108 684,120"
+                    fill="none"
+                    stroke="url(#scratchFade2)"
+                    strokeWidth="0.28"
                     strokeLinecap="round"
                   />
                 </svg>

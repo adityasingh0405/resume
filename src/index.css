@@ -206,8 +206,8 @@ body {
   pointer-events: none;
   z-index: 9997;
   background: radial-gradient(ellipse at 50% 50%,
-      transparent 72%,
-      rgba(0, 0, 0, 0.28) 100%);
+      transparent 80%,
+      rgba(0, 0, 0, 0.08) 100%);
 }
 
 /* Barely-there phosphor flicker */
@@ -1053,7 +1053,7 @@ body {
       #cdc09a 60%,
       #c4b48a 85%,
       #b8a87d 100%);
-  border-radius: 38px 38px 22px 22px;
+  border-radius: 12px 12px 8px 8px;
   padding: 24px 26px 14px 26px;
   display: flex;
   flex-direction: column;
@@ -1110,7 +1110,7 @@ body {
 .crt-screen-inset {
   width: 100%;
   background: linear-gradient(180deg, #1a1815 0%, #111009 55%, #0a0908 100%);
-  border-radius: 30px / 22px;
+  border-radius: 8px / 6px;
   padding: 16px 18px;
   position: relative;
   z-index: 2;
@@ -1130,15 +1130,14 @@ body {
 .crt-glass-tube {
   width: 100%;
   height: 560px;
-  border-radius: 22px / 16px;
+  border-radius: 6px / 4px;
   overflow: hidden;
   position: relative;
   background: #000000;
   box-shadow:
-    /* Deep 3D glass tube inset shadow with glass rim corrosion */
-    inset 0 0 50px rgba(0, 0, 0, 0.95),
-    inset 0 0 20px rgba(110, 45, 12, 0.35),
-    inset 0 0 15px rgba(0, 0, 0, 0.9);
+    /* Soft 3D glass tube inset shadow */
+    inset 0 0 20px rgba(0, 0, 0, 0.45),
+    inset 0 0 10px rgba(110, 45, 12, 0.15);
   transition: filter 0.25s ease;
 }
 
@@ -1170,54 +1169,67 @@ body {
       rgba(0, 0, 0, 0.18) 4px);
   background-size: 100% 8px;
   animation: crtScanlineRoll 10s linear infinite;
-  border-radius: 22px / 16px;
+  border-radius: 6px / 4px;
 }
 
-/* Violent Retro CRT Color Shift & Skew Glitch (250ms — old tube pop) */
+/* Spider-Verse Multiverse Chromatic Polygon & Slice Glitch (380ms stepped pop) */
 @keyframes crtGlitchShift {
   0% {
     transform: translate(0, 0) skew(0deg);
     filter: none;
+    clip-path: none;
   }
 
   10% {
-    transform: translate(-10px, 3px) skew(-4.5deg, 1.5deg);
-    filter: drop-shadow(-12px 0 0 rgba(255, 0, 90, 0.9)) drop-shadow(12px 0 0 rgba(0, 255, 220, 0.9)) hue-rotate(90deg) contrast(1.5) brightness(1.3);
+    /* Step 1: Upper-band horizontal slice shear with Cyan & Hot Pink split */
+    transform: translate(-18px, 4px) skew(-6deg, 2deg);
+    filter: drop-shadow(-20px 0 0 #00ffff) drop-shadow(20px 0 0 #ff0055) hue-rotate(90deg) contrast(1.8) saturate(2.5);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 0% 45%);
   }
 
-  25% {
-    transform: translate(12px, -4px) skew(5deg, -2deg);
-    filter: drop-shadow(14px 0 0 rgba(255, 40, 0, 0.9)) drop-shadow(-14px 0 0 rgba(0, 160, 255, 0.9)) hue-rotate(-120deg) invert(0.15) contrast(1.6);
+  22% {
+    /* Step 2: Middle-band invert flash with Yellow & Blue shift */
+    transform: translate(22px, -6px) skew(7deg, -3deg);
+    filter: drop-shadow(24px 0 0 #ffff00) drop-shadow(-24px 0 0 #0066ff) invert(0.85) contrast(2) brightness(1.4);
+    clip-path: polygon(0% 25%, 100% 25%, 100% 75%, 0% 75%);
   }
 
-  40% {
-    transform: translate(-8px, 5px) skew(-3.5deg, 2deg);
-    filter: drop-shadow(-10px 0 0 rgba(0, 255, 80, 0.85)) drop-shadow(10px 0 0 rgba(255, 0, 200, 0.85)) hue-rotate(180deg) brightness(1.4) saturate(2.5);
+  38% {
+    /* Step 3: Lower-band RGB channel tearing with extreme skew */
+    transform: translate(-15px, 8px) skew(-8deg, 4deg);
+    filter: drop-shadow(-18px 0 0 #ff00ff) drop-shadow(18px 0 0 #00ff66) hue-rotate(180deg) saturate(3);
+    clip-path: polygon(0% 50%, 100% 50%, 100% 100%, 0% 100%);
   }
 
-  55% {
-    transform: translate(9px, -2px) skew(3deg, -1.2deg);
-    filter: drop-shadow(11px 0 0 rgba(255, 210, 0, 0.85)) drop-shadow(-11px 0 0 rgba(30, 120, 255, 0.85)) hue-rotate(-60deg) contrast(1.7);
+  54% {
+    /* Step 4: Staggered full-frame chromatic pop */
+    transform: translate(14px, -3px) skew(4deg, -1.5deg);
+    filter: drop-shadow(-16px 0 0 #00ffff) drop-shadow(16px 0 0 #ff0055) contrast(1.9) brightness(1.3);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 85%);
   }
 
-  75% {
-    transform: translate(-4px, 2px) skew(-2deg, 0.8deg);
-    filter: drop-shadow(-6px 0 0 rgba(255, 0, 100, 0.75)) drop-shadow(6px 0 0 rgba(0, 240, 200, 0.75));
+  72% {
+    /* Step 5: Micro horizontal hairline snap */
+    transform: translate(-6px, 2px) skew(-2deg);
+    filter: drop-shadow(-8px 0 0 #00e5ff) drop-shadow(8px 0 0 #ff0066);
+    clip-path: none;
   }
 
   90% {
-    transform: translate(2px, -1px) skew(1deg);
-    filter: drop-shadow(3px 0 0 rgba(255, 80, 0, 0.5)) drop-shadow(-3px 0 0 rgba(0, 120, 255, 0.5));
+    transform: translate(3px, -1px) skew(1deg);
+    filter: drop-shadow(4px 0 0 #00ffff) drop-shadow(-4px 0 0 #ff0055);
+    clip-path: none;
   }
 
   100% {
     transform: translate(0, 0) skew(0deg);
     filter: none;
+    clip-path: none;
   }
 }
 
 .crt-glitching {
-  animation: crtGlitchShift 0.25s steps(4, end) both !important;
+  animation: crtGlitchShift 0.38s steps(6, end) both !important;
 }
 
 /* CRT Glass Glare — Two large oval overhead-light reflections (dominant ref feature) */
@@ -1247,7 +1259,7 @@ body {
     radial-gradient(ellipse 60% 50% at 50% 50%,
       rgba(10, 35, 12, 0.12) 0%,
       transparent 80%);
-  border-radius: 22px / 16px;
+  border-radius: 6px / 4px;
 }
 
 /* Glass smudges — minimal, just faint dust and fingerprint bloom */
@@ -1256,7 +1268,7 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 9001;
-  border-radius: 22px / 16px;
+  border-radius: 6px / 4px;
   mix-blend-mode: screen;
   opacity: 0.7;
   background:
@@ -1284,18 +1296,17 @@ body {
   pointer-events: none;
   z-index: 9002;
   background:
-    /* Main radial darkening — corners go nearly black, center stays visible */
-    radial-gradient(ellipse 88% 78% at 50% 50%,
+    /* Subtle radial darkening — keeps corners clear and readable */
+    radial-gradient(ellipse 92% 84% at 50% 50%,
       transparent 0%,
-      transparent 48%,
-      rgba(0, 0, 0, 0.25) 65%,
-      rgba(0, 0, 0, 0.72) 82%,
-      rgba(0, 0, 0, 0.95) 100%),
-    /* Extra top-edge darkening */
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0%, transparent 8%),
-    /* Extra bottom-edge darkening */
-    linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, transparent 10%);
-  border-radius: 22px / 16px;
+      transparent 65%,
+      rgba(0, 0, 0, 0.10) 80%,
+      rgba(0, 0, 0, 0.32) 100%),
+    /* Soft top-edge darkening */
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 0%, transparent 6%),
+    /* Soft bottom-edge darkening */
+    linear-gradient(to top, rgba(0, 0, 0, 0.15) 0%, transparent 8%);
+  border-radius: 6px / 4px;
 }
 
 /* Power-off Standby Overlay */
@@ -1366,7 +1377,7 @@ body {
   align-items: center;
   justify-content: center;
   background: #181412;
-  border-radius: 20px;
+  border-radius: 6px;
   padding: 6px 12px;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.95), 0 0 8px rgba(120, 45, 14, 0.3);
 }
@@ -1472,14 +1483,14 @@ body {
   box-shadow:
     inset 0 4px 6px rgba(0, 0, 0, 0.4),
     0 4px 8px rgba(0, 0, 0, 0.55);
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 3px 3px;
 }
 
 .crt-stand-foot {
   width: 820px;
   height: 46px;
   background: linear-gradient(180deg, #cdc09a 0%, #c4b48a 40%, #b8a87d 100%);
-  border-radius: 8px 8px 16px 16px;
+  border-radius: 3px 3px 6px 6px;
   box-shadow:
     0 22px 50px rgba(0, 0, 0, 0.88),
     inset 0 3px 5px rgba(255, 250, 225, 0.45),

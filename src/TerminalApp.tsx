@@ -57,11 +57,20 @@ const HELP_TEXT: Line[] = [
   { type: 'label', text: 'AVAILABLE COMMANDS:' },
   { type: 'normal', text: '' },
   { type: 'cmd', text: '  whoami    — Display complete identity & profile file' },
+  { type: 'cmd', text: '  resume    — View & download Aditya_Resume.pdf document' },
   { type: 'cmd', text: '  skills    — List technical skills & frameworks' },
   { type: 'cmd', text: '  projects  — List projects directory summary' },
   { type: 'cmd', text: '  status    — System status & CP achievements report' },
   { type: 'cmd', text: '  clear     — Clear terminal screen' },
   { type: 'cmd', text: '  help      — Show this help menu' },
+];
+
+const RESUME_CMD_TEXT: Line[] = [
+  { type: 'label', text: 'C:\\PEGASUS\\DOCS\\RESUME.PDF — ADITYA SINGH RÉSUMÉ' },
+  { type: 'normal', text: '' },
+  { type: 'key-val', key: 'FILE', val: 'Aditya_Resume.pdf' },
+  { type: 'key-val', key: 'STATUS', val: 'OPENING IN NEW BROWSER TAB...' },
+  { type: 'skill', text: '  -> Transmitting PDF binary stream...' },
 ];
 
 const STATUS_TEXT: Line[] = [
@@ -131,6 +140,14 @@ const TerminalApp: React.FC = () => {
     switch (trimmed) {
       case 'whoami':
         result = WHOAMI_TEXT;
+        break;
+      case 'resume':
+      case 'resume.pdf':
+      case 'cv':
+        result = RESUME_CMD_TEXT;
+        try {
+          window.open('/Aditya_Resume.pdf', '_blank');
+        } catch { }
         break;
       case 'skills':
         result = SKILLS_TEXT;

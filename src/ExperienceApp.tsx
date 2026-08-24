@@ -128,7 +128,7 @@ const ExperienceApp: React.FC = () => {
               letterSpacing: '2px',
             }}
           >
-            XPERIENCE.LOG
+            XPRIENCE.LOG
           </div>
 
           <div

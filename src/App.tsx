@@ -16,6 +16,8 @@ import MinesweeperApp from './MinesweeperApp';
 import SynthApp from './SynthApp';
 import DisplayCfgApp, { ThemeMode } from './DisplayCfgApp';
 import StickyNotesApp from './StickyNotesApp';
+import CertificatesApp from './CertificatesApp';
+import ResumeApp from './ResumeApp';
 import { SpotifyWidget } from './SpotifyWidget';
 import RetroMonitorFrame from './RetroMonitorFrame';
 import { playClick, playFloppySeek, playClose } from './sound';
@@ -35,6 +37,8 @@ import {
   IconLeetcode,
   IconResearch,
   IconMinesweeper,
+  IconCertificate,
+  IconResume,
 } from './PixelIcons';
 
 // ─── App Registry ──────────────────────────────────────────────────────────
@@ -53,7 +57,9 @@ export type AppId =
   | 'minesweeper'
   | 'synth'
   | 'display'
-  | 'notes';
+  | 'notes'
+  | 'certificates'
+  | 'resume';
 
 interface AppDef {
   id: AppId;
@@ -116,9 +122,9 @@ const APPS: AppDef[] = [
   },
   {
     id: 'experience',
-    label: 'XPERIENCE.LOG',
-    exe: 'XPERIENCE.LOG',
-    path: 'C:\\PEGASUS\\XPERIENCE.LOG',
+    label: 'XPRIENCE.LOG',
+    exe: 'XPRIENCE.LOG',
+    path: 'C:\\PEGASUS\\XPRIENCE.LOG',
     icon: <IconScroll size={46} />,
     category: 'APPS',
     isDesktop: true,
@@ -223,6 +229,28 @@ const APPS: AppDef[] = [
     isDesktop: false,
     defaultPos: { x: 270, y: 60 },
     defaultSize: { width: 500, height: 420 },
+  },
+  {
+    id: 'certificates',
+    label: 'CERTS.DIR',
+    exe: 'CERTS.DIR',
+    path: 'C:\\PEGASUS\\DOCS\\CERTS\\',
+    icon: <IconCertificate size={46} />,
+    category: 'APPS',
+    isDesktop: true,
+    defaultPos: { x: 240, y: 65 },
+    defaultSize: { width: 720, height: 530 },
+  },
+  {
+    id: 'resume',
+    label: 'RESUME.PDF',
+    exe: 'RESUME.PDF',
+    path: 'C:\\PEGASUS\\DOCS\\RESUME.PDF',
+    icon: <IconResume size={46} />,
+    category: 'APPS',
+    isDesktop: true,
+    defaultPos: { x: 240, y: 60 },
+    defaultSize: { width: 680, height: 560 },
   },
 ];
 
@@ -662,6 +690,12 @@ const App: React.FC = () => {
 
       case 'notes':
         return <StickyNotesApp />;
+
+      case 'certificates':
+        return <CertificatesApp />;
+
+      case 'resume':
+        return <ResumeApp />;
     }
   };
 
@@ -879,7 +913,7 @@ const App: React.FC = () => {
                         </span>
 
                         <span className="xp-user-subtitle">
-                          Administrator · PEGASUS v1.984
+                          Administrator · PEGASUS v2.4.5
                         </span>
                       </div>
                     </div>

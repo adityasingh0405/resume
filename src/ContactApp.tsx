@@ -154,7 +154,13 @@ const ContactApp: React.FC = () => {
       icon: Link,
       description: 'Professional network',
     },
-
+    {
+      key: 'RESUME',
+      value: 'Aditya_Resume.pdf',
+      href: '/Aditya_Resume.pdf',
+      icon: ExternalLink,
+      description: 'Download Resume (PDF)',
+    },
   ];
 
   return (

@@ -116,19 +116,40 @@ const ResearchApp: React.FC = () => {
       <div style={{
         border: '1px solid var(--amber)',
         background: 'rgba(255,176,0,0.05)',
-        padding: '12px',
         marginBottom: '16px',
-        display: 'flex',
-        gap: '12px',
-        alignItems: 'center',
+        overflow: 'hidden',
       }}>
-        <div className="font-vt323 text-3xl" style={{ color: 'var(--amber)' }}>🏆</div>
-        <div>
-          <div style={{ fontSize: '14px', color: 'var(--amber)', fontWeight: 'bold' }}>
-            WINNER — CLUSTER BUILD-A-THON HACKATHON (1ST PLACE)
-          </div>
-          <div style={{ fontSize: '12px', color: 'var(--phosphor-mid)', marginTop: '2px' }}>
-            Awarded 1st Place for building an autonomous, end-to-end enterprise AI agent architecture featuring multi-step tool execution and grounded reasoning.
+        <div style={{
+          width: '100%',
+          aspectRatio: '16 / 9', // consistent, predictable crop instead of arbitrary maxHeight
+          borderBottom: '1px solid var(--amber)',
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          <img
+            src="https://ik.imagekit.io/hzvbqwpg8/WhatsApp%20Image%202026-08-25%20at%2012.52.26%20AM.jpeg"
+            alt="Cluster Build-A-Thon Winner Award"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center',
+              display: 'block',
+            }}
+          />
+        </div>
+        {/* Award Info Section */}
+        <div style={{ padding: '12px 14px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+          <div className="font-vt323 text-3xl" style={{ color: 'var(--amber)', lineHeight: 1, flexShrink: 0 }}>🏆</div>
+          <div>
+            <div style={{ fontSize: '14px', color: 'var(--amber)', fontWeight: 'bold' }}>
+              WINNER — CLUSTER BUILD-A-THON HACKATHON (1ST PLACE)
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--phosphor-mid)', marginTop: '4px', lineHeight: '1.4' }}>
+              Awarded 1st Place for building an autonomous, end-to-end enterprise AI agent architecture featuring multi-step tool execution and grounded reasoning.
+            </div>
           </div>
         </div>
       </div>

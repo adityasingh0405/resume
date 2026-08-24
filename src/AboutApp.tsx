@@ -53,6 +53,12 @@ const STATS = [
 
 const LINKS = [
   {
+    href: '/Aditya_Resume.pdf',
+    label: 'RÉSUMÉ (PDF)',
+    variant: 'retro-btn-amber',
+    download: 'Aditya_Resume.pdf',
+  },
+  {
     href: 'https://github.com/adityasingh0405',
     label: 'GITHUB',
     variant: '',
@@ -60,13 +66,9 @@ const LINKS = [
   {
     href: 'https://linkedin.com/in/aditya-singh-2b175828a',
     label: 'LINKEDIN',
-    variant: 'retro-btn-amber',
-  },
-  {
-    href: 'https://dev-adi.netlify.app',
-    label: 'PORTFOLIO',
     variant: '',
   },
+
 ];
 
 /* -------------------------------------------------------
@@ -839,6 +841,7 @@ const AboutApp: React.FC = () => {
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
+            download={link.download}
             className={`retro-btn ${link.variant}`}
             style={{
               flex: 1,
@@ -850,7 +853,7 @@ const AboutApp: React.FC = () => {
               letterSpacing: '0.5px',
             }}
           >
-            {link.label} ↗
+            {link.label} {link.download ? '↓' : '↗'}
           </a>
         ))}
       </div>

@@ -97,6 +97,36 @@ const SPOTIFY_PLAYLIST_URI =
   `spotify:playlist:${SPOTIFY_PLAYLIST_ID}`;
 
 /* =========================================================
+   OFFICIAL SONY WALKMAN LOGO SVG (Liquid W + Dot + Wordmark)
+========================================================= */
+
+const WalkmanOfficialLogoSVG: React.FC<{ width?: number; height?: number; color?: string }> = ({
+  width = 72,
+  height = 26,
+  color = '#1c160c',
+}) => (
+  <svg viewBox="0 0 290 120" width={width} height={height} fill={color} style={{ display: 'block' }}>
+    {/* Upper W-Wave Liquid Logo Mark */}
+    <path d="M 28 58 C 16 58 8 68 8 80 C 8 94 18 104 32 104 C 44 104 52 90 58 72 C 64 52 76 38 90 38 C 104 38 114 52 118 70 C 122 88 134 104 150 104 C 166 104 178 88 184 58 C 192 22 214 8 234 8 C 254 8 268 24 268 44 C 268 60 254 74 236 74 C 220 74 210 62 202 42 C 194 24 184 22 176 38 C 168 54 156 82 142 82 C 128 82 120 68 114 50 C 108 32 96 22 84 22 C 70 22 60 36 54 54 C 50 66 42 80 32 80 C 24 80 20 74 20 68 C 20 60 24 58 28 58 Z" />
+    <circle cx="254" cy="80" r="25" />
+
+    {/* Custom WALKMAN® Wordmark */}
+    <g transform="translate(6, 96)">
+      <path d="M 0,20 L 6,0 L 14,0 L 19,14 L 24,0 L 32,0 L 38,20 L 31,20 L 28,8 L 22,20 L 16,20 L 10,8 L 7,20 Z" />
+      <path d="M 42,20 L 51,0 L 59,0 L 68,20 L 61,20 L 59,15 L 51,15 L 49,20 Z M 53,10 L 57,10 L 55,4 Z" />
+      <path d="M 72,0 L 79,0 L 79,14 L 92,14 L 92,20 L 72,20 Z" />
+      <path d="M 96,0 L 103,0 L 103,8 L 112,0 L 121,0 L 111,9 L 122,20 L 113,20 L 103,11 L 103,20 L 96,20 Z" />
+      <path d="M 125,0 L 132,0 L 140,13 L 148,0 L 155,0 L 155,20 L 149,20 L 149,7 L 142,18 L 138,18 L 131,7 L 131,20 L 125,20 Z" />
+      <path d="M 159,20 L 168,0 L 176,0 L 185,20 L 178,20 L 176,15 L 168,15 L 166,20 Z M 170,10 L 174,10 L 172,4 Z" />
+      <path d="M 189,0 L 196,0 L 208,13 L 208,0 L 214,0 L 214,20 L 207,20 L 195,7 L 195,20 L 189,20 Z" />
+      {/* ® Symbol */}
+      <circle cx="225" cy="5" r="5" stroke="currentColor" strokeWidth="1.2" fill="none" />
+      <text x="222.5" y="7.5" fontSize="6" fontWeight="bold" fontFamily="sans-serif">R</text>
+    </g>
+  </svg>
+);
+
+/* =========================================================
    LAYOUT
 ========================================================= */
 
@@ -170,7 +200,7 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
   // Always holds the latest handleTrackChange so Spotify listeners
   // never call a stale closure.
   const handleTrackChangeRef =
-    useRef<(uri: string) => void>(() => {});
+    useRef<(uri: string) => void>(() => { });
 
   /* =======================================================
      TRACK HELPERS
@@ -478,6 +508,39 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
     }
   };
 
+  const handleRewind = (): void => {
+    const targetPosMs = Math.max(0, position - 10000);
+    setPosition(targetPosMs);
+    const controller = controllerRef.current as any;
+    if (controller && typeof controller.seek === 'function') {
+      try {
+        controller.seek(Math.floor(targetPosMs / 1000));
+      } catch (err) { }
+    }
+  };
+
+  const handleFastForward = (): void => {
+    const targetPosMs = duration > 0 ? Math.min(duration, position + 10000) : position + 10000;
+    setPosition(targetPosMs);
+    const controller = controllerRef.current as any;
+    if (controller && typeof controller.seek === 'function') {
+      try {
+        controller.seek(Math.floor(targetPosMs / 1000));
+      } catch (err) { }
+    }
+  };
+
+  const handleStop = (): void => {
+    const controller = controllerRef.current;
+    if (controller) {
+      try {
+        controller.pause();
+      } catch (err) { }
+    }
+    setIsPlaying(false);
+    setPosition(0);
+  };
+
   /* =======================================================
      TIME
   ======================================================= */
@@ -611,6 +674,69 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
             playGlow 1.8s ease-in-out infinite;
         }
 
+        /* =============================================
+           WAVEFORM EQUALIZER
+        ============================================= */
+
+        @keyframes eqBar1 {
+          0%, 100% { height: 4px; }
+          25% { height: 14px; }
+          50% { height: 8px; }
+          75% { height: 12px; }
+        }
+        @keyframes eqBar2 {
+          0%, 100% { height: 10px; }
+          30% { height: 4px; }
+          60% { height: 14px; }
+          80% { height: 6px; }
+        }
+        @keyframes eqBar3 {
+          0%, 100% { height: 7px; }
+          20% { height: 14px; }
+          55% { height: 4px; }
+          75% { height: 11px; }
+        }
+        @keyframes eqBar4 {
+          0%, 100% { height: 12px; }
+          35% { height: 5px; }
+          65% { height: 13px; }
+          85% { height: 7px; }
+        }
+        @keyframes eqBar5 {
+          0%, 100% { height: 5px; }
+          40% { height: 13px; }
+          70% { height: 7px; }
+          90% { height: 14px; }
+        }
+
+        .eq-bar-1 { animation: eqBar1 0.9s ease-in-out infinite; }
+        .eq-bar-2 { animation: eqBar2 0.75s ease-in-out infinite; }
+        .eq-bar-3 { animation: eqBar3 1.1s ease-in-out infinite; }
+        .eq-bar-4 { animation: eqBar4 0.85s ease-in-out infinite; }
+        .eq-bar-5 { animation: eqBar5 1.0s ease-in-out infinite; }
+
+        /* =============================================
+           MARQUEE SCROLL
+        ============================================= */
+
+        @keyframes marqueeScroll {
+          0% { transform: translateX(0); }
+          15% { transform: translateX(0); }
+          85% { transform: translateX(-100%); }
+          100% { transform: translateX(-100%); }
+        }
+
+        .track-marquee-inner {
+          display: inline-block;
+          animation: marqueeScroll 8s linear infinite;
+          white-space: nowrap;
+          padding-right: 32px;
+        }
+
+        .track-marquee-inner.paused {
+          animation-play-state: paused;
+        }
+
       `}</style>
 
       {/* =================================================
@@ -675,29 +801,24 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
         className="spotify-widget-container"
         style={{
           position: 'absolute',
-          bottom: 52,
-          right: 12,
+          top: 14,
+          right: 14,
           width: 270,
           height: isWidgetMinimized ? 38 : 420,
           zIndex: 50,
-          fontFamily:
-            'var(--font-mono, "Courier New", monospace)',
-          filter:
-            'drop-shadow(0 12px 22px rgba(0,0,0,.5))',
-          opacity:
-            activeVideo ? 0 : 1,
-          pointerEvents:
-            activeVideo
-              ? 'none'
-              : 'auto',
-          transition: 'height 200ms ease',
+          fontFamily: 'var(--font-mono, "Courier New", monospace)',
+          filter: 'drop-shadow(0 14px 28px rgba(0,0,0,0.75))',
+          opacity: activeVideo ? 0 : 1,
+          pointerEvents: activeVideo ? 'none' : 'auto',
+          transition: 'height 220ms cubic-bezier(0.16, 1, 0.3, 1)',
           ...(isWidgetMinimized
             ? {
-                background: 'linear-gradient(180deg,#1c2b1e 0%,#0c150e 100%)',
-                border: '1px solid #3e8a46',
-                borderRadius: 6,
-                overflow: 'hidden',
-              }
+              background: 'linear-gradient(180deg, #142217 0%, #09120b 100%)',
+              border: '1px solid var(--bevel-light, #3e8a46)',
+              borderRadius: 6,
+              overflow: 'hidden',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1)',
+            }
             : {}),
         }}
       >
@@ -720,16 +841,20 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
 
             {/* LED & Track snippet */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0, overflow: 'hidden' }}>
-              <span
-                className={isPlaying ? 'cassette-led' : ''}
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: '50%',
-                  background: isPlaying ? '#4fae63' : '#6b7a6d',
-                  flexShrink: 0,
-                }}
-              />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                <IconSpotify size={14} />
+                <span
+                  className={isPlaying ? 'cassette-led' : ''}
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: '50%',
+                    background: isPlaying ? '#1db954' : '#576559',
+                    flexShrink: 0,
+                    boxShadow: isPlaying ? '0 0 6px #1db954' : 'none',
+                  }}
+                />
+              </div>
               <span
                 style={{
                   fontSize: 9,
@@ -759,14 +884,15 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: 3,
-                  border: '1px solid #57523e',
+                  border: '1px solid #3e8a46',
                   background: isPlaying
-                    ? 'linear-gradient(180deg,#dce7b5,#aebc7a)'
-                    : 'linear-gradient(180deg,#f5e8c3,#c7ad77)',
-                  color: '#1d2c20',
+                    ? 'linear-gradient(180deg,#22c55e,#15803d)'
+                    : 'linear-gradient(180deg,#1c3822,#0d2012)',
+                  color: '#ffffff',
                   fontSize: 10,
                   fontWeight: 'bold',
                   cursor: 'pointer',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.4)',
                 }}
               >
                 {isPlaying ? 'Ⅱ' : '▶'}
@@ -784,9 +910,9 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: 3,
-                  border: '1px solid #726844',
-                  background: 'linear-gradient(180deg,#f0dfb2,#bfa978)',
-                  color: '#263a2b',
+                  border: '1px solid #4a584a',
+                  background: 'linear-gradient(180deg,#243828,#122016)',
+                  color: '#a3c4a7',
                   fontSize: 9,
                   fontWeight: 'bold',
                   cursor: 'pointer',
@@ -919,28 +1045,79 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                       overflow: 'hidden',
                     }}
                   >
-                    {/* AWESOME MIX */}
-
+                    {/* REALISTIC STUCK PAPER MASKING TAPE */}
                     <div
                       style={{
                         position: 'absolute',
-                        top: 5,
-                        left: 0,
-                        right: 0,
-                        textAlign: 'center',
-                        fontFamily:
-                          '"Comic Sans MS","Bradley Hand",cursive',
-                        color: '#f0e4b8',
-                        fontSize: 12,
-                        fontWeight: 900,
-                        letterSpacing: 1,
-                        textShadow: '0 1px 1px #000',
-                        transform: 'rotate(-1deg)',
+                        top: 2,
+                        left: '50%',
+                        transform: 'translateX(-50%) rotate(-1.5deg)',
+                        width: '150px',
+                        height: '22px',
+                        zIndex: 10,
+                        filter: 'drop-shadow(1px 3px 3px rgba(0,0,0,0.35))',
                       }}
                     >
-                      AWESOME MIX
-                    </div>
+                      {/* Tape body — soft irregular edges via clip-path, translucent + fibrous */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          backgroundColor: '#f2e9d3',
+                          opacity: 0.88,
+                          mixBlendMode: 'multiply',
+                          clipPath:
+                            'polygon(0% 8%, 8% 3%, 18% 9%, 30% 2%, 44% 8%, 58% 3%, 72% 9%, 86% 2%, 100% 7%, 100% 93%, 88% 97%, 74% 92%, 60% 98%, 46% 92%, 32% 98%, 20% 91%, 10% 97%, 0% 92%)',
+                          backgroundImage: `
+        linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.55) 40%, rgba(0,0,0,0.04) 100%),
+        repeating-linear-gradient(90deg, rgba(160,140,80,0.05) 0px, rgba(160,140,80,0.05) 1.5px, transparent 1.5px, transparent 3.5px),
+        repeating-linear-gradient(3deg, rgba(0,0,0,0.015) 0px, transparent 1px, transparent 3px)
+      `,
+                          boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.12)',
+                        }}
+                      />
 
+                      {/* Peeling corner highlight — bottom-right lifts slightly like real tape */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          right: '-1px',
+                          bottom: '-1px',
+                          width: '14px',
+                          height: '10px',
+                          background: 'linear-gradient(135deg, transparent 45%, rgba(255,255,255,0.6) 55%, rgba(0,0,0,0.08) 100%)',
+                          clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%)',
+                          pointerEvents: 'none',
+                        }}
+                      />
+
+                      {/* Handwritten text, per-word jitter for an organic, non-uniform look */}
+                      <div
+                        style={{
+                          position: 'relative',
+                          width: '100%',
+                          height: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '3px',
+                          fontFamily: '"Caveat", "Kalam", "Patrick Hand", "Segoe Print", cursive',
+                          fontSize: '13px',
+                          fontWeight: 700,
+                          color: '#212a3a',
+                        }}
+                      >
+                        <span style={{ transform: 'rotate(-3deg) translateY(0.5px)', textShadow: '0.3px 0.3px 0 rgba(30,40,60,0.25)' }}>
+                          Awesome
+                        </span>
+                        <span style={{ transform: 'rotate(1.5deg) translateY(-0.5px)', textShadow: '0.3px 0.3px 0 rgba(30,40,60,0.25)' }}>
+                          Mix
+                        </span>
+                        <span style={{ transform: 'rotate(-1deg)', textShadow: '0.3px 0.3px 0 rgba(30,40,60,0.25)' }}>
+                          VOL.1
+                        </span>
+                      </div>
+                    </div>
                     <div
                       style={{
                         position: 'absolute',
@@ -973,13 +1150,9 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                       }}
                     >
                       {/* LEFT REEL */}
-
+                      {/* LEFT REEL */}
                       <div
-                        className={
-                          isPlaying && !activeVideo
-                            ? 'cassette-reel-spinning'
-                            : ''
-                        }
+                        className={isPlaying && !activeVideo ? 'cassette-reel-spinning' : ''}
                         style={{
                           position: 'absolute',
                           left: 7,
@@ -989,35 +1162,72 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                           borderRadius: '50%',
                           background:
                             'radial-gradient(circle,#ded2a8 0 9%,#44473c 10% 21%,#a89c78 22% 29%,#292c27 30% 48%,#111410 49% 100%)',
-                          border:
-                            '2px solid #777158',
+                          border: '2px solid #777158',
+                          boxShadow:
+                            'inset 0 0 5px rgba(0,0,0,0.65), inset 2px 2px 3px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)',
                         }}
                       >
+                        {/* Toothed cog ring — the asymmetric detail that actually makes rotation visible */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            inset: '27%',
+                            borderRadius: '50%',
+                            background:
+                              'repeating-conic-gradient(rgba(15,17,13,0.95) 0deg 7deg, rgba(168,156,120,0.5) 7deg 14deg, rgba(15,17,13,0.95) 14deg 21deg, rgba(60,58,44,0.3) 21deg 28deg)',
+                            boxShadow: 'inset 0 0 3px rgba(0,0,0,0.8)',
+                          }}
+                        />
+
+                        {/* Sprocket holes arranged around the hub */}
+                        {[0, 60, 120, 180, 240, 300].map((angle) => (
+                          <div
+                            key={angle}
+                            style={{
+                              position: 'absolute',
+                              left: '50%',
+                              top: '50%',
+                              width: 3,
+                              height: 3,
+                              borderRadius: '50%',
+                              background: '#0a0c08',
+                              boxShadow: 'inset 0 0 1px rgba(255,255,255,0.15)',
+                              transform: `translate(-50%,-50%) rotate(${angle}deg) translateY(-11px)`,
+                            }}
+                          />
+                        ))}
+
+                        {/* Gloss highlight sweep for a slight 3D sheen */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            inset: 0,
+                            borderRadius: '50%',
+                            background:
+                              'conic-gradient(from -40deg, rgba(255,255,255,0.14) 0deg 18deg, transparent 40deg 320deg, rgba(255,255,255,0.08) 342deg 360deg)',
+                            pointerEvents: 'none',
+                          }}
+                        />
+
+                        {/* Center hub cap */}
                         <div
                           style={{
                             position: 'absolute',
                             left: '50%',
                             top: '50%',
-                            transform:
-                              'translate(-50%,-50%)',
+                            transform: 'translate(-50%,-50%)',
                             width: 7,
                             height: 7,
                             borderRadius: '50%',
                             background: '#d4c69c',
-                            border:
-                              '2px solid #34362e',
+                            border: '2px solid #34362e',
                           }}
                         />
                       </div>
 
                       {/* RIGHT REEL */}
-
                       <div
-                        className={
-                          isPlaying && !activeVideo
-                            ? 'cassette-reel-spinning'
-                            : ''
-                        }
+                        className={isPlaying && !activeVideo ? 'cassette-reel-spinning' : ''}
                         style={{
                           position: 'absolute',
                           right: 7,
@@ -1027,29 +1237,66 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                           borderRadius: '50%',
                           background:
                             'radial-gradient(circle,#ded2a8 0 9%,#44473c 10% 21%,#a89c78 22% 29%,#292c27 30% 48%,#111410 49% 100%)',
-                          border:
-                            '2px solid #777158',
+                          border: '2px solid #777158',
+                          boxShadow:
+                            'inset 0 0 5px rgba(0,0,0,0.65), inset 2px 2px 3px rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.4)',
                         }}
                       >
                         <div
                           style={{
                             position: 'absolute',
+                            inset: '27%',
+                            borderRadius: '50%',
+                            background:
+                              'repeating-conic-gradient(rgba(15,17,13,0.95) 0deg 7deg, rgba(168,156,120,0.5) 7deg 14deg, rgba(15,17,13,0.95) 14deg 21deg, rgba(60,58,44,0.3) 21deg 28deg)',
+                            boxShadow: 'inset 0 0 3px rgba(0,0,0,0.8)',
+                          }}
+                        />
+
+                        {[0, 60, 120, 180, 240, 300].map((angle) => (
+                          <div
+                            key={angle}
+                            style={{
+                              position: 'absolute',
+                              left: '50%',
+                              top: '50%',
+                              width: 3,
+                              height: 3,
+                              borderRadius: '50%',
+                              background: '#0a0c08',
+                              boxShadow: 'inset 0 0 1px rgba(255,255,255,0.15)',
+                              transform: `translate(-50%,-50%) rotate(${angle}deg) translateY(-11px)`,
+                            }}
+                          />
+                        ))}
+
+                        <div
+                          style={{
+                            position: 'absolute',
+                            inset: 0,
+                            borderRadius: '50%',
+                            background:
+                              'conic-gradient(from -40deg, rgba(255,255,255,0.14) 0deg 18deg, transparent 40deg 320deg, rgba(255,255,255,0.08) 342deg 360deg)',
+                            pointerEvents: 'none',
+                          }}
+                        />
+
+                        <div
+                          style={{
+                            position: 'absolute',
                             left: '50%',
                             top: '50%',
-                            transform:
-                              'translate(-50%,-50%)',
+                            transform: 'translate(-50%,-50%)',
                             width: 7,
                             height: 7,
                             borderRadius: '50%',
                             background: '#d4c69c',
-                            border:
-                              '2px solid #34362e',
+                            border: '2px solid #34362e',
                           }}
                         />
                       </div>
 
                       {/* TAPE */}
-
                       <div
                         style={{
                           position: 'absolute',
@@ -1058,37 +1305,43 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                           top: 27,
                           height: 3,
                           borderRadius: 2,
-                          background:
-                            'linear-gradient(90deg,#080a08,#303830,#080a08)',
+                          background: 'linear-gradient(90deg,#080a08,#303830,#080a08)',
+                          boxShadow: '0 1px 1px rgba(0,0,0,0.3)',
                         }}
                       />
 
-                      {/* CENTER LABEL */}
-
+                      {/* CENTER LABEL — SONY EMBOSSED METALLIC BADGE */}
                       <div
                         style={{
                           position: 'absolute',
                           left: '50%',
                           top: '50%',
-                          transform:
-                            'translate(-50%,-50%)',
-                          width: 38,
-                          height: 17,
-                          borderRadius: 2,
+                          transform: 'translate(-50%,-50%)',
+                          width: 60,
+                          height: 26,
+                          borderRadius: 3,
                           background:
-                            'linear-gradient(180deg,#c2b68b,#8d8464)',
-                          border:
-                            '1px solid #68624c',
+                            'linear-gradient(180deg,#e8dfc3 0%,#b8ac84 50%,#8c825b 100%)',
+                          border: '1px solid #524b38',
+                          boxShadow:
+                            'inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.6)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: 6,
-                          fontWeight: 900,
-                          letterSpacing: 0.5,
-                          color: '#20261f',
                         }}
                       >
-                        VOL. 01
+                        <img
+                          src="/sony.png"
+                          alt="SONY"
+                          style={{
+                            width: '112px',
+                            height: '48px',
+                            objectFit: 'contain',
+                            display: 'block',
+                            userSelect: 'none',
+                            pointerEvents: 'none',
+                          }}
+                        />
                       </div>
                     </div>
 
@@ -1114,7 +1367,7 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                   </div>
                 </div>
 
-                {/* CONTROLS */}
+                {/* CONTROLS — REAL WALKMAN HARDWARE DECK */}
 
                 <div
                   className="cassette-controls-section"
@@ -1126,8 +1379,9 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                     height: 54,
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 8,
+                    justifyContent: 'space-between',
+                    gap: 10,
+                    padding: '0 12px',
                     background:
                       'linear-gradient(180deg,#ebdfbd 0%,#d4c194 55%,#bda97a 100%)',
                     borderLeft:
@@ -1141,93 +1395,110 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                     zIndex: 2,
                   }}
                 >
-                  <div
-                    className="cassette-btn"
-                    style={{
-                      width: 28,
-                      height: 27,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 4,
-                      border:
-                        '1px solid #776c4b',
-                      background:
-                        'linear-gradient(180deg,#dfcea1,#b7a16d)',
-                      color: '#344536',
-                      fontSize: 8,
-                    }}
-                  >
-                    ◀◀
-                  </div>
-
-                  <button
-                    className={`cassette-btn ${isPlaying
-                      ? 'cassette-play-active'
-                      : ''
-                      }`}
-                    onClick={togglePlayback}
-                    style={{
-                      width: 42,
-                      height: 32,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 5,
-                      border:
-                        '1px solid #57523e',
-                      background:
-                        isPlaying
-                          ? 'linear-gradient(180deg,#dce7b5,#aebc7a)'
-                          : 'linear-gradient(180deg,#f5e8c3,#c7ad77)',
-                      color: '#1d2c20',
-                      fontSize: 13,
-                      fontWeight: 900,
-                      cursor: 'pointer',
-                      pointerEvents: 'auto',
-                    }}
-                  >
-                    {isPlaying ? 'Ⅱ' : '▶'}
-                  </button>
-
-                  <div
-                    style={{
-                      minWidth: 88,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: 2,
-                      color: '#405842',
-                      fontSize: 6,
-                      fontWeight: 900,
-                      letterSpacing: 1.1,
-                    }}
-                  >
-                    <span>
-                      AWESOME MIX
-                    </span>
-
-                    <span
+                  {/* PLAY / PAUSE button (left-aligned tactile 3D key) */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+                    <button
+                      type="button"
+                      className={`cassette-btn ${isPlaying ? 'cassette-play-active' : ''}`}
+                      onClick={togglePlayback}
                       style={{
-                        fontSize: 5,
-                        opacity: 0.65,
+                        width: 44,
+                        height: 32,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 5,
+                        border: '1px solid #4a5438',
+                        background: isPlaying
+                          ? 'linear-gradient(180deg,#cce2a4,#8eb364)'
+                          : 'linear-gradient(180deg,#f3e5be,#c2aa72)',
+                        color: '#1d2c20',
+                        fontSize: 13,
+                        fontWeight: 900,
+                        cursor: 'pointer',
+                        pointerEvents: 'auto',
+                        boxShadow: isPlaying
+                          ? '0 0 8px rgba(79,174,99,0.5), inset 0 1px 0 rgba(255,255,255,0.8)'
+                          : '0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.7)',
                       }}
+                      title={isPlaying ? 'Pause (Ⅱ)' : 'Play (▶)'}
                     >
-                      CASSETTE PLAYER
+                      {isPlaying ? 'Ⅱ' : '▶'}
+                    </button>
+                    <span style={{ fontSize: 5.5, fontWeight: 900, color: isPlaying ? '#294f26' : '#574e35', letterSpacing: 0.5 }}>
+                      {isPlaying ? 'PAUSE' : 'PLAY'}
                     </span>
                   </div>
 
+                  {/* SPOTIFY ACCOUNT / PLAYLIST BUTTON (aligned perfectly in between, no text underneath) */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, minWidth: 0 }}>
+                    <a
+                      href={`https://open.spotify.com/playlist/${SPOTIFY_PLAYLIST_ID}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cassette-btn"
+                      style={{
+                        width: '100%',
+                        height: 32,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6,
+                        padding: '0 8px',
+                        borderRadius: 5,
+                        border: '1px solid #148037',
+                        background: 'linear-gradient(180deg, #1db954 0%, #15803d 100%)',
+                        color: '#ffffff',
+                        fontSize: 9.5,
+                        fontWeight: 900,
+                        letterSpacing: '0.6px',
+                        textDecoration: 'none',
+                        cursor: 'pointer',
+                        pointerEvents: 'auto',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4)',
+                        boxSizing: 'border-box',
+                      }}
+                      title="Open Spotify Account / Playlist"
+                    >
+                      <IconSpotify size={15} />
+                      <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>SPOTIFY</span>
+                    </a>
+                    {/* Spacer to match Play/Pause column height for exact alignment */}
+                    <div style={{ height: 9 }} />
+                  </div>
+
+                  {/* Official Walkman metallic logo badge */}
                   <div
                     style={{
-                      width: 25,
-                      height: 25,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      padding: '4px 6px',
+                      background: 'linear-gradient(180deg,#e8dfc3 0%,#baaf86 50%,#90845c 100%)',
+                      border: '1px solid #574c35',
                       borderRadius: 4,
+                      boxShadow: `
+                        inset 0 1px 0 rgba(255,255,255,0.7), 
+                        inset 0 -1px 1px rgba(0,0,0,0.3), 
+                        0 1px 3px rgba(0,0,0,0.35)
+                      `,
+                      userSelect: 'none',
+                      overflow: 'hidden',
+                      flexShrink: 0,
                     }}
+                    title="Sony WALKMAN"
                   >
-                    <IconSpotify size={13} />
+                    <img
+                      src="/walkman.png"
+                      alt="Sony WALKMAN"
+                      style={{
+                        width: 66,
+                        height: 28,
+                        objectFit: 'contain',
+                        display: 'block',
+                        mixBlendMode: 'multiply',
+                      }}
+                    />
                   </div>
                 </div>
 
@@ -1276,37 +1547,29 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                         gap: 5,
                       }}
                     >
-                      <span
-                        className={
-                          isPlaying
-                            ? 'cassette-led'
-                            : ''
-                        }
-                        style={{
-                          width: 6,
-                          height: 6,
-                          borderRadius: '50%',
-                          background:
-                            isPlaying
-                              ? '#4fae63'
-                              : '#91876b',
-                          display:
-                            'inline-block',
-                        }}
-                      />
+                      {/* Waveform equalizer bars */}
+                      <span style={{ display: 'inline-flex', alignItems: 'flex-end', gap: 1.5, height: 14, marginRight: 2 }}>
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <span
+                            key={n}
+                            className={isPlaying && !activeVideo ? `eq-bar-${n}` : ''}
+                            style={{
+                              display: 'inline-block',
+                              width: 2,
+                              height: isPlaying && !activeVideo ? undefined : 4,
+                              background: isPlaying ? '#4fae63' : '#91876b',
+                              borderRadius: 1,
+                              transition: 'background 0.3s ease',
+                              flexShrink: 0,
+                            }}
+                          />
+                        ))}
+                      </span>
 
-                      {isPlaying
-                        ? 'NOW PLAYING'
-                        : 'PAUSED'}
+                      {isPlaying ? 'NOW PLAYING' : 'PAUSED'}
                     </span>
 
-                    <span
-                      style={{
-                        opacity: 0.7,
-                      }}
-                    >
-                      AUDIO // A
-                    </span>
+                    <span style={{ opacity: 0.7 }}>AUDIO // A</span>
                   </div>
 
                   {/* TRACK */}
@@ -1338,12 +1601,26 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                         marginRight: 5,
                         opacity: 0.55,
                         fontSize: 7,
+                        flexShrink: 0,
                       }}
                     >
                       ►
                     </span>
 
-                    {getTrackLabel()}
+                    {/* Marquee scrolling track name */}
+                    <span
+                      style={{
+                        flex: 1,
+                        overflow: 'hidden',
+                        position: 'relative',
+                      }}
+                    >
+                      <span
+                        className={`track-marquee-inner${!isPlaying ? ' paused' : ''}`}
+                      >
+                        {getTrackLabel()}
+                      </span>
+                    </span>
                   </div>
 
                   {/* PROGRESS */}
