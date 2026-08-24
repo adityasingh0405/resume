@@ -1320,9 +1320,7 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                   >
                     {isPlaying ? 'Ⅱ' : '▶'}
                   </button>
-                  <span style={{ fontSize: 5.5, fontWeight: 900, color: isPlaying ? '#294f26' : '#574e35', letterSpacing: 0.5 }}>
 
-                  </span>
                 </div>
 
                 {/* SPOTIFY ACCOUNT / PLAYLIST BUTTON (aligned perfectly in between, no text underneath) */}
@@ -1359,7 +1357,7 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
                     <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>SPOTIFY</span>
                   </a>
                   {/* Spacer to match Play/Pause column height for exact alignment */}
-                  <div style={{ height: 9 }} />
+
                 </div>
 
                 {/* Official Walkman metallic logo badge */}
