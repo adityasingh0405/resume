@@ -36,6 +36,7 @@ interface SpotifyIframeAPI {
       height?: string | number;
       uri?: string;
       url?: string;
+      theme?: string | number;
     },
     callback: (controller: SpotifyEmbedController) => void
   ) => void;
@@ -343,8 +344,9 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
           width: '100%',
           height: 420,
           uri: SPOTIFY_PLAYLIST_URI,
+          theme: 'dark',
         },
-        (controller) => {
+        (controller: SpotifyEmbedController) => {
           if (cancelled) return;
 
           controllerRef.current = controller;
@@ -449,7 +451,7 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
     }
 
     window.onSpotifyIframeApiReady = (
-      api
+      api: SpotifyIframeAPI
     ) => {
       window.SpotifyIframeApi = api;
 
@@ -579,6 +581,14 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
   return (
     <>
       <style>{`
+
+        .spotify-iframe-wrapper,
+        .spotify-iframe-wrapper iframe {
+          background-color: #000000 !important;
+          filter: grayscale(1) contrast(1.25) brightness(0.55) !important;
+          border: none !important;
+          border-radius: 8px !important;
+        }
 
         /* =============================================
            CASSETTE REEL
@@ -850,11 +860,13 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
             >
               <div
                 ref={spotifyContainerRef}
+                className="spotify-iframe-wrapper"
                 style={{
                   width: '100%',
                   height: 420,
+                  background: '#000000',
                   filter:
-                    'grayscale(1) contrast(1.1) brightness(1.05)',
+                    'grayscale(1) contrast(1.25) brightness(0.55)',
                 }}
               />
             </div>
@@ -1677,38 +1689,40 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
           )}
           {/* MINIMIZE BUTTON */}
 
-          <button
-            type="button"
-            className="cassette-btn"
-            onClick={() => setIsWidgetMinimized((previous) => !previous)}
-            aria-label={isWidgetMinimized ? 'Expand widget' : 'Minimize widget'}
-            title={isWidgetMinimized ? 'Expand widget' : 'Minimize widget'}
-            style={{
-              position: 'absolute',
-              top: 5,
-              left: 30,
-              width: 21,
-              height: 21,
-              padding: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 4,
-              border:
-                '1px solid #726844',
-              background:
-                'linear-gradient(180deg,#f0dfb2,#bfa978)',
-              color: '#263a2b',
-              fontSize: 9,
-              fontWeight: 900,
-              cursor: 'pointer',
-              zIndex: 1000,
-              boxShadow:
-                '0 2px 3px rgba(0,0,0,.45)',
-            }}
-          >
-            {isWidgetMinimized ? '🗗' : '🗕'}
-          </button>
+          {!cassetteCollapsed && (
+            <button
+              type="button"
+              className="cassette-btn"
+              onClick={() => setIsWidgetMinimized((previous) => !previous)}
+              aria-label={isWidgetMinimized ? 'Expand widget' : 'Minimize widget'}
+              title={isWidgetMinimized ? 'Expand widget' : 'Minimize widget'}
+              style={{
+                position: 'absolute',
+                top: 5,
+                left: 30,
+                width: 21,
+                height: 21,
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 4,
+                border:
+                  '1px solid #726844',
+                background:
+                  'linear-gradient(180deg,#f0dfb2,#bfa978)',
+                color: '#263a2b',
+                fontSize: 9,
+                fontWeight: 900,
+                cursor: 'pointer',
+                zIndex: 1000,
+                boxShadow:
+                  '0 2px 3px rgba(0,0,0,.45)',
+              }}
+            >
+              {isWidgetMinimized ? '🗗' : '🗕'}
+            </button>
+          )}
         </>
       </div>
     </>
