@@ -21,6 +21,7 @@ import ResumeApp from './ResumeApp';
 import { SpotifyWidget } from './SpotifyWidget';
 import RetroMonitorFrame from './RetroMonitorFrame';
 import { playClick, playFloppySeek, playClose } from './sound';
+import ZolaApp from './ZolaAssistant';
 
 import {
   IconTerminal,
@@ -39,6 +40,7 @@ import {
   IconMinesweeper,
   IconCertificate,
   IconResume,
+  IconZola,
 } from './PixelIcons';
 
 // ─── App Registry ──────────────────────────────────────────────────────────
@@ -59,7 +61,8 @@ export type AppId =
   | 'display'
   | 'notes'
   | 'certificates'
-  | 'resume';
+  | 'resume'
+  | 'zola';
 
 interface AppDef {
   id: AppId;
@@ -251,6 +254,17 @@ const APPS: AppDef[] = [
     isDesktop: true,
     defaultPos: { x: 240, y: 60 },
     defaultSize: { width: 680, height: 560 },
+  },
+  {
+    id: 'zola',
+    label: 'ZOLA.EXE',
+    exe: 'ZOLA.EXE',
+    path: 'C:\\PEGASUS\\AI\\ZOLA.EXE',
+    icon: <IconZola size={46} />,
+    category: 'SYSTEM',
+    isDesktop: false,
+    defaultPos: { x: 215, y: 15 },
+    defaultSize: { width: 680, height: 470 },
   },
 ];
 
@@ -696,6 +710,9 @@ const App: React.FC = () => {
 
       case 'resume':
         return <ResumeApp />;
+
+      case 'zola':
+        return <ZolaApp onOpenApp={openApp} />;
     }
   };
 
@@ -808,6 +825,8 @@ const App: React.FC = () => {
               <SpotifyWidget
                 soundEnabled={soundEnabled}
               />
+
+
 
               {/* ── Open Windows ────────────────────────── */}
 
@@ -1177,6 +1196,7 @@ const App: React.FC = () => {
                   <IconTerminal size={13} />
                   <span>START</span>
                 </button>
+
 
                 {/* Divider */}
 

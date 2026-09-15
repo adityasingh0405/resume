@@ -164,7 +164,7 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
     useState(false);
 
   const [isWidgetMinimized, setIsWidgetMinimized] =
-    useState(false);
+    useState(true);
 
   const [isMobile, setIsMobile] = useState(() => {
     return typeof window !== 'undefined' ? window.innerWidth <= 768 : false;

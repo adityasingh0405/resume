@@ -615,3 +615,55 @@ export const IconResume: React.FC<PixelIconProps> = ({ size = 32 }) => (
     <rect x="11" y="41" width="26" height="1.5" rx="0.7" fill="#cbd5e1" opacity="0.5" />
   </svg>
 );
+
+// ─── ZOLA.EXE — Hydra Retro Mainframe / AI Consciousness Monitor ─────────────
+export const IconZola: React.FC<PixelIconProps> = ({ size = 32 }) => (
+  <svg viewBox="0 0 48 48" fill="none" width={size} height={size}>
+    <defs>
+      <linearGradient id="zolaCaseGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#2a382c" />
+        <stop offset="100%" stopColor="#0f1910" />
+      </linearGradient>
+      <linearGradient id="zolaScreenGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#02210b" />
+        <stop offset="100%" stopColor="#000e04" />
+      </linearGradient>
+      <filter id="zolaGlow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="1.2" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+    {/* Base Stand */}
+    <path d="M14 40h20l2 4H12l2-4z" fill="#1f2920" stroke="#0f1910" strokeWidth="1.5" />
+    <rect x="20" y="34" width="8" height="6" fill="#2a382c" stroke="#0f1910" strokeWidth="1.5" />
+    {/* Main Terminal Case */}
+    <rect x="5" y="5" width="38" height="30" rx="3" fill="url(#zolaCaseGrad)" stroke="#050a06" strokeWidth="2" />
+    <rect x="6" y="6" width="36" height="28" rx="2" fill="none" stroke="#4ade80" strokeWidth="1" strokeOpacity="0.25" />
+    {/* CRT Bezel */}
+    <rect x="8" y="8" width="32" height="23" rx="2" fill="#050c07" stroke="#162e1c" strokeWidth="1" />
+    {/* Green Screen */}
+    <rect x="10" y="10" width="28" height="19" rx="1" fill="url(#zolaScreenGrad)" />
+    <rect x="10" y="10" width="28" height="19" rx="1" fill="none" stroke="#00ff41" strokeWidth="0.8" strokeOpacity="0.3" />
+    {/* Scanlines */}
+    <path d="M10 13h28M10 16h28M10 19h28M10 22h28M10 25h28" stroke="#00ff41" strokeWidth="0.5" strokeOpacity="0.15" />
+    {/* Digital Arnim Zola Hologram Face Silhouette */}
+    {/* Forehead / Cranium */}
+    <rect x="18" y="12" width="12" height="4" fill="#00ff41" filter="url(#zolaGlow)" />
+    <rect x="16" y="14" width="16" height="4" fill="#00ff41" filter="url(#zolaGlow)" />
+    {/* Cheekbones & Eye Cavities */}
+    <rect x="15" y="18" width="18" height="3" fill="#00ff41" filter="url(#zolaGlow)" />
+    {/* Dark Eye sockets with glowing green pupils */}
+    <rect x="18" y="17" width="3" height="3" fill="#050c07" />
+    <rect x="27" y="17" width="3" height="3" fill="#050c07" />
+    <rect x="19" y="18" width="1.5" height="1.5" fill="#a7f3d0" />
+    <rect x="28" y="18" width="1.5" height="1.5" fill="#a7f3d0" />
+    {/* Jaw & dynamic digitized teeth grid */}
+    <rect x="18" y="22" width="12" height="2" fill="#00ff41" filter="url(#zolaGlow)" />
+    <rect x="20" y="24" width="8" height="2" fill="#00ff41" filter="url(#zolaGlow)" />
+    {/* Hydra Badge / LED on bottom bezel */}
+    <circle cx="12" cy="32" r="1.2" fill="#00ff41" filter="url(#zolaGlow)" />
+    <circle cx="16" cy="32" r="0.8" fill="#ef4444" />
+    <rect x="30" y="31.5" width="8" height="1.5" rx="0.5" fill="#4ade80" opacity="0.4" />
+  </svg>
+);
+
