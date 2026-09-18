@@ -50,6 +50,11 @@ const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 const INWORLD_AUTH = import.meta.env.VITE_INWORLD_AUTH || '';
 
+console.log('=== AI ENV CHECK ===');
+console.log('Groq key exists:', !!GROQ_API_KEY);
+console.log('Inworld auth exists:', !!INWORLD_AUTH);
+console.log('Groq key length:', GROQ_API_KEY.length);
+
 const TENOR_POST_ID = '2573604625503425997';
 
 /* ─── Classified S.H.I.E.L.D. dossier ───────────────────────── */
