@@ -46,7 +46,7 @@ const DisplayCfgApp: React.FC<DisplayCfgAppProps> = ({
           DISPLAY.CFG — SYSTEM CONFIG
         </div>
         <div style={{ fontSize: '10px', color: 'var(--phosphor-dim)', letterSpacing: '1px', marginTop: '2px' }}>
-          C:\PEGASUS\SYS\DISPLAY.CFG · Configure Phosphor Tubes &amp; Hardware Relays
+          C:\SHIELD\SYS\DISPLAY.CFG · Configure Phosphor Tubes &amp; Hardware Relays
         </div>
       </div>
 

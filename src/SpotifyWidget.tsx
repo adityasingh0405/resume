@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IconSpotify } from './PixelIcons';
 
 interface SpotifyWidgetProps {
+  isOpen?: boolean;
+  onClose?: () => void;
   soundEnabled?: boolean;
   onTrackChange?: (trackUri: string) => void;
 }
@@ -143,6 +145,9 @@ const SPOTIFY_PLAYLIST_OFFSET =
 ========================================================= */
 
 export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
+  isOpen = false,
+  onClose,
+  soundEnabled = true,
   onTrackChange,
 }) => {
   const [currentTrack, setCurrentTrack] =
@@ -818,9 +823,10 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
           zIndex: 50,
           fontFamily: 'var(--font-mono, "Courier New", monospace)',
           filter: 'drop-shadow(0 14px 28px rgba(0,0,0,0.75))',
-          opacity: activeVideo ? 0 : 1,
-          pointerEvents: activeVideo ? 'none' : 'auto',
-          transition: 'height 220ms cubic-bezier(0.16, 1, 0.3, 1)',
+          opacity: !isOpen || activeVideo ? 0 : 1,
+          pointerEvents: !isOpen || activeVideo ? 'none' : 'auto',
+          transform: isOpen ? 'translateY(0) scale(1)' : 'translateY(-12px) scale(0.96)',
+          transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
           overflow: 'hidden',
         }}
       >
@@ -1723,6 +1729,9 @@ export const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
               {isWidgetMinimized ? '🗗' : '🗕'}
             </button>
           )}
+
+          {/* CLOSE BUTTON */}
+
         </>
       </div>
     </>

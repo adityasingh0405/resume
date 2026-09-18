@@ -341,8 +341,8 @@ export const RetroMonitorFrame: React.FC<RetroMonitorFrameProps> = ({
             <div className="crt-chin">
               {/* Brand label */}
               <div className="crt-brand">
-                <span className="crt-brand-name">PEGASUS-1001</span>
-                <span className="crt-brand-model">VIDEO MONITOR · MODEL 1984C</span>
+                <span className="crt-brand-name">S.H.I.E.L.D. · SSR-1001</span>
+                <span className="crt-brand-model">CLASSIFIED TERMINAL · LEVEL 5</span>
               </div>
 
               {/* Status LEDs (Red, Green, Blue) */}
@@ -558,7 +558,7 @@ export const RetroMonitorFrame: React.FC<RetroMonitorFrameProps> = ({
                       marginLeft: '3px',
                     }}
                   >
-                    click me...
+                    Password:
                   </div>
 
                   <div
@@ -570,7 +570,7 @@ export const RetroMonitorFrame: React.FC<RetroMonitorFrameProps> = ({
                       transform: 'rotate(1deg)',
                     }}
                   >
-                    opens the terminal :)
+                    8539
                   </div>
                 </div>
 

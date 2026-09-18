@@ -349,7 +349,7 @@ const ProjectsApp: React.FC = () => {
           <div>
             <div className="font-vt323 text-2xl text-p text-glow">PROJECTS/ DIRECTORY</div>
             <div style={{ color: 'var(--phosphor-dim)', fontSize: '11px' }}>
-              DIR: C:\PEGASUS\PROJECTS\  │  {RESUME_PROJECTS.length} PROJECT OBJECTS FOUND
+              DIR: C:\SHIELD\PROJECTS\  │  {RESUME_PROJECTS.length} PROJECT OBJECTS FOUND
             </div>
           </div>
           {selectedProjectId && (
@@ -472,7 +472,7 @@ const ProjectsApp: React.FC = () => {
             >
               {/* Left: Title, badge, tech stack */}
               <div style={{ flex: '1 1 280px', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontSize: '10px', color: 'var(--phosphor-dark)' }}>C:\PEGASUS\PROJECTS\{selectedProj.file}</div>
+                <div style={{ fontSize: '10px', color: 'var(--phosphor-dark)' }}>C:\SHIELD\PROJECTS\{selectedProj.file}</div>
                 <div style={{
                   fontSize: '22px',
                   fontFamily: 'var(--font-vt323)',

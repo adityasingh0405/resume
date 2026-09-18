@@ -59,7 +59,7 @@ const ResumeApp: React.FC = () => {
           </span>
         </div>
         <span style={{ fontSize: '8px', color: 'var(--phosphor-dark)', letterSpacing: '1px' }}>
-          C:\PEGASUS\DOCS\RESUME.PDF
+          C:\SHIELD\DOCS\RESUME.PDF
         </span>
       </div>
 

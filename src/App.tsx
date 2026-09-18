@@ -82,7 +82,7 @@ const APPS: AppDef[] = [
     id: 'about',
     label: 'ABOUT.EXE',
     exe: 'ABOUT.EXE',
-    path: 'C:\\PEGASUS\\ABOUT.EXE',
+    path: 'C:\\SHIELD\\ABOUT.EXE',
     icon: <IconAboutCard size={46} />,
     category: 'SYSTEM',
     isDesktop: true,
@@ -93,7 +93,7 @@ const APPS: AppDef[] = [
     id: 'terminal',
     label: 'TERMINAL.EXE',
     exe: 'TERMINAL.EXE',
-    path: 'C:\\PEGASUS\\TERMINAL.EXE',
+    path: 'C:\\SHIELD\\TERMINAL.EXE',
     icon: <IconTerminal size={46} />,
     category: 'SYSTEM',
     isDesktop: false,
@@ -105,7 +105,7 @@ const APPS: AppDef[] = [
     id: 'projects',
     label: 'PROJECTS/',
     exe: 'PROJECTS.DIR',
-    path: 'C:\\PEGASUS\\PROJECTS\\',
+    path: 'C:\\SHIELD\\PROJECTS\\',
     icon: <IconFolder size={46} />,
     category: 'APPS',
     isDesktop: true,
@@ -116,7 +116,7 @@ const APPS: AppDef[] = [
     id: 'skills',
     label: 'SKILLS.DLL',
     exe: 'SKILLS.DLL',
-    path: 'C:\\PEGASUS\\SKILLS.DLL',
+    path: 'C:\\SHIELD\\SKILLS.DLL',
     icon: <IconChip size={46} />,
     category: 'SYSTEM',
     isDesktop: true,
@@ -127,7 +127,7 @@ const APPS: AppDef[] = [
     id: 'experience',
     label: 'XPRIENCE.LOG',
     exe: 'XPRIENCE.LOG',
-    path: 'C:\\PEGASUS\\XPRIENCE.LOG',
+    path: 'C:\\SHIELD\\XPRIENCE.LOG',
     icon: <IconScroll size={46} />,
     category: 'APPS',
     isDesktop: true,
@@ -138,7 +138,7 @@ const APPS: AppDef[] = [
     id: 'github',
     label: 'GITHUB.URL',
     exe: 'GITHUB.URL',
-    path: 'C:\\PEGASUS\\GITHUB.URL',
+    path: 'C:\\SHIELD\\GITHUB.URL',
     icon: <IconGithub size={46} />,
     category: 'APPS',
     isDesktop: true,
@@ -149,7 +149,7 @@ const APPS: AppDef[] = [
     id: 'leetcode',
     label: 'LEETCODE.EXE',
     exe: 'LEETCODE.EXE',
-    path: 'C:\\PEGASUS\\LEETCODE.EXE',
+    path: 'C:\\SHIELD\\LEETCODE.EXE',
     icon: <IconLeetcode size={46} />,
     category: 'APPS',
     isDesktop: true,
@@ -160,7 +160,7 @@ const APPS: AppDef[] = [
     id: 'research',
     label: 'RESEARCH.PDF',
     exe: 'RESEARCH.PDF',
-    path: 'C:\\PEGASUS\\RESEARCH.PDF',
+    path: 'C:\\SHIELD\\RESEARCH.PDF',
     icon: <IconResearch size={46} />,
     category: 'APPS',
     isDesktop: true,
@@ -171,7 +171,7 @@ const APPS: AppDef[] = [
     id: 'contact',
     label: 'CONTACT.BAT',
     exe: 'CONTACT.BAT',
-    path: 'C:\\PEGASUS\\CONTACT.BAT',
+    path: 'C:\\SHIELD\\CONTACT.BAT',
     icon: <IconMail size={46} />,
     category: 'APPS',
     isDesktop: true,
@@ -182,7 +182,7 @@ const APPS: AppDef[] = [
     id: 'snake',
     label: 'SNAKE.EXE',
     exe: 'SNAKE.EXE',
-    path: 'C:\\PEGASUS\\GAMES\\SNAKE.EXE',
+    path: 'C:\\SHIELD\\GAMES\\SNAKE.EXE',
     icon: <IconSnake size={46} />,
     category: 'GAMES',
     isDesktop: false,
@@ -193,7 +193,7 @@ const APPS: AppDef[] = [
     id: 'minesweeper',
     label: 'MINES.EXE',
     exe: 'MINES.EXE',
-    path: 'C:\\PEGASUS\\GAMES\\MINES.EXE',
+    path: 'C:\\SHIELD\\GAMES\\MINES.EXE',
     icon: <IconMinesweeper size={46} />,
     category: 'GAMES',
     isDesktop: false,
@@ -204,7 +204,7 @@ const APPS: AppDef[] = [
     id: 'synth',
     label: 'SYNTH.EXE',
     exe: 'SYNTH.EXE',
-    path: 'C:\\PEGASUS\\TOOLS\\SYNTH.EXE',
+    path: 'C:\\SHIELD\\TOOLS\\SYNTH.EXE',
     icon: <IconSynth size={46} />,
     category: 'TOOLS',
     isDesktop: false,
@@ -215,7 +215,7 @@ const APPS: AppDef[] = [
     id: 'display',
     label: 'DISPLAY.CFG',
     exe: 'DISPLAY.CFG',
-    path: 'C:\\PEGASUS\\SYS\\DISPLAY.CFG',
+    path: 'C:\\SHIELD\\SYS\\DISPLAY.CFG',
     icon: <IconDisplay size={46} />,
     category: 'SYSTEM',
     isDesktop: false,
@@ -226,7 +226,7 @@ const APPS: AppDef[] = [
     id: 'notes',
     label: 'NOTES.TXT',
     exe: 'NOTES.TXT',
-    path: 'C:\\PEGASUS\\DOCS\\NOTES.TXT',
+    path: 'C:\\SHIELD\\DOCS\\NOTES.TXT',
     icon: <IconNotes size={46} />,
     category: 'TOOLS',
     isDesktop: false,
@@ -237,7 +237,7 @@ const APPS: AppDef[] = [
     id: 'certificates',
     label: 'CERTS.DIR',
     exe: 'CERTS.DIR',
-    path: 'C:\\PEGASUS\\DOCS\\CERTS\\',
+    path: 'C:\\SHIELD\\DOCS\\CERTS\\',
     icon: <IconCertificate size={46} />,
     category: 'APPS',
     isDesktop: true,
@@ -248,7 +248,7 @@ const APPS: AppDef[] = [
     id: 'resume',
     label: 'RESUME.PDF',
     exe: 'RESUME.PDF',
-    path: 'C:\\PEGASUS\\DOCS\\RESUME.PDF',
+    path: 'C:\\SHIELD\\DOCS\\RESUME.PDF',
     icon: <IconResume size={46} />,
     category: 'APPS',
     isDesktop: true,
@@ -259,7 +259,7 @@ const APPS: AppDef[] = [
     id: 'zola',
     label: 'ZOLA.EXE',
     exe: 'ZOLA.EXE',
-    path: 'C:\\PEGASUS\\AI\\ZOLA.EXE',
+    path: 'C:\\SHIELD\\AI\\ZOLA.EXE',
     icon: <IconZola size={46} />,
     category: 'SYSTEM',
     isDesktop: false,
@@ -468,6 +468,8 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [windowZOrder, setWindowZOrder] = useState<AppId[]>([]);
   const [themeMode, setThemeMode] = useState<ThemeMode>('green');
+  const [spotifyOpen, setSpotifyOpen] = useState(false);
+  const [zolaFullScreen, setZolaFullScreen] = useState(false);
 
   // ── Notification state ────────────────────────────────────────────────
   const [showNotifications, setShowNotifications] = useState(false);
@@ -476,6 +478,16 @@ const App: React.FC = () => {
     () => playClick(soundEnabled),
     [soundEnabled]
   );
+
+  const toggleSpotify = useCallback(() => {
+    playClick(soundEnabled);
+    setSpotifyOpen((prev) => !prev);
+  }, [soundEnabled]);
+
+  const openZolaFullScreen = useCallback(() => {
+    playFloppySeek(soundEnabled);
+    setZolaFullScreen(true);
+  }, [soundEnabled]);
 
   const openApp = useCallback(
     (id: AppId) => {
@@ -746,6 +758,7 @@ const App: React.FC = () => {
 
         {!booted && (
           <BiosScreen
+            soundEnabled={soundEnabled}
             onComplete={() =>
               setBooted(true)
             }
@@ -754,6 +767,24 @@ const App: React.FC = () => {
 
         <div className="crt-bezel-inner">
           <div className="crt-glass crt-flicker">
+
+            {/* ── Zola Full-Screen Modal Overlay ───────────────────────── */}
+            {zolaFullScreen && (
+              <div
+                className="absolute inset-0 z-[8500] flex flex-col overflow-hidden"
+                style={{
+                  background: '#090b09',
+                }}
+              >
+                <ZolaApp
+                  onOpenApp={openApp}
+                  onClose={() => {
+                    playClose(soundEnabled);
+                    setZolaFullScreen(false);
+                  }}
+                />
+              </div>
+            )}
 
             {/* ── Desktop ───────────────────────────────────────── */}
 
@@ -823,6 +854,8 @@ const App: React.FC = () => {
               {/* ── Spotify Desktop Widget ──────────────── */}
 
               <SpotifyWidget
+                isOpen={spotifyOpen}
+                onClose={() => setSpotifyOpen(false)}
                 soundEnabled={soundEnabled}
               />
 
@@ -932,7 +965,7 @@ const App: React.FC = () => {
                         </span>
 
                         <span className="xp-user-subtitle">
-                          Administrator · PEGASUS v2.4.5
+                          Administrator · SHIELD v2.4.5
                         </span>
                       </div>
                     </div>
@@ -1157,6 +1190,7 @@ const App: React.FC = () => {
 
               {/* ── Taskbar ─────────────────────────────── */}
 
+
               <div
                 className="taskbar"
                 style={{
@@ -1253,24 +1287,11 @@ const App: React.FC = () => {
                         }
                         title={app.label}
                       >
-                        <span
-                          style={{
-                            display: 'flex',
-                            flexShrink: 0,
-                            imageRendering:
-                              'pixelated',
-                          }}
-                        >
-                          {React.cloneElement(
-                            app.icon,
-                            { size: 16 }
-                          )}
+                        <span style={{ display: 'flex', flexShrink: 0, imageRendering: 'pixelated' }}>
+                          {React.cloneElement(app.icon, { size: 16 })}
                         </span>
-
                         <span>
-                          {isMin
-                            ? '▾ '
-                            : '▸ '}
+                          {isMin ? '▾ ' : '▸ '}
                           {app.exe}
                         </span>
                       </button>
@@ -1279,226 +1300,80 @@ const App: React.FC = () => {
                 </div>
 
                 {/* Divider */}
+                <div style={{ width: 1, height: 22, background: 'var(--bevel-dark)', borderRight: '1px solid var(--bevel-mid)', flexShrink: 0 }} />
 
-                <div
-                  style={{
-                    width: '1px',
-                    height: '22px',
-                    background:
-                      'var(--bevel-dark)',
-                    borderRight:
-                      '1px solid var(--bevel-mid)',
-                    flexShrink: 0,
-                  }}
-                />
-
-                {/* ── System Tray ───────────────────────── */}
-
+                {/* ── System Tray (right-aligned cluster) ── */}
                 <div
                   className="system-tray"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '2px',
-                    flexShrink: 0,
-                  }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '2px', flexShrink: 0 }}
                 >
 
-                  {/* WiFi */}
-
-                  <div
-                    title="Network connected"
-                    style={{
-                      display: 'flex',
-                      alignItems:
-                        'center',
-                      justifyContent:
-                        'center',
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '4px',
-                      cursor: 'default',
-                    }}
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="var(--phosphor)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    >
-                      <path
-                        d="M1.5 8.5C5.5 4.5 10.5 2.5 12 2.5s6.5 2 10.5 6"
-                        opacity="0.4"
-                      />
-
-                      <path
-                        d="M5 12c1.9-1.9 4.2-3 7-3s5.1 1.1 7 3"
-                        opacity="0.7"
-                      />
-
-                      <path
-                        d="M8.5 15.5C9.8 14.2 10.9 13.5 12 13.5s2.2.7 3.5 2"
-                      />
-
-                      <circle
-                        cx="12"
-                        cy="19"
-                        r="1.5"
-                        fill="var(--phosphor)"
-                        stroke="none"
-                      />
-                    </svg>
-                  </div>
-
-                  {/* Speaker */}
-
+                  {/* ── ZOLA AI quick-launch ── */}
                   <button
+                    className={`taskbar-btn ${zolaFullScreen ? 'active' : ''}`}
                     onClick={() => {
                       sound();
-                      setSoundEnabled(
-                        (v) => !v
-                      );
+                      playFloppySeek(soundEnabled);
+                      setZolaFullScreen((prev) => !prev);
                     }}
-                    title={
-                      soundEnabled
-                        ? 'Mute audio'
-                        : 'Enable audio'
-                    }
+                    title={zolaFullScreen ? 'Restore Desktop' : 'Launch Zola AI'}
+                  >
+                    <span style={{
+                      width: 5, height: 5, borderRadius: '50%', display: 'inline-block', flexShrink: 0,
+                      background: zolaFullScreen ? '#ff9500' : '#4a3e2a',
+                      boxShadow: zolaFullScreen ? '0 0 5px #ff9500' : 'none',
+                      transition: 'all 0.2s',
+                    }} />
+                    ZOLA AI
+                  </button>
+
+                  {/* ── WALKMAN quick-launch ── */}
+                  <button
+                    className={`taskbar-btn ${spotifyOpen ? 'active' : ''}`}
+                    onClick={() => {
+                      sound();
+                      toggleSpotify();
+                    }}
+                    title={spotifyOpen ? 'Hide Spotify' : 'Open Spotify'}
+                  >
+                    <span style={{
+                      width: 5, height: 5, borderRadius: '50%', display: 'inline-block', flexShrink: 0,
+                      background: spotifyOpen ? '#1db954' : '#1a3324',
+                      boxShadow: spotifyOpen ? '0 0 5px #1db954' : 'none',
+                      transition: 'all 0.2s',
+                    }} />
+                    WALKMAN
+                  </button>
+
+                  {/* Separator */}
+                  <div style={{ width: 1, height: 20, background: 'var(--bevel-mid)', margin: '0 3px', flexShrink: 0 }} />
+
+                  {/* Speaker */}
+                  <button
+                    onClick={() => { sound(); setSoundEnabled((v) => !v); }}
+                    title={soundEnabled ? 'Mute audio' : 'Enable audio'}
                     style={{
-                      display: 'flex',
-                      alignItems:
-                        'center',
-                      justifyContent:
-                        'center',
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '4px',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      color: soundEnabled
-                        ? 'var(--phosphor)'
-                        : 'var(--amber)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      width: 28, height: 28, borderRadius: 3,
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      color: soundEnabled ? 'var(--phosphor)' : 'var(--amber)',
+                      flexShrink: 0,
                     }}
                   >
                     {soundEnabled ? (
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      >
-                        <polygon
-                          points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"
-                          fill="currentColor"
-                          stroke="none"
-                        />
-
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" stroke="none" />
                         <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-
-                        <path
-                          d="M19.07 4.93a10 10 0 0 1 0 14.14"
-                          opacity="0.5"
-                        />
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14" opacity="0.5" />
                       </svg>
                     ) : (
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      >
-                        <polygon
-                          points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"
-                          fill="currentColor"
-                          stroke="none"
-                        />
-
-                        <line
-                          x1="23"
-                          y1="9"
-                          x2="17"
-                          y2="15"
-                        />
-
-                        <line
-                          x1="17"
-                          y1="9"
-                          x2="23"
-                          y2="15"
-                        />
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" stroke="none" />
+                        <line x1="23" y1="9" x2="17" y2="15" />
+                        <line x1="17" y1="9" x2="23" y2="15" />
                       </svg>
                     )}
                   </button>
-
-                  {/* Battery */}
-
-                  <div
-                    title="Battery charging"
-                    style={{
-                      display: 'flex',
-                      alignItems:
-                        'center',
-                      justifyContent:
-                        'center',
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '4px',
-                      cursor: 'default',
-                    }}
-                  >
-                    <svg
-                      width="20"
-                      height="14"
-                      viewBox="0 0 20 14"
-                      fill="none"
-                    >
-                      <rect
-                        x="0.5"
-                        y="1.5"
-                        width="16"
-                        height="11"
-                        rx="2"
-                        stroke="var(--phosphor)"
-                        strokeWidth="1.2"
-                        fill="#1a1a1a"
-                      />
-
-                      <rect
-                        x="17"
-                        y="4.5"
-                        width="2.5"
-                        height="5"
-                        rx="1"
-                        fill="var(--phosphor)"
-                        opacity="0.6"
-                      />
-
-                      <rect
-                        x="2"
-                        y="3"
-                        width="12"
-                        height="8"
-                        rx="1"
-                        fill="#22c55e"
-                      />
-
-                      <path
-                        d="M9.5 3.5L7 7h3l-1.5 3.5L12.5 6.5H9.5z"
-                        fill="#ffffff"
-                        stroke="none"
-                      />
-                    </svg>
-                  </div>
 
                   {/* Divider */}
 
@@ -1690,7 +1565,7 @@ const App: React.FC = () => {
                                     '4px',
                                 }}
                               >
-                                Instagram
+                                Leetcode
                               </div>
 
                               <div
@@ -1703,7 +1578,7 @@ const App: React.FC = () => {
                                     '1.5',
                                 }}
                               >
-                                Khushi: YO WAKE TF UP!
+                                Weekly Contest Reminder...
                               </div>
 
                               <div

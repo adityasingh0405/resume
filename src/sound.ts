@@ -154,3 +154,51 @@ export function toggleCrtHum(enable: boolean) {
     }
   } catch (_) {}
 }
+
+// S.H.I.E.L.D. Clearance Access Granted Chime
+export function playAccessGranted(enabled: boolean = true) {
+  if (!enabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const chords = [523.25, 659.25, 783.99, 1046.50]; // C5 - E5 - G5 - C6
+    chords.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
+
+      gain.gain.setValueAtTime(0.12, ctx.currentTime + i * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.08 + 0.35);
+
+      osc.start(ctx.currentTime + i * 0.08);
+      osc.stop(ctx.currentTime + i * 0.08 + 0.35);
+    });
+  } catch (_) {}
+}
+
+// S.H.I.E.L.D. Clearance Access Denied Alert Buzzer
+export function playAccessDenied(enabled: boolean = true) {
+  if (!enabled) return;
+  try {
+    const ctx = getAudioCtx();
+    [0, 0.14].forEach((delay) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(120, ctx.currentTime + delay);
+      osc.frequency.linearRampToValueAtTime(80, ctx.currentTime + delay + 0.1);
+
+      gain.gain.setValueAtTime(0.18, ctx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.12);
+
+      osc.start(ctx.currentTime + delay);
+      osc.stop(ctx.currentTime + delay + 0.12);
+    });
+  } catch (_) {}
+}

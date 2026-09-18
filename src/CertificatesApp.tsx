@@ -114,7 +114,7 @@ const CertificatesApp: React.FC = () => {
           </span>
         </div>
         <span style={{ fontSize: '8px', color: 'var(--phosphor-dark)', letterSpacing: '1px' }}>
-          C:\PEGASUS\CERTS\
+          C:\SHIELD\CERTS\
         </span>
       </div>
 

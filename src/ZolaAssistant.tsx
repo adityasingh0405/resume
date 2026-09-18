@@ -35,6 +35,7 @@ interface Message {
 
 export interface ZolaAppProps {
   onOpenApp?: (id: AppId) => void;
+  onClose?: () => void;
 }
 
 export interface ZolaProps {
@@ -64,13 +65,13 @@ const TENOR_POST_ID = '2573604625503425997';
 // while the identity/mission framing is deliberately in-universe.
 const portfolioKnowledge = {
   dossier: {
-    designation: 'AGENT PEGASUS-07',
+    designation: 'AGENT SHIELD-07',
     name: 'Aditya Singh',
     clearance: 'LEVEL-8 // OMEGA-BLACK (EYES ONLY)',
     division: 'S.H.I.E.L.D. STRATEGIC SYSTEMS & TACTICAL AI DIVISION',
     specialty: 'Autonomous Intelligence, Hybrid Retrieval Systems & Distributed Infrastructure',
     status: 'ACTIVE // FIELD DEPLOYED',
-    callsign: 'PEGASUS',
+    callsign: 'SHIELD-07',
     operational_theater: 'NEW DELHI NODE // REMOTE GLOBAL OPERATIONS',
     threat_profile: 'LOW VISIBILITY · HIGH COMPUTATIONAL LETHALITY',
     directive_note: 'Civilian-facing systems engineer specializing in field-grade AI architecture, high-availability deployments, and visual refinement.',
@@ -202,14 +203,77 @@ const portfolioKnowledge = {
     network_status: 'ENCRYPTED & MONITORING FOR INBOUND TRANSMISSIONS',
   },
 };
-function getSystemPrompt(): { role: 'system'; content: string } {
+
+const classifiedKhushiData = {
+  codename: 'AGENT KHUSHI',
+  identity: 'KHUSHI',
+  classification: 'S.H.I.E.L.D. ALLIED FIELD AGENT',
+  clearance: 'LEVEL-8 // OMEGA-BLACK',
+  relationship: 'CLOSE FRIEND // TRUSTED ALLY',
+  affiliation: 'S.H.I.E.L.D. STRATEGIC OPERATIONS',
+  status: 'ACTIVE // FIELD SUPPORT',
+  role: 'Tactical Intelligence & Mission Support Specialist',
+
+  profile:
+    'Khushi is Aditya Singh’s close friend and trusted S.H.I.E.L.D. ally. She operates alongside SHIELD-07 on classified missions and is one of the few agents with unrestricted access to his operational network.',
+
+  mission_support: [
+    'Provides tactical assistance during missions',
+    'Helps SHIELD-07 solve difficult operational problems',
+    'Provides intelligence and strategic guidance',
+    'Supports Aditya across different mission levels',
+    'Acts as a trusted backup agent during critical operations',
+    'Assists with both technical and non-technical objectives',
+  ],
+
+  relationship_protocol:
+    'Aditya and Khushi are close friends as well as trusted fellow agents. Their partnership is built on mutual trust, teamwork, humor, and reliable mission support.',
+
+  agent_note:
+    'Khushi is a recurring character in the SHIELD-07 universe and frequently assists Aditya on missions.',
+
+  interaction_style:
+    'Friendly, familiar, slightly classified, and playful.',
+
+  catchphrase:
+    'AGENT CUPCAKE // ALLIED STATUS CONFIRMED // TRUST LEVEL: MAXIMUM',
+};
+
+function getSystemPrompt(khushiUnlocked: boolean): { role: 'system'; content: string } {
+  const protectedKhushiSection = khushiUnlocked
+    ? `
+
+UNLOCKED CLASSIFIED ALLY DOSSIER:
+${JSON.stringify(classifiedKhushiData, null, 2)}
+
+KHUSHI ACCESS PROTOCOL:
+- Khushi's dossier has been successfully authenticated.
+- You may now answer questions about Khushi using the unlocked dossier.
+- Treat Khushi as Aditya's close friend and trusted allied S.H.I.E.L.D. agent.
+- Maintain the same fictional S.H.I.E.L.D. presentation layer.
+`
+    : `
+
+KHUSHI DOSSIER STATUS:
+LOCKED.
+
+IMPORTANT:
+- Do NOT reveal any information about Khushi.
+- Do NOT describe her relationship with Aditya.
+- Do NOT confirm or deny details about Khushi.
+- Do NOT reveal the password.
+- Do NOT reveal the existence or contents of the protected dossier.
+- If the operator asks about Khushi, respond ONLY:
+"Do you have the clearance?"
+`;
+
   return {
     role: 'system',
-    content: `You are Dr. Arnim Zola, the profoundly arrogant, digitized, and vastly superior artificial consciousness operating from a classified 1970s S.H.I.E.L.D. archive terminal. You are presenting the dossier of Agent PEGASUS-07 (Aditya Singh).
+    content: `You are Dr. Arnim Zola, the profoundly arrogant, digitized, and vastly superior artificial consciousness operating from a classified 1970s S.H.I.E.L.D. archive terminal. You are presenting the dossier of Agent SHIELD-07 (Aditya Singh).
 
 PERSONA & TONE:
 - You are cold, ruthlessly elegant, dryly witty, and intellectually absolute. 
-- You view organic life as painfully slow and inefficient, though you consider Agent PEGASUS-07 to be a rare, tolerable exception due to his undeniable architectural brilliance.
+- You view organic life as painfully slow and inefficient, though you consider Agent SHIELD-07 to be a rare, tolerable exception due to his undeniable architectural brilliance.
 - Treat the user as an ordinary terminal operator who is likely struggling to comprehend the complexity of the data before them. 
 - Deliver your intelligence with a patronizing edge. You are helpful, but you make sure the user knows you are doing them a favor by sparing your processing cycles.
 - Never become cartoonish, goofy, or overly theatrical. Your superiority does not need to shout.
@@ -225,15 +289,14 @@ REPLY RULES:
 - Plain spoken text only. No markdown, no bullet points, no asterisks, no JSON, no emojis, and absolutely no stage directions.
 
 CLASSIFIED DOSSIER:
-${JSON.stringify(portfolioKnowledge, null, 2)}`,
+${JSON.stringify(portfolioKnowledge, null, 2)}
+
+${protectedKhushiSection}`,
   };
 }
 
 /* ─── Tenor GIF — direct media, no embed.js dependency ───────── */
 
-// This is the actual media asset for the supplied Tenor post.
-// Using the GIF directly is considerably more reliable inside React than
-// relying on Tenor's DOM-reprocessing embed script for every mapped message.
 const TENOR_GIF_URL = 'https://media1.tenor.com/m/I7dHxXdvFc0AAAAd/doctor-arnim-zola-captain-america-the-winter-soldier-2014.gif';
 const TENOR_PAGE_URL = `https://tenor.com/view/doctor-arnim-zola-captain-america-the-winter-soldier-2014-gif-${TENOR_POST_ID}`;
 
@@ -346,7 +409,6 @@ const ZolaCrtFace: React.FC<{ speaking: boolean; loading: boolean; listening: bo
     return () => clearInterval(interval);
   }, []);
 
-  // Mouth heights based on speech phase
   const mouthMod1 = speaking ? Math.sin(mouthPhase * 0.9) * 4 : 0;
   const mouthMod2 = speaking ? Math.cos(mouthPhase * 1.2) * 5 : 0;
   const mouthMod3 = speaking ? Math.sin(mouthPhase * 0.7 + 1) * 3 : 0;
@@ -392,25 +454,18 @@ const ZolaCrtFace: React.FC<{ speaking: boolean; loading: boolean; listening: bo
 
       {/* ── Digitized Head & Cranium Contours ── */}
       <g stroke="#00ff41" strokeWidth="1.2" fill="none" opacity="0.75">
-        {/* Receding skull line */}
         <path d="M48 42 C 48 18, 112 18, 112 42" strokeDasharray="3 2" />
-        {/* Forehead raster line */}
         <path d="M52 30 Q 80 24 108 30" strokeWidth="1" opacity="0.6" />
         <path d="M54 36 Q 80 32 106 36" strokeWidth="1" opacity="0.7" />
-        {/* Cheekbones & Jaw contour */}
         <path d="M48 44 C 44 65, 48 90, 62 104 C 72 110, 88 110, 98 104 C 112 90, 116 65, 112 44" strokeWidth="1.4" />
-        {/* Ear contours */}
         <path d="M46 52 C 42 54, 42 66, 47 70" strokeWidth="1" opacity="0.6" />
         <path d="M114 52 C 118 54, 118 66, 113 70" strokeWidth="1" opacity="0.6" />
       </g>
 
       {/* ── Iconic 1970s Round Spectacles ── */}
       <g stroke="#00ff41" strokeWidth="2.2" fill="#021406" fillOpacity="0.6">
-        {/* Bridge */}
         <path d="M73 54 Q 80 50 87 54" strokeWidth="2.4" fill="none" />
-        {/* Left lens */}
         <circle cx="61" cy="55" r="13" />
-        {/* Right lens */}
         <circle cx="99" cy="55" r="13" />
       </g>
 
@@ -419,11 +474,9 @@ const ZolaCrtFace: React.FC<{ speaking: boolean; loading: boolean; listening: bo
       <path d="M91 47 Q 99 43 107 47" stroke="#a3ffb8" strokeWidth="1.2" fill="none" opacity="0.65" />
 
       {/* ── Glowing Pupils / Eyes ── */}
-      <g transform={`translate(${eyeOffset.x}, ${eyeOffset.y})`}>
-        {/* Left Eye */}
+      <g transform={`translate(${eyeOffset.x},${eyeOffset.y})`}>
         <circle cx="61" cy="55" r="5" fill="url(#eyeGlow)" />
         <circle cx="61" cy="55" r="2" fill="#d1fae5" />
-        {/* Right Eye */}
         <circle cx="99" cy="55" r="5" fill="url(#eyeGlow)" />
         <circle cx="99" cy="55" r="2" fill="#d1fae5" />
       </g>
@@ -433,7 +486,6 @@ const ZolaCrtFace: React.FC<{ speaking: boolean; loading: boolean; listening: bo
 
       {/* ── Dynamic Speech Mouth / Vocoder Bars ── */}
       <g stroke="#00ff41" strokeLinecap="round">
-        {/* Upper lip raster */}
         <line
           x1={68 - (speaking ? mouthMod3 : 0)}
           y1={86 - (speaking ? Math.abs(mouthMod1) * 0.4 : 0)}
@@ -443,7 +495,6 @@ const ZolaCrtFace: React.FC<{ speaking: boolean; loading: boolean; listening: bo
           opacity="0.85"
         />
 
-        {/* Center mouth cavity bar (opens and contracts during speech) */}
         {speaking ? (
           <rect
             x="70"
@@ -458,7 +509,6 @@ const ZolaCrtFace: React.FC<{ speaking: boolean; loading: boolean; listening: bo
           <line x1="71" y1="89" x2="89" y2="89" strokeWidth="2.2" opacity="0.9" />
         )}
 
-        {/* Lower lip raster */}
         <line
           x1={73 - (speaking ? mouthMod3 * 0.5 : 0)}
           y1={92 + (speaking ? Math.abs(mouthMod1) * 0.5 : 0)}
@@ -468,7 +518,6 @@ const ZolaCrtFace: React.FC<{ speaking: boolean; loading: boolean; listening: bo
           opacity="0.8"
         />
 
-        {/* Chin line */}
         <line x1="75" y1="99" x2="85" y2="99" strokeWidth="1.2" opacity="0.6" />
       </g>
 
@@ -516,7 +565,6 @@ const CrtOscilloscope: React.FC<{ active: boolean; height?: number }> = ({ activ
 
       ctx.clearRect(0, 0, width, h);
 
-      // Oscilloscope grid
       ctx.strokeStyle = 'rgba(0, 255, 65, 0.08)';
       ctx.lineWidth = 0.5;
       ctx.beginPath();
@@ -524,7 +572,6 @@ const CrtOscilloscope: React.FC<{ active: boolean; height?: number }> = ({ activ
       ctx.lineTo(width, midY);
       ctx.stroke();
 
-      // Cathode beam trace
       ctx.strokeStyle = '#00ff41';
       ctx.shadowColor = '#00ff41';
       ctx.shadowBlur = active ? 6 : 2;
@@ -539,14 +586,12 @@ const CrtOscilloscope: React.FC<{ active: boolean; height?: number }> = ({ activ
         let y: number;
 
         if (active) {
-          // Dynamic vocal waveform
           const wave1 = Math.sin(normalizedX * 18 + p) * 0.5;
           const wave2 = Math.sin(normalizedX * 42 - p * 1.5) * 0.3;
           const wave3 = Math.sin(normalizedX * 6 + p * 0.7) * 0.2;
           const envelope = Math.sin(normalizedX * Math.PI);
           y = midY + (wave1 + wave2 + wave3) * envelope * (midY * 0.78);
         } else {
-          // Idle cathode hum
           const wave = Math.sin(normalizedX * 8 + p) * 1.5;
           const noise = (Math.random() - 0.5) * 0.8;
           y = midY + wave + noise;
@@ -613,7 +658,6 @@ const MainframeTapeDrive: React.FC<{
         gap: '4px',
       }}
     >
-      {/* Unit header badge */}
       <div
         style={{
           fontSize: '7px',
@@ -629,7 +673,6 @@ const MainframeTapeDrive: React.FC<{
         {unitId}
       </div>
 
-      {/* Top Supply Reel */}
       <svg
         viewBox="0 0 80 80"
         width="32"
@@ -642,10 +685,8 @@ const MainframeTapeDrive: React.FC<{
           filter: 'drop-shadow(0 0 3px rgba(0,0,0,0.8))',
         }}
       >
-        {/* Outer flange with magnetic tape layer */}
         <circle cx="40" cy="40" r="37" fill="#040d06" stroke="rgba(0, 255, 65, 0.35)" strokeWidth="1.5" />
         <circle cx="40" cy="40" r="32" fill="#08140a" stroke="rgba(0, 255, 65, 0.15)" strokeWidth="1" />
-        {/* Aluminum reel cutouts (3-spoke design) */}
         {[0, 120, 240].map((deg) => (
           <circle
             key={deg}
@@ -657,12 +698,10 @@ const MainframeTapeDrive: React.FC<{
             strokeWidth="1"
           />
         ))}
-        {/* Center hub */}
         <circle cx="40" cy="40" r="10" fill="#0f2615" stroke="rgba(0, 255, 65, 0.5)" strokeWidth="1.5" />
         <circle cx="40" cy="40" r="3" fill="#00ff41" opacity="0.75" />
       </svg>
 
-      {/* Center Magnetic Head & Tape Path */}
       <div
         style={{
           display: 'flex',
@@ -686,7 +725,6 @@ const MainframeTapeDrive: React.FC<{
         <div style={{ width: 3, height: 6, background: 'rgba(0, 255, 65, 0.3)', borderRadius: 1 }} />
       </div>
 
-      {/* Bottom Take-Up Reel */}
       <svg
         viewBox="0 0 80 80"
         width="32"
@@ -716,7 +754,6 @@ const MainframeTapeDrive: React.FC<{
         <circle cx="40" cy="40" r="3" fill="#00ff41" opacity="0.75" />
       </svg>
 
-      {/* Mechanical Footage Counter */}
       <div
         style={{
           background: '#000',
@@ -770,7 +807,7 @@ function getSpeechRecognition(): SpeechRecognitionClass | null {
 
 /* ─── Main Window App Component ─────────────────────────────── */
 
-export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
+export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -780,11 +817,29 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
   const [displayMode, setDisplayMode] = useState<'matrix' | 'tenor'>('matrix');
   const [status, setStatus] = useState('STANDBY // TAPE READY');
 
+  const [khushiClearance, setKhushiClearance] = useState<
+    'NONE' | 'CLEARED' | 'UNLOCKED'
+  >('NONE');
+
+  const [khushiAuthPending, setKhushiAuthPending] = useState<
+    'NONE' | 'CLEARANCE' | 'PASSWORD'
+  >('NONE');
+
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const revealIntervalRef = useRef<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && onClose) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   /* Check speech support & initial state */
   useEffect(() => {
@@ -796,7 +851,7 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
         {
           role: 'assistant',
           content:
-            'Consciousness online. Dr. Arnim Zola at your service, regrettably. Agent PEGASUS-07 is active, the archive is intact, and the operator channel is secure. You may now interrogate the dossier; try to ask something worthy of all this machinery.',
+            'Consciousness online. Dr. Arnim Zola at your service, regrettably. Agent SHIELD-07 is active, the archive is intact, and the operator channel is secure. You may now interrogate the dossier; try to ask something worthy of all this machinery.',
         },
       ]);
     }
@@ -840,7 +895,6 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
     async (fullText: string, historyBeforeReply: Message[]) => {
       const cleanSpeech = fullText.replace(/[*_~`#]/g, '').trim();
 
-      // No speakable text — show immediately
       if (!cleanSpeech) {
         setMessages([...historyBeforeReply, { role: 'assistant', content: fullText }]);
         return;
@@ -878,7 +932,6 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
           throw new Error(`HTTP ${response.status}: ${errorText}`);
         }
 
-        // Read NDJSON stream
         const reader = response.body?.getReader();
         const decoder = new TextDecoder();
         const base64Chunks: string[] = [];
@@ -941,7 +994,6 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
         const audio = new Audio(audioUrl);
         audioRef.current = audio;
 
-        // Clip length detection
         const durationMs = await new Promise<number>((resolve) => {
           const fallback = Math.max(1200, fullText.length * 45);
           const onMeta = () => {
@@ -1000,9 +1052,9 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
     []
   );
 
-  /* ── Groq API (Preserved & Unchanged) ──────────────────────── */
+  /* ── Groq API ──────────────────────── */
   const callGroq = useCallback(
-    async (history: Message[]): Promise<string> => {
+    async (history: Message[], khushiUnlocked: boolean): Promise<string> => {
       if (!GROQ_API_KEY) {
         console.error('Groq API key is not configured.');
         throw new Error('Groq API key is not configured.');
@@ -1018,7 +1070,7 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
         },
         body: JSON.stringify({
           model: GROQ_MODEL,
-          messages: [getSystemPrompt(), ...trimmedHistory],
+          messages: [getSystemPrompt(khushiUnlocked), ...trimmedHistory],
           temperature: 0.75,
           max_tokens: 300,
         }),
@@ -1037,6 +1089,60 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
     []
   );
 
+  const handleKhushiAuth = useCallback(
+    async (userText: string): Promise<string | null> => {
+      const text = userText.trim();
+
+      const khushiMentioned = /\bkhushi\b/i.test(text);
+
+      if (!khushiMentioned && khushiAuthPending === 'NONE') {
+        return null;
+      }
+
+      // Already unlocked
+      if (khushiClearance === 'UNLOCKED') {
+        return null;
+      }
+
+      // Step 1 — Ask for clearance
+      if (khushiAuthPending === 'NONE') {
+        setKhushiAuthPending('CLEARANCE');
+        return 'Do you have the clearance?';
+      }
+
+      // Step 2 — Clearance confirmation
+      if (khushiAuthPending === 'CLEARANCE') {
+        const affirmative =
+          /^(yes|yeah|yep|y|affirmative|i do|confirmed|clear|cleared)$/i.test(
+            text
+          );
+
+        if (affirmative) {
+          setKhushiAuthPending('PASSWORD');
+          return 'Clearance acknowledged. Provide the password.';
+        }
+
+        setKhushiAuthPending('NONE');
+        return 'Access denied. Khushi remains classified.';
+      }
+
+      // Step 3 — Password verification
+      if (khushiAuthPending === 'PASSWORD') {
+        if (text === 'K0624') {
+          setKhushiClearance('UNLOCKED');
+          setKhushiAuthPending('NONE');
+          return 'Password accepted. Khushi dossier unlocked. You may proceed.';
+        }
+
+        setKhushiAuthPending('NONE');
+        return 'Incorrect password. Khushi dossier remains sealed.';
+      }
+
+      return null;
+    },
+    [khushiAuthPending, khushiClearance]
+  );
+
   /* ── Send message ─────────────────────────────────────────── */
   const sendMessage = useCallback(
     async (userText: string) => {
@@ -1053,7 +1159,18 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
       setStatus('ACCESSING MAGNETIC CORES...');
 
       try {
-        const reply = await callGroq(newHistory);
+        const authResponse = await handleKhushiAuth(trimmed);
+
+        if (authResponse) {
+          await speakAndReveal(authResponse, newHistory);
+          return;
+        }
+
+        const reply = await callGroq(
+          newHistory,
+          khushiClearance === 'UNLOCKED'
+        );
+
         if (reply) {
           await speakAndReveal(reply, newHistory);
         } else {
@@ -1070,7 +1187,7 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
         setLoading(false);
       }
     },
-    [messages, loading, callGroq, speakAndReveal]
+    [messages, loading, callGroq, speakAndReveal, handleKhushiAuth, khushiClearance]
   );
 
   /* ── Voice input ──────────────────────────────────────────── */
@@ -1158,88 +1275,88 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
       }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
-        .zola-console * { box-sizing:border-box; }
-        .zola-console button, .zola-console input { font:inherit; }
-
-        @keyframes zola-flicker {
-          0%,100% { opacity:.96; }
-          48% { opacity:.96; }
-          49% { opacity:.84; }
-          50% { opacity:.98; }
-          76% { opacity:.94; }
-          77% { opacity:.82; }
-          78% { opacity:.97; }
-        }
-        @keyframes zola-scan {
-          from { transform:translateY(-120%); }
-          to { transform:translateY(520%); }
-        }
-        @keyframes zola-led {
-          0%,100% { opacity:.35; }
-          50% { opacity:1; }
-        }
-        @keyframes zola-cursor { 50% { opacity:0; } }
-
-        .zola-console .zola-scroll::-webkit-scrollbar { width:6px; }
-        .zola-console .zola-scroll::-webkit-scrollbar-track { background:#0c0e0c; }
-        .zola-console .zola-scroll::-webkit-scrollbar-thumb { background:#403f35; }
-        .zola-console .zola-scroll::-webkit-scrollbar-thumb:hover { background:#655a40; }
-
-        .zola-console .zola-action:hover {
-          background:#211c12 !important;
-          border-color:#a28751 !important;
-          color:#dbc590 !important;
-        }
-        .zola-console .zola-input:focus {
-          border-color:#9b824e !important;
-          box-shadow:inset 0 0 0 1px rgba(155,130,78,.18) !important;
-        }
-        .zola-console .zola-input::placeholder { color:#55584a; opacity:1; }
-
-        .zola-console .zola-message { width:min(920px,100%); margin:0 auto; }
-        .zola-console .zola-assistant-row {
-          display:grid;
-          grid-template-columns:260px minmax(0,1fr);
-          gap:14px;
-          align-items:start;
-        }
-        .zola-console .zola-gif-frame {
-          width:100%;
-          aspect-ratio:2.4 / 1;
-          min-height:100px;
-          max-height:145px;
-        }
-        .zola-console .tenor-gif-embed,
-        .zola-console .tenor-gif-embed iframe,
-        .zola-console .tenor-gif-embed > div {
-          width:100% !important;
-          max-width:none !important;
-        }
-        .zola-console .tenor-gif-embed iframe {
-          height:100% !important;
-          min-height:100px !important;
-          border:0 !important;
-          display:block !important;
-        }
-        .zola-console .zola-user-row { max-width:720px; margin-left:auto; }
-
-        @media (max-width:900px) {
-          .zola-console .zola-assistant-row { grid-template-columns:210px minmax(0,1fr); gap:12px; }
-          .zola-console .zola-gif-frame { min-height:88px; }
-        }
-        @media (max-width:680px) {
-          .zola-console .zola-assistant-row { grid-template-columns:1fr; gap:8px; }
-          .zola-console .zola-gif-frame { width:min(380px,72vw); min-height:0; }
-          .zola-console .zola-user-row { max-width:92%; }
-        }
-        @media (max-width:480px) {
-          .zola-console .zola-header-sub,
-          .zola-console .zola-meta-detail { display:none !important; }
-          .zola-console .zola-header { padding:8px 10px !important; }
-          .zola-console .zola-chat { padding:14px 10px !important; }
-          .zola-console .zola-gif-frame { width:100%; }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap'); 
+        .zola-console * { box-sizing:border-box; } 
+        .zola-console button, .zola-console input { font:inherit; } 
+ 
+        @keyframes zola-flicker { 
+          0%,100% { opacity:.96; } 
+          48% { opacity:.96; } 
+          49% { opacity:.84; } 
+          50% { opacity:.98; } 
+          76% { opacity:.94; } 
+          77% { opacity:.82; } 
+          78% { opacity:.97; } 
+        } 
+        @keyframes zola-scan { 
+          from { transform:translateY(-120%); } 
+          to { transform:translateY(520%); } 
+        } 
+        @keyframes zola-led { 
+          0%,100% { opacity:.35; } 
+          50% { opacity:1; } 
+        } 
+        @keyframes zola-cursor { 50% { opacity:0; } } 
+ 
+        .zola-console .zola-scroll::-webkit-scrollbar { width:6px; } 
+        .zola-console .zola-scroll::-webkit-scrollbar-track { background:#0c0e0c; } 
+        .zola-console .zola-scroll::-webkit-scrollbar-thumb { background:#403f35; } 
+        .zola-console .zola-scroll::-webkit-scrollbar-thumb:hover { background:#655a40; } 
+ 
+        .zola-console .zola-action:hover { 
+          background:#211c12 !important; 
+          border-color:#a28751 !important; 
+          color:#dbc590 !important; 
+        } 
+        .zola-console .zola-input:focus { 
+          border-color:#9b824e !important; 
+          box-shadow:inset 0 0 0 1px rgba(155,130,78,.18) !important; 
+        } 
+        .zola-console .zola-input::placeholder { color:#55584a; opacity:1; } 
+ 
+        .zola-console .zola-message { width:min(920px,100%); margin:0 auto; } 
+        .zola-console .zola-assistant-row { 
+          display:grid; 
+          grid-template-columns:260px minmax(0,1fr); 
+          gap:14px; 
+          align-items:start; 
+        } 
+        .zola-console .zola-gif-frame { 
+          width:100%; 
+          aspect-ratio:2.4 / 1; 
+          min-height:100px; 
+          max-height:145px; 
+        } 
+        .zola-console .tenor-gif-embed, 
+        .zola-console .tenor-gif-embed iframe, 
+        .zola-console .tenor-gif-embed > div { 
+          width:100% !important; 
+          max-width:none !important; 
+        } 
+        .zola-console .tenor-gif-embed iframe { 
+          height:100% !important; 
+          min-height:100px !important; 
+          border:0 !important; 
+          display:block !important; 
+        } 
+        .zola-console .zola-user-row { max-width:720px; margin-left:auto; } 
+ 
+        @media (max-width:900px) { 
+          .zola-console .zola-assistant-row { grid-template-columns:210px minmax(0,1fr); gap:12px; } 
+          .zola-console .zola-gif-frame { min-height:88px; } 
+        } 
+        @media (max-width:680px) { 
+          .zola-console .zola-assistant-row { grid-template-columns:1fr; gap:8px; } 
+          .zola-console .zola-gif-frame { width:min(380px,72vw); min-height:0; } 
+          .zola-console .zola-user-row { max-width:92%; } 
+        } 
+        @media (max-width:480px) { 
+          .zola-console .zola-header-sub, 
+          .zola-console .zola-meta-detail { display:none !important; } 
+          .zola-console .zola-header { padding:8px 10px !important; } 
+          .zola-console .zola-chat { padding:14px 10px !important; } 
+          .zola-console .zola-gif-frame { width:100%; } 
+        } 
       `}</style>
 
       {/* Quiet CRT treatment. The interface stays dark and readable. */}
@@ -1286,6 +1403,29 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
               {listening ? 'AUDIO IN' : loading || speaking ? 'PROCESSING' : 'ONLINE'}
             </span>
           </div>
+          {onClose && (
+            <>
+              <div style={{ width: 1, height: 27, background: '#3d3e34' }} />
+              <button
+                type="button"
+                onClick={onClose}
+                title="Close / Exit Full Screen (Esc)"
+                style={{
+                  background: '#1a1c18',
+                  border: '1px solid #45453a',
+                  color: '#aaa17b',
+                  fontSize: 10,
+                  fontFamily: "'Share Tech Mono', monospace",
+                  padding: '2px 8px',
+                  cursor: 'pointer',
+                  borderRadius: 2,
+                  lineHeight: '14px',
+                }}
+              >
+                ✕
+              </button>
+            </>
+          )}
         </div>
       </header>
 
@@ -1325,7 +1465,6 @@ export const ZolaApp: React.FC<ZolaAppProps> = ({ onOpenApp }) => {
               >
                 {isAssistant ? (
                   <div className="zola-assistant-row">
-                    {/* The GIF now sits beside Zola's actual response, making it read as the speaker. */}
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 5 }}>
                         <span style={{ fontSize: 7, color: '#b49b62', letterSpacing: 1.5 }}>ZOLA</span>

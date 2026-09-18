@@ -9,10 +9,10 @@ interface Line {
 }
 
 const INITIAL_OUTPUT: Line[] = [
-  { type: 'system', text: 'PEGASUS-1001 — Interactive Command Prompt (CMD.EXE / TERMINAL)' },
-  { type: 'system', text: 'Type "help" for available commands or "whoami" for profile info.' },
+  { type: 'system', text: 'S.H.I.E.L.D. SSR-1001 — Interactive Archives Terminal (CMD.EXE / LEVEL-5)' },
+  { type: 'system', text: 'Type "help" for available commands or "whoami" for agent dossier.' },
   { type: 'system', text: '────────────────────────────────────────────────────────────' },
-  { type: 'normal', text: 'C:\\PEGASUS> System initialized. Ready.' },
+  { type: 'normal', text: 'C:\\SHIELD> Strategic Homeland Archives initialized. Level 7 clearance active.' },
   { type: 'normal', text: '' },
 ];
 
@@ -66,7 +66,7 @@ const HELP_TEXT: Line[] = [
 ];
 
 const RESUME_CMD_TEXT: Line[] = [
-  { type: 'label', text: 'C:\\PEGASUS\\DOCS\\RESUME.PDF — ADITYA SINGH RÉSUMÉ' },
+  { type: 'label', text: 'C:\\SHIELD\\DOCS\\RESUME.PDF — SPECIAL AGENT ADITYA SINGH RÉSUMÉ' },
   { type: 'normal', text: '' },
   { type: 'key-val', key: 'FILE', val: 'Aditya_Resume.pdf' },
   { type: 'key-val', key: 'STATUS', val: 'OPENING IN NEW BROWSER TAB...' },
@@ -74,9 +74,10 @@ const RESUME_CMD_TEXT: Line[] = [
 ];
 
 const STATUS_TEXT: Line[] = [
-  { type: 'label', text: 'ADITYA SINGH — SYSTEM STATUS & CP ACHIEVEMENTS' },
+  { type: 'label', text: 'ADITYA SINGH — S.H.I.E.L.D. AGENT STATUS & ACHIEVEMENTS' },
   { type: 'normal', text: '' },
-  { type: 'key-val', key: 'STATUS', val: 'ACTIVE — Software Engineering & AI Intern' },
+  { type: 'key-val', key: 'STATUS', val: 'ACTIVE — Special Agent / AI Engineer' },
+  { type: 'key-val', key: 'CLEARANCE', val: 'LEVEL 5 (SSR-TRISKELION)' },
   { type: 'key-val', key: 'HACKATHON', val: '1ST PLACE WINNER — Cluster Build-a-thon' },
   { type: 'key-val', key: 'LEETCODE', val: '300+ DSA Problems Solved (C++ Primary)' },
   { type: 'key-val', key: 'EDUCATION', val: 'B.Tech AI & DS @ VIPS-TC (CGPA 8.8)' },
@@ -84,7 +85,7 @@ const STATUS_TEXT: Line[] = [
 ];
 
 const PROJECTS_SUMMARY_TEXT: Line[] = [
-  { type: 'label', text: 'C:\\PEGASUS\\PROJECTS\\ DIRECTORY SUMMARY:' },
+  { type: 'label', text: 'C:\\SHIELD\\PROJECTS\\ DIRECTORY SUMMARY:' },
   { type: 'normal', text: '' },
   { type: 'key-val', key: 'BIOME_AI.PY', val: 'Enterprise RAG Engine (FastAPI, BM25, RRF, ChromaDB)' },
   { type: 'key-val', key: 'AXIOM.PY', val: 'Offline Multimodal Knowledge Engine (Whisper, Ollama)' },
@@ -133,7 +134,7 @@ const TerminalApp: React.FC = () => {
 
   const runCommand = (cmd: string) => {
     const trimmed = cmd.trim().toLowerCase();
-    const echoLine: Line = { type: 'input', text: `C:\\PEGASUS> ${cmd}` };
+    const echoLine: Line = { type: 'input', text: `C:\\SHIELD> ${cmd}` };
 
     let result: Line[] = [];
 
@@ -191,9 +192,9 @@ const TerminalApp: React.FC = () => {
         background: 'rgba(0,255,65,0.03)',
         flexShrink: 0,
       }}>
-        <div className="font-vt323 text-2xl text-p text-glow">TERMINAL.EXE — COMMAND PROMPT v2.1</div>
+        <div className="font-vt323 text-2xl text-p text-glow">TERMINAL.EXE — S.H.I.E.L.D. PROMPT v2.1</div>
         <div style={{ color: 'var(--phosphor-dim)', fontSize: '11px' }}>
-          Monochrome Phosphor Interactive Shell — Type "help" or "whoami"
+          Monochrome Phosphor S.H.I.E.L.D. Shell — Type "help" or "whoami"
         </div>
       </div>
 
@@ -214,7 +215,7 @@ const TerminalApp: React.FC = () => {
         gap: '8px',
         flexShrink: 0,
       }}>
-        <span style={{ color: 'var(--phosphor)', fontSize: '12px', flexShrink: 0 }}>C:\PEGASUS&gt;</span>
+        <span style={{ color: 'var(--phosphor)', fontSize: '12px', flexShrink: 0 }}>C:\SHIELD&gt;</span>
         <input
           ref={inputRef}
           className="terminal-input"
